@@ -1,3 +1,4 @@
+aniso8601==6.0.0
 argcomplete==1.9.3
 boto3==1.9.123
 botocore==1.12.123
@@ -5,9 +6,14 @@ certifi==2019.3.9
 cfn-flip==1.2.0
 chardet==3.0.4
 Click==7.0
+coverage==4.5.3
+coveralls==1.7.0
+docopt==0.6.2
 docutils==0.14
 durationpy==0.5
+filelock==3.0.10
 Flask==1.0.2
+Flask-RESTful==0.3.7
 future==0.16.0
 hjson==3.0.1
 idna==2.8
@@ -20,8 +26,11 @@ MarkupSafe==1.1.1
 marshmallow==2.19.1
 pkg-resources==0.0.0
 placebo==0.9.0
+pluggy==0.9.0
+py==1.8.0
 python-dateutil==2.6.1
 python-slugify==1.2.4
+pytz==2018.9
 PyYAML==5.1
 requests==2.21.0
 s3transfer==0.2.0
@@ -31,6 +40,7 @@ tqdm==4.19.1
 troposphere==2.4.6
 Unidecode==1.0.23
 urllib3==1.24.1
+virtualenv==16.4.3
 Werkzeug==0.15.1
 wsgi-request-logger==0.4.6
 zappa==0.48.2
