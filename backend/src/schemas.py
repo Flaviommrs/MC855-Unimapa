@@ -1,6 +1,6 @@
 from marshmallow import Schema, fields, post_load
 
-from src.models import User, Map, Subscription, Post
+from .models import User, Map, Subscription, Post
 
 class UserSchema(Schema):
     username = fields.Str()

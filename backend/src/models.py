@@ -48,3 +48,5 @@ if 'FLASK_ENV' in os.environ and os.environ['FLASK_ENV'] == 'development':
     import sys, inspect
     for _, my_model in inspect.getmembers(sys.modules[__name__], lambda member: inspect.isclass(member) and member.__module__ == __name__ ):
         my_model.Meta.host = 'http://localhost:8000'
+        if not my_model.exists():
+            my_model.create_table(read_capacity_units=1, write_capacity_units=1, wait=True)

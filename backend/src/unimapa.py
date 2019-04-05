@@ -6,9 +6,8 @@ from flask import Flask
 from flask_restful import Resource, Api, reqparse
 from flask.cli import AppGroup
 
-from src.schemas import UserSchema
-from src.database import prepare_database, get_User
-from src.models import User
+from .schemas import UserSchema
+from .models import User
 from flask.cli import with_appcontext
 
 import os
@@ -21,12 +20,13 @@ class HelloWorld(Resource):
 
 class UserResource(Resource):
     def get(self, username):
-        return UserSchema().dump(get_User(username)).data, 200
+        user = User.get(username)
+        return UserSchema().dump(user).data, 200
 
 class UserListResource(Resource):
     def get(self):
         res = []
-        for u in  User.scan():
+        for u in User.scan():
             res.append(UserSchema().dump(u).data)
         return res
 
@@ -37,7 +37,6 @@ class UserListResource(Resource):
 
         args = parser.parse_args()
         newUser = User(args['username'], name=args['name'])
-        print(UserSchema().dump(newUser).data)
         newUser.save()
         
         return UserSchema().dump(newUser).data, 201
@@ -49,10 +48,6 @@ app = Flask(__name__)
 def create_database():
     prepare_database()
 
-@app.cli.command()
-@click.argument('name')
-def create_user(name):
-    print(name)
 app.cli.add_command(create_database)
 
 api = Api(app)

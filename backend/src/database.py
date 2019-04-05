@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from src.models import User, Map, Subscription, Post
+from .models import User, Map, Subscription, Post
 
 def prepare_database():
     if not User.exists():
@@ -10,6 +10,3 @@ def prepare_database():
         Subscription.create_table(read_capacity_units=1, write_capacity_units=1, wait=True)
     if not Post.exists():
         Post.create_table(read_capacity_units=1, write_capacity_units=1, wait=True)
-
-def get_User(username):
-    return User.get(username)
