@@ -10,17 +10,24 @@ from flask.cli import with_appcontext
 from .schemas import UserSchema
 from .models import User
 from .resources import UserResource, UserListResource, MapResource, MapListResource
+from . import database
 
-import os
-
-from flask import Flask
-
+# App creation
 app = Flask(__name__)
 
+# Command to run 
 @app.cli.command()
 def create_database():
-    prepare_database()
+    database.create_database()
+    print("Database created")
 
+# Command to run 
+@app.cli.command()
+def mock_database():
+    database.mock_database()
+    print("Database mocked")
+
+app.cli.add_command(mock_database)
 app.cli.add_command(create_database)
 
 # Routes
