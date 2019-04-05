@@ -25,11 +25,11 @@ class SubscriptionListResource(Resource):
 
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('map_id')
+        parser.add_argument('map_id',  type=int)
         parser.add_argument('username')
 
         args = parser.parse_args()
-        new_subscription = Subscription(int(args['map_id']), username=args['username'], subscription_time=datetime.now())
+        new_subscription = Subscription(args['map_id'], username=args['username'], subscription_time=datetime.now())
         new_subscription.save()
         
         return SubscriptionSchema().dump(new_subscription).data, 201

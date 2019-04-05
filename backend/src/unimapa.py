@@ -11,7 +11,8 @@ from .schemas import UserSchema
 from .models import User
 from .resources import (UserResource, UserListResource, 
                         MapResource, MapListResource,
-                        SubscriptionResource, SubscriptionListResource, UserSubscriptionResource)
+                        SubscriptionResource, SubscriptionListResource, UserSubscriptionResource,
+                        PostResource, PostListResource, UserPostResource)
 from . import database
 
 # App creation
@@ -37,9 +38,15 @@ api = Api(app)
 api.add_resource(UserListResource, '/users')
 api.add_resource(UserResource, '/users/<string:username>')
 api.add_resource(UserSubscriptionResource, '/users/<string:username>/subscriptions')
+api.add_resource(UserPostResource, '/users/<string:username>/posts')
+
 api.add_resource(MapListResource, '/maps')
 api.add_resource(MapResource, '/maps/<int:map_id>')
+
 api.add_resource(SubscriptionListResource, '/subscriptions')
 api.add_resource(SubscriptionResource, '/subscriptions/<int:map_id>')
+
+api.add_resource(PostListResource, '/posts')
+api.add_resource(PostResource, '/posts/<int:map_id>')
 
 
