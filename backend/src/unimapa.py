@@ -9,7 +9,9 @@ from flask.cli import with_appcontext
 
 from .schemas import UserSchema
 from .models import User
-from .resources import UserResource, UserListResource, MapResource, MapListResource
+from .resources import (UserResource, UserListResource, 
+                        MapResource, MapListResource,
+                        SubscriptionResource, SubscriptionListResource, UserSubscriptionResource)
 from . import database
 
 # App creation
@@ -34,7 +36,10 @@ app.cli.add_command(create_database)
 api = Api(app)
 api.add_resource(UserListResource, '/users')
 api.add_resource(UserResource, '/users/<string:username>')
+api.add_resource(UserSubscriptionResource, '/users/<string:username>/subscriptions')
 api.add_resource(MapListResource, '/maps')
 api.add_resource(MapResource, '/maps/<int:map_id>')
+api.add_resource(SubscriptionListResource, '/subscriptions')
+api.add_resource(SubscriptionResource, '/subscriptions/<int:map_id>')
 
 

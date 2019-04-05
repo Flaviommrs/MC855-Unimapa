@@ -27,8 +27,8 @@ class Subscription(Model):
     class Meta:
         table_name = 'unimapa_subscription'
 
-    username = UnicodeAttribute(hash_key=True)
-    map_id = NumberAttribute(range_key=True)
+    map_id = NumberAttribute(hash_key=True)
+    username = UnicodeAttribute(range_key=True)
     subscription_time = UTCDateTimeAttribute()
 
 class Post(Model):
