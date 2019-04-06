@@ -32,12 +32,13 @@ class SubscriptionSchema(Schema):
 
 
 class PostSchema(Schema):
+    post_id = fields.Integer()
     map_id = fields.Integer()
     post_time = fields.DateTime()
     message = fields.String()
     username = fields.String()
-    pos_x = fields.Integer()
-    pos_y = fields.Integer()
+    pos_x = fields.Float()
+    pos_y = fields.Float()
 
     @post_load
     def make_post(self, data):
