@@ -3,8 +3,9 @@ from .map_resource import *
 from .subscription_resource import *
 from .post_resource import *
 
-__all__ = ['UserResource', 'UserListResource',
+__all__ = ['UserResource', 'UserListResource', 
             'MapResource', 'MapListResource',
-            'SubscriptionResource', 'SubscriptionListResource', 'UserSubscriptionResource'
+            'UserSubscriptionListResource', 'SubscriptionListResource', 
+            'MapSubscriptionResource', 'MapSubscriptionListResource',
             'PostResource', 'PostListResource', 'UserPostListResource',
             ]
