@@ -6,5 +6,5 @@ from .post_resource import *
 __all__ = ['UserResource', 'UserListResource',
             'MapResource', 'MapListResource',
             'SubscriptionResource', 'SubscriptionListResource', 'UserSubscriptionResource'
-            'PostResource', 'PostListResource', 'UserPostResource'
+            'PostResource', 'PostListResource', 'UserPostListResource',
             ]

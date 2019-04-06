@@ -37,7 +37,8 @@ class Post(Model):
         table_name = 'unimapa_post'
 
     map_id = NumberAttribute(hash_key=True)
-    post_time = UTCDateTimeAttribute(range_key=True)
+    post_id = NumberAttribute(range_key=True)
+    post_time = UTCDateTimeAttribute()
     username = UnicodeAttribute()
     message = UnicodeAttribute()
     pos_x = NumberAttribute()

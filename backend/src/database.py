@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
+import random
+
+from datetime import datetime
+
 from .models import User, Map, Subscription, Post
 
 def create_database():
@@ -21,3 +25,18 @@ def mock_database():
         for i in range(5):
             new_map = Map(i, name="Mapa {}".format(i))
             new_map.save()
+
+        for i in range(10):
+            new_subscription = Subscription(i % 5, "Username {}".format(i), subscription_time=datetime.utcnow())
+            new_subscription.save()
+
+        for i in range(10):
+            c = datetime.utcnow()
+            microseconds = (c.day * 24 * 60 * 60 + c.second) * 1000000 + c.microsecond
+            new_post = Post(i % 3, microseconds,
+                post_time=datetime.utcnow(), 
+                message="Post {}".format(i),
+                pos_x=random.uniform(-15,15),
+                pos_y=random.uniform(-15,15),
+                username="Username {}".format(i))
+            new_post.save()

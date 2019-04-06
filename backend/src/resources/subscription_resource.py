@@ -13,7 +13,7 @@ class UserSubscriptionResource(Resource):
 
 class SubscriptionResource(Resource):
     def get(self, map_id):
-        subscriptions = Subscription.query(map_id, username)
+        subscriptions = Subscription.query(map_id)
         return SubscriptionSchema().dump(subscriptions, many=True).data, 200
 
 class SubscriptionListResource(Resource):
