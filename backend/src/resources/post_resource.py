@@ -10,10 +10,10 @@ class UserPostListResource(Resource):
         posts = Post.scan(username__eq=username)
         return PostSchema().dump(posts, many=True).data, 200
 
-class PostResource(Resource):
+class MapPostListResource(Resource):
     def get(self, map_id):
-        user = Post.query(map_id)
-        return PostSchema().dump(user, many=True).data, 200
+        posts = Post.query(map_id)
+        return PostSchema().dump(posts, many=True).data, 200
 
 class PostListResource(Resource):
     def get(self):

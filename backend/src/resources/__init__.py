@@ -7,5 +7,5 @@ __all__ = ['UserResource', 'UserListResource',
             'MapResource', 'MapListResource',
             'UserSubscriptionListResource', 'SubscriptionListResource', 
             'MapSubscriptionResource', 'MapSubscriptionListResource',
-            'PostResource', 'PostListResource', 'UserPostListResource',
+            'MapPostListResource', 'PostListResource', 'UserPostListResource',
             ]
