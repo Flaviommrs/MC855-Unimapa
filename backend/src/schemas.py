@@ -1,17 +1,45 @@
 from marshmallow import Schema, fields, post_load
 
-from src.models import User, Map, Position, Post
+from .models import User, Map, Subscription, Post
 
 class UserSchema(Schema):
+    username = fields.Str()
     name = fields.Str()
 
     @post_load
     def make_user(self, data):
         return User(**data)
 
-class MapSchema(Schema):
-    name = fields.Str()
 
-class PositionSchema(Schema):
-    x = fields.Float()
-    y = fields.Float()
+class MapSchema(Schema):
+    map_id = fields.Integer()
+    name = fields.Str()
+    posts = fields.Integer()
+
+    @post_load
+    def make_map(self, data):
+        return Map(**data)
+
+
+class SubscriptionSchema(Schema):
+    username = fields.Str()
+    map_id = fields.Integer()
+    subscription_date = fields.DateTime()
+
+    @post_load
+    def make_subscription(self, data):
+        return Subscription(**data)
+
+
+class PostSchema(Schema):
+    post_id = fields.Integer()
+    map_id = fields.Integer()
+    post_time = fields.DateTime()
+    message = fields.String()
+    username = fields.String()
+    pos_x = fields.Float()
+    pos_y = fields.Float()
+
+    @post_load
+    def make_post(self, data):
+        return Post(**data)

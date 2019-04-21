@@ -1,42 +1,52 @@
 # -*- coding: utf-8 -*-
+import os
+import click
+
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
+from flask.cli import AppGroup
+from flask.cli import with_appcontext
 
-from src.schemas import UserSchema
-from src.database import USERS
-from src.models import User
+from .schemas import UserSchema
+from .models import User
+from .resources import (UserResource, UserListResource, 
+                        MapResource, MapListResource,
+                        SubscriptionResource, SubscriptionListResource, UserSubscriptionResource,
+                        PostResource, PostListResource, UserPostListResource)
+from . import database
 
-
+# App creation
 app = Flask(__name__)
+
+# Command to run 
+@app.cli.command()
+def create_database():
+    database.create_database()
+    print("Database created")
+
+# Command to run 
+@app.cli.command()
+def mock_database():
+    database.mock_database()
+    print("Database mocked")
+
+app.cli.add_command(mock_database)
+app.cli.add_command(create_database)
+
+# Routes
 api = Api(app)
-
-class HelloWorld(Resource):
-    def get(self):
-        return {'hello': 'world'}
-
-class UserResource(Resource):
-    def get(self, user_id):
-        return USERS[user_id], 200
-
-
-class UserListResource(Resource):
-    def get(self):
-        return USERS
-
-    def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('name')
-
-        args = parser.parse_args()
-        newUser = User(args['name'])
-        print(UserSchema().dump(newUser).data)
-        USERS[len(USERS)] = UserSchema().dump(newUser).data
-
-        return USERS[len(USERS) - 1], 201
-
-api.add_resource(HelloWorld, '/')
 api.add_resource(UserListResource, '/users')
-api.add_resource(UserResource, '/users/<int:user_id>')
+api.add_resource(UserResource, '/users/<string:username>')
+api.add_resource(UserSubscriptionResource, '/users/<string:username>/subscriptions')
+api.add_resource(UserPostListResource, '/users/<string:username>/posts')
 
-if __name__ == '__main__':
-    app.run(debug=True)
+api.add_resource(MapListResource, '/maps')
+api.add_resource(MapResource, '/maps/<int:map_id>')
+
+api.add_resource(SubscriptionListResource, '/subscriptions')
+api.add_resource(SubscriptionResource, '/subscriptions/<int:map_id>')
+
+api.add_resource(PostListResource, '/posts')
+api.add_resource(PostResource, '/posts/<int:map_id>')
+
+
