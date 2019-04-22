@@ -11,8 +11,18 @@
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        mapbox:mapbox_cameraTargetLat="40.73581"
-        mapbox:mapbox_cameraTargetLng="-73.99155"
-        mapbox:mapbox_cameraZoom="11" />
+        mapbox:mapbox_cameraTargetLat="33.397676454651766"
+        mapbox:mapbox_cameraTargetLng="-118.39439114221236"
+        mapbox:mapbox_cameraZoom="13" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        mapbox:layout_constraintBottom_toBottomOf="parent"
+        mapbox:layout_constraintEnd_toEndOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
