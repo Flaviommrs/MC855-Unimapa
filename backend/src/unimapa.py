@@ -15,6 +15,7 @@ from .resources import (UserResource, UserListResource,
                         MapSubscriptionResource, MapSubscriptionListResource, 
                         PostListResource, UserPostListResource, MapPostListResource)
 from . import database
+from . import notifications
 
 # App creation
 app = Flask(__name__)
@@ -31,8 +32,15 @@ def mock_database():
     database.mock_database()
     print("Database mocked")
 
+# Command to run 
+@app.cli.command()
+def send_notification():
+    notifications.send_notification([], "Hello", "World")
+    print("Notification Sent")
+
 app.cli.add_command(mock_database)
 app.cli.add_command(create_database)
+app.cli.add_command(send_notification)
 
 # Routes
 api = Api(app)
