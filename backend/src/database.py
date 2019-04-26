@@ -3,6 +3,7 @@ import os
 import random
 
 from datetime import datetime
+from geojson import Point
 
 from .models import User, Map, Subscription, Post
 
@@ -36,7 +37,6 @@ def mock_database():
             new_post = Post(i % 3, microseconds,
                 post_time=datetime.utcnow(), 
                 message="Post {}".format(i),
-                pos_x=random.uniform(-15,15),
-                pos_y=random.uniform(-15,15),
+                point=Point((random.uniform(-47.1,-47.0), random.uniform(-22.9,-22.8))),
                 username="Username {}".format(i))
             new_post.save()

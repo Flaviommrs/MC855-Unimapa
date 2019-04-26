@@ -4,6 +4,7 @@ from ..schemas import PostSchema
 from ..models import Post
 
 from datetime import datetime
+from geojson import Feature, Point, FeatureCollection
 
 class UserPostListResource(Resource):
     def get(self, username):
@@ -13,7 +14,10 @@ class UserPostListResource(Resource):
 class MapPostListResource(Resource):
     def get(self, map_id):
         posts = Post.query(map_id)
-        return PostSchema().dump(posts, many=True).data, 200
+        feature_collection_list = [] 
+        for post in posts:
+            feature_collection_list.append(Feature(geometry=post.point))
+        return FeatureCollection(feature_collection_list), 200
 
 class PostListResource(Resource):
     def get(self):
@@ -37,8 +41,7 @@ class PostListResource(Resource):
             post_time=datetime.utcnow(),
             username=args['username'],
             message=args['message'],
-            pos_x=args['pos_x'],
-            pos_y=args['pos_y']
+            point=Point((args['pos_x'], args['pos_y'])),
             )
         new_post.save()
         

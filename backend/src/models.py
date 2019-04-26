@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from pynamodb.models import Model
-from pynamodb.attributes import NumberAttribute, UnicodeAttribute, UTCDateTimeAttribute
+from pynamodb.attributes import NumberAttribute, UnicodeAttribute, UTCDateTimeAttribute, JSONAttribute
+import geojson
 import os
 
 class User(Model):   
@@ -41,13 +42,15 @@ class Post(Model):
     post_time = UTCDateTimeAttribute()
     username = UnicodeAttribute()
     message = UnicodeAttribute()
-    pos_x = NumberAttribute()
-    pos_y = NumberAttribute()
+    point = JSONAttribute()
 
 
 if 'FLASK_ENV' in os.environ and os.environ['FLASK_ENV'] == 'development':
     import sys, inspect
     for _, my_model in inspect.getmembers(sys.modules[__name__], lambda member: inspect.isclass(member) and member.__module__ == __name__ ):
-        my_model.Meta.host = 'http://localhost:8000'
-        if not my_model.exists():
-            my_model.create_table(read_capacity_units=1, write_capacity_units=1, wait=True)
+        try:
+            my_model.Meta.host = 'http://localhost:8000'
+            if not my_model.exists():
+                my_model.create_table(read_capacity_units=1, write_capacity_units=1, wait=True)
+        except:
+            pass

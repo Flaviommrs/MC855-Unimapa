@@ -2,6 +2,9 @@ from marshmallow import Schema, fields, post_load
 
 from .models import User, Map, Subscription, Post
 
+import geojson
+
+
 class UserSchema(Schema):
     username = fields.Str()
     name = fields.Str()
@@ -37,8 +40,7 @@ class PostSchema(Schema):
     post_time = fields.DateTime()
     message = fields.String()
     username = fields.String()
-    pos_x = fields.Float()
-    pos_y = fields.Float()
+    point = fields.Dict()
 
     @post_load
     def make_post(self, data):
