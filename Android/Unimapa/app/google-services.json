@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "730125665479",
+    "firebase_url": "https://unimapa-3f12e.firebaseio.com",
+    "project_id": "unimapa-3f12e",
+    "storage_bucket": "unimapa-3f12e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:730125665479:android:ffcc730a9e1eeb74",
+        "android_client_info": {
+          "package_name": "com.unimapa.unimapa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "730125665479-cer5ogijv8si4e9gugcbtra1sq1fi8nt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.unimapa.unimapa",
+            "certificate_hash": "234b5661ef34b8d2de66bf104b27f6a7ae112d4d"
+          }
+        },
+        {
+          "client_id": "730125665479-3vrf5fmeo2ikrnk6bl132grsn222decc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMgUXuFDvwsFrg-oC-sWby_aIy4MqLeyE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "730125665479-3vrf5fmeo2ikrnk6bl132grsn222decc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
