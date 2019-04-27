@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Unimapa</string>
+    <string name="access_token" translatable="false">pk.eyJ1IjoiZmxhdmlvbW1ycyIsImEiOiJjanR0ZDNyNmYwNGV3M3ltc3B0M2xrN2U0In0.Tp3erbOpcucIqkjEjTQ1_w</string>
+</resources>
