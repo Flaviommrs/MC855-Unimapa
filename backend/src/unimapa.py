@@ -11,8 +11,9 @@ from .schemas import UserSchema
 from .models import User
 from .resources import (UserResource, UserListResource, 
                         MapResource, MapListResource,
-                        SubscriptionResource, SubscriptionListResource, UserSubscriptionResource,
-                        PostResource, PostListResource, UserPostListResource)
+                        UserSubscriptionListResource, SubscriptionListResource, 
+                        MapSubscriptionResource, MapSubscriptionListResource, 
+                        PostListResource, UserPostListResource, MapPostListResource)
 from . import database
 
 # App creation
@@ -37,16 +38,18 @@ app.cli.add_command(create_database)
 api = Api(app)
 api.add_resource(UserListResource, '/users')
 api.add_resource(UserResource, '/users/<string:username>')
-api.add_resource(UserSubscriptionResource, '/users/<string:username>/subscriptions')
+
+api.add_resource(UserSubscriptionListResource, '/users/<string:username>/subscriptions')
 api.add_resource(UserPostListResource, '/users/<string:username>/posts')
 
 api.add_resource(MapListResource, '/maps')
 api.add_resource(MapResource, '/maps/<int:map_id>')
+api.add_resource(MapSubscriptionListResource, '/maps/<int:map_id>/subscriptions')
+api.add_resource(MapSubscriptionResource, '/maps/<int:map_id>/subscriptions/<string:username>')
+api.add_resource(MapPostListResource, '/maps/<int:map_id>/posts')
 
 api.add_resource(SubscriptionListResource, '/subscriptions')
-api.add_resource(SubscriptionResource, '/subscriptions/<int:map_id>')
 
 api.add_resource(PostListResource, '/posts')
-api.add_resource(PostResource, '/posts/<int:map_id>')
 
 
