@@ -1,0 +1,44 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:statusBarColor">@color/color_white</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+    </style>
+
+    <!--
+    <style name="AppTheme_Cinza">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="colorPrimary">@color/color2_1</item>
+        <item name="colorPrimaryDark">@color/color2_2</item>
+    </style>
+
+    <style name="AppTheme.ConfigurationEnvironments">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor">@color/noColor</item>
+        <item name="colorPrimary">@color/colorPrimaryEnvironment</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkEnvironment</item>
+    </style>
+
+    <style name="AppTheme.forgotPassword">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor">@color/noColor</item>
+        <item name="colorPrimary">@color/colorPrimaryForgot</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkForgot</item>
+    </style>-->
+</resources>

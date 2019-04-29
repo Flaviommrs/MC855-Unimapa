@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Unimapa</string>
+    <string name="access_token" translatable="false">pk.eyJ1IjoiZmxhdmlvbW1ycyIsImEiOiJjanR0ZDNyNmYwNGV3M3ltc3B0M2xrN2U0In0.Tp3erbOpcucIqkjEjTQ1_w</string>
+    <string name="action_sign_in_short">Logar</string>
+    <string name="prompt_password">Senha</string>
+    <string name="prompt_email">email</string>
+    <string name="error_invalid_password">Senha inválida</string>
+    <string name="error_field_required">Preencher campo</string>
+    <string name="error_invalid_email">Email inválido</string>
+    <string name="error_incorrect_password">Senha incorreta</string>
+    <string name="navigation_drawer_open">Abrir</string>
+    <string name="navigation_drawer_close">Fechar</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="nav_header_title">Nome</string>
+    <string name="nav_header_subtitle">master@email.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+</resources>
