@@ -9,7 +9,8 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.net.ConnectivityManager
+import android.content.res.Resources
+import android.graphics.drawable.Drawable
 import android.os.Bundle;
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -19,7 +20,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.IdpResponse
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
@@ -41,17 +47,44 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
     private val jsonReader: JsonReader? = null
     private var alertDialogBuilder: AlertDialog.Builder? = null
 
+    private val RC_SIGN_IN = 100
+
     @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        signInFlow()
 
-        // Mapbox access token is configured here. This needs to be called either in your application
-        // object or in the same activity which contains the mapview.
+        mapSetupFlow(savedInstanceState)
+
+        try {
+            //val json = JsonReader.readJsonArray("https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev/users/Username 1/posts").toString()
+            //Toast.makeText(this, json, 10000).show()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        createMenu()
+    }
+
+    private fun signInFlow(){
+        val providers = arrayListOf(
+                AuthUI.IdpConfig.EmailBuilder().build(),
+                AuthUI.IdpConfig.GoogleBuilder().build())
+        startActivityForResult(
+                AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setAvailableProviders(providers)
+                        .setLogo(R.drawable.logo)
+                        .setTheme(R.style.Theme)
+                        .build(),
+                RC_SIGN_IN)
+    }
+
+    private fun mapSetupFlow(savedInstanceState: Bundle?){
         Mapbox.getInstance(this, getString(R.string.access_token))
         setContentView(R.layout.activity_main)
-        //setSupportActionBar(toolbar)
-        // This contains the MapView in XML and needs to be called after the access token is configured.
+
         mapView = this.findViewById(R.id.mapView)
         mapView!!.onCreate(savedInstanceState)
         mapView!!.getMapAsync(OnMapReadyCallback { mapboxMap ->
@@ -69,15 +102,9 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
 
             }
         })
+    }
 
-        try {
-            //val json = JsonReader.readJsonArray("https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev/users/Username 1/posts").toString()
-            //Toast.makeText(this, json, 10000).show()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-
-
+    private fun createMenu(){
         alertDialogBuilder = AlertDialog.Builder(this)
 
         toolbar = findViewById<View>(R.id.toolbar) as Toolbar
@@ -98,20 +125,6 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
         ////////////////////////////////////////////////////////
 
         addItensInMenu()
-    }
-
-    private fun setUserInformations() {
-        val txtInfoName = mNavigationView!!.getHeaderView(0).findViewById<TextView>(R.id.txtInfoName)
-        val txtInfoEmail = mNavigationView!!.getHeaderView(0).findViewById<TextView>(R.id.txtInfoEmail)
-
-        txtInfoName.setText("Fulano da Silva")
-        txtInfoEmail.setText("email@email.com")
-        try {
-            //TODO:GradientDrawable backgroundColor = (GradientDrawable) mNavigationView.getHeaderView(0).getBackground();
-            //backgroundColor.setColor(Color.parseColor(environment.getColor()));
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-        }
     }
 
     private fun addItensInMenu() {
@@ -143,8 +156,7 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
         if (id == R.id.nav_home) {
             alert("Selecione um ambiente")
         } else if (id == R.id.nav_logout) {
-            openLogin()
-            finish()
+            signOutUser()
         } else if (id == R.id.addEnvironment) {
             openEnvironment()
             return true
@@ -160,14 +172,21 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
         return true
     }
 
+    private fun signOutUser(){
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener {
+                    signInFlow()
+                }
+    }
+
     private fun confirmationDeleteEnvironment(context: Context) {
         // set title
         alertDialogBuilder?.setTitle("Mensagem")
 
         // set dialog message
-        alertDialogBuilder?.setMessage("Deseja excuir os ambientes?")?.setPositiveButton("Sim") { dialog, id ->
-            openLogin()
-            finish()
+        alertDialogBuilder?.setMessage("Deseja excluir os ambientes?")?.setPositiveButton("Sim") { dialog, id ->
+            //faz algo
         }?.setNegativeButton("Não") { dialog, id ->
             //colocar alguma coisa para fazer
         }
@@ -202,14 +221,40 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
         alertDialog.show()
     }
 
-    private fun openLogin() {
-        val intent = Intent(this, LoginActivity::class.java)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
-        //inicia a activity
-        startActivity(intent)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        setResult(Activity.RESULT_OK)
-        finish()
+        if (requestCode == RC_SIGN_IN) {
+            val response = IdpResponse.fromResultIntent(data)
+
+            if (resultCode == Activity.RESULT_OK) {
+                // Successfully signed in
+                val user = FirebaseAuth.getInstance().currentUser
+
+                if(user != null) {
+                    setUserInformations(user)
+                }
+            } else {
+                // Sign in failed. If response is null the user canceled the
+                // sign-in flow using the back button. Otherwise check
+                // response.getError().getErrorCode() and handle the error.
+                // ...
+            }
+        }
+    }
+
+    private fun setUserInformations(user: FirebaseUser) {
+        val txtInfoName = mNavigationView!!.getHeaderView(0).findViewById<TextView>(R.id.txtInfoName)
+        val txtInfoEmail = mNavigationView!!.getHeaderView(0).findViewById<TextView>(R.id.txtInfoEmail)
+
+        txtInfoName.text = user.displayName
+        txtInfoEmail.text = user.email
+        try {
+            //TODO:GradientDrawable backgroundColor = (GradientDrawable) mNavigationView.getHeaderView(0).getBackground();
+            //backgroundColor.setColor(Color.parseColor(environment.getColor()));
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
     }
 
     // Add the mapView's own lifecycle methods to the activity's lifecycle methods
