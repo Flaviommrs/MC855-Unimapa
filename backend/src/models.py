@@ -1,53 +1,48 @@
 # -*- coding: utf-8 -*-
-from pynamodb.models import Model
-from pynamodb.attributes import NumberAttribute, UnicodeAttribute, UTCDateTimeAttribute
+# from pynamodb.models import Model
+# from pynamodb.attributes import NumberAttribute, UnicodeAttribute, UTCDateTimeAttribute, JSONAttribute
+from flask_sqlalchemy import SQLAlchemy
+
+import geojson
 import os
 
-class User(Model):   
+db = SQLAlchemy()
 
-    class Meta:
-        table_name=  'unimapa_user'
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    name = db.Column(db.String(100))
 
-    username = UnicodeAttribute(hash_key=True)
-    name = UnicodeAttribute()
+    posts = db.relationship('Post', backref='user', lazy=True)
+    subscriptions = db.relationship('Subscription', backref='user', lazy=True)
 
-    
-class Map(Model):
-
-    class Meta:
-        table_name = 'unimapa_map'
-
-    map_id = NumberAttribute(hash_key=True)
-    name = UnicodeAttribute()
-    posts = NumberAttribute(default=0)
+    def __repr__(self):
+        return '<User {}>'.format(self.username)
 
     
-class Subscription(Model):
+class Map(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), unique=True, nullable=False)
+    
+    posts = db.relationship('Post', backref='map', lazy=True)
+    subscriptions = db.relationship('Subscription', backref='map', lazy=True)
+    
+    
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    post_time = db.Column(db.DateTime, nullable=False)
+    message = db.Column(db.Text)
+    point_x = db.Column(db.Float, nullable=False)
+    point_y = db.Column(db.Float, nullable=False)
 
-    class Meta:
-        table_name = 'unimapa_subscription'
-
-    map_id = NumberAttribute(hash_key=True)
-    username = UnicodeAttribute(range_key=True)
-    subscription_time = UTCDateTimeAttribute()
-
-class Post(Model):
-
-    class Meta:
-        table_name = 'unimapa_post'
-
-    map_id = NumberAttribute(hash_key=True)
-    post_id = NumberAttribute(range_key=True)
-    post_time = UTCDateTimeAttribute()
-    username = UnicodeAttribute()
-    message = UnicodeAttribute()
-    pos_x = NumberAttribute()
-    pos_y = NumberAttribute()
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    map_id = db.Column(db.Integer, db.ForeignKey('map.id'), nullable=False)
 
 
-if 'FLASK_ENV' in os.environ and os.environ['FLASK_ENV'] == 'development':
-    import sys, inspect
-    for _, my_model in inspect.getmembers(sys.modules[__name__], lambda member: inspect.isclass(member) and member.__module__ == __name__ ):
-        my_model.Meta.host = 'http://localhost:8000'
-        if not my_model.exists():
-            my_model.create_table(read_capacity_units=1, write_capacity_units=1, wait=True)
+class Subscription(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    subscription_time = db.Column(db.DateTime, nullable=False)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    map_id = db.Column(db.Integer, db.ForeignKey('map.id'), nullable=False)
