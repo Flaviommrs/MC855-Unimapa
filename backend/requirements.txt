@@ -52,7 +52,6 @@ py==1.8.0
 pyasn1==0.4.5
 pyasn1-modules==0.2.5
 pycryptodome==3.4.3
-pynamodb==3.3.3
 python-dateutil==2.6.1
 python-dotenv==0.10.1
 python-jwt==2.0.1

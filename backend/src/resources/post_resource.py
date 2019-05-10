@@ -1,14 +1,15 @@
 from flask_restful import Resource, reqparse
 
 from ..schemas import PostSchema
-from ..models import Post
+from ..models import Post, User
 
 from datetime import datetime
 from geojson import Feature, Point, FeatureCollection
 
 class UserPostListResource(Resource):
-    def get(self, username):
-        posts = Post.scan(username__eq=username)
+    def get(self, user_id):
+        user = User.query.get(user_id)
+        posts = Post.query.filter_by(user=user)
         return PostSchema().dump(posts, many=True).data, 200
 
 class MapPostListResource(Resource):
@@ -22,7 +23,7 @@ class MapPostListResource(Resource):
 class PostListResource(Resource):
     def get(self):
         res = []
-        for post in Post.scan():
+        for post in Post.query.all():
             res.append(PostSchema().dump(post).data)
         return res, 200
 
