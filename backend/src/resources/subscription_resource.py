@@ -2,37 +2,39 @@ from flask_restful import Resource, reqparse
 
 
 from ..schemas import SubscriptionSchema
-from ..models import Subscription
+from ..models import Subscription, User, Map
 
 from datetime import datetime
 
 class UserSubscriptionListResource(Resource):
-    def get(self, username):
-        subscriptions = Subscription.scan(username__eq=username)
+    def get(self, user_id):
+        user = User.query.get(user_id)
+        subscriptions = Subscription.query.filter_by(user=user)
         return SubscriptionSchema().dump(subscriptions, many=True).data, 200
 
 
 class MapSubscriptionListResource(Resource):
     def get(self, map_id):
-        subscriptions= Subscription.query(map_id)
+        mapa = Map.query.get(map_id)
+        subscriptions= Subscription.query.filter_by(map=mapa)
         return SubscriptionSchema().dump(subscriptions, many=True).data, 200
 
 
-class MapSubscriptionResource(Resource):
-    def get(self, map_id, username):
-        subscription = Subscription.get(map_id, username)
+class SubscriptionResource(Resource):
+    def get(self, subscription_id):
+        subscription = Subscription.query.get(subscription_id)
         return SubscriptionSchema().dump(subscription).data, 200
 
-    def delete(self, map_id, username):
-        subscription = Subscription.get(map_id, username)
+    def delete(self, subscription_id):
+        subscription = Subscription.query.get(subscription_id)
         subscription.delete()
-        return SubscriptionSchema().dump(subscription).data, 204
+        return res, 204
 
 
 class SubscriptionListResource(Resource):
     def get(self):
         res = []
-        for subscription in Subscription.scan():
+        for subscription in Subscription.query.all():
             res.append(SubscriptionSchema().dump(subscription).data)
         return res
 

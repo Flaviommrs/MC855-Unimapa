@@ -5,13 +5,13 @@ from ..models import Map
 
 class MapResource(Resource):
     def get(self, map_id):
-        _map = Map.get(map_id)
+        _map = Map.query.get(map_id)
         return MapSchema().dump(_map).data, 200
 
 class MapListResource(Resource):
     def get(self):
         res = []
-        for _map in Map.scan():
+        for _map in Map.query.all():
             res.append(MapSchema().dump(_map).data)
         return res
 
