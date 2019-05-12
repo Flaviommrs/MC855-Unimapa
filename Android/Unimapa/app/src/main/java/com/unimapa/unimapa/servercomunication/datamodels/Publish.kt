@@ -8,23 +8,38 @@ import com.google.gson.annotations.SerializedName
  */
 class Publish {
 
-    @SerializedName("mapName")
+    @SerializedName("map")
     @Expose
-    private var mapName : String = ""
-    @SerializedName("pinDescription")
+    private var map : String = ""
+    @SerializedName("description")
     @Expose
-    private var pinDescription : String = ""
+    private var description : String = ""
+    @SerializedName("user")
+    @Expose
+    private var user : String = ""
 
-    private fun Publish(mapName: String, description: String){
-        this.mapName = mapName
-        this.pinDescription = description
+    fun getMap() : String {
+        return map;
     }
 
-    fun getMapName() : String {
-        return mapName
+    fun setMap(map: String) {
+        this.map = map;
     }
 
-    fun getPinDescription() : String {
-        return pinDescription
+    fun getDescription() : String {
+        return description;
     }
+
+    fun setDescription(description : String) {
+        this.description = description;
+    }
+
+    fun getUser() : String {
+        return user;
+    }
+
+    fun setUser(user : String) {
+        this.user = user;
+    }
+
 }

@@ -21,12 +21,12 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".UnimapaFirebaseInstanceIdService">
+        <service android:name=".services.InstanceIdService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".UnimapaFirebaseMessagingService">
+        <service android:name=".services.MessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
