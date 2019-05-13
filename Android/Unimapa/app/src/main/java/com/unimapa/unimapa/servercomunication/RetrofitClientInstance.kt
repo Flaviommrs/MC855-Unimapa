@@ -6,10 +6,10 @@ import retrofit2.Retrofit
 /**
  * Created by flavio.matheus on 05/05/19.
  */
-class RetrofitClientInstance {
+object RetrofitClientInstance {
 
     private var retrofit: Retrofit? = null
-    private val BASE_URL = "https://jsonplaceholder.typicode.com"
+    private val BASE_URL = "http://07f465a1.ngrok.io/"
 
     fun getRetrofitInstance(): Retrofit {
         if (retrofit == null) {

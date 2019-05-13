@@ -12,6 +12,7 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.os.Bundle;
+import android.os.Debug
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
@@ -24,6 +25,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
+import com.firebase.ui.auth.data.model.User
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
@@ -34,8 +37,9 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.layers.CircleLayer
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
-import java.io.IOException
-import java.net.URL
+import com.unimapa.unimapa.servercomunication.ApiUtils
+import com.unimapa.unimapa.servercomunication.datamodels.SignUp
+
 
 class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelectedListener{
 
@@ -54,17 +58,11 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
 
         signInFlow()
-
         mapSetupFlow(savedInstanceState)
 
-        try {
-            //val json = JsonReader.readJsonArray("https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev/users/Username 1/posts").toString()
-            //Toast.makeText(this, json, 10000).show()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-
         createMenu()
+
+
     }
 
     private fun signInFlow(){
@@ -88,19 +86,19 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
         mapView = this.findViewById(R.id.mapView)
         mapView!!.onCreate(savedInstanceState)
         mapView!!.getMapAsync(OnMapReadyCallback { mapboxMap ->
-            mapboxMap.setStyle(Style.OUTDOORS) { style ->
-
-                runOnUiThread {
-                    val geojsonUrl = URL("https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev/maps/1/posts")
-
-                    val source = GeoJsonSource("geojson-source", geojsonUrl)
-
-                    style.addSource(source)
-
-                    style.addLayer(CircleLayer("circlelayer", "geojson-source"))
-                }
-
-            }
+//            mapboxMap.setStyle(Style.OUTDOORS) { style ->
+//
+//                runOnUiThread {
+//                    val geojsonUrl = URL("https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev/maps/1/posts")
+//
+//                    val source = GeoJsonSource("geojson-source", geojsonUrl)
+//
+//                    style.addSource(source)
+//
+//                    style.addLayer(CircleLayer("circlelayer", "geojson-source"))
+//                }
+//
+//            }
         })
     }
 
@@ -229,11 +227,24 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
 
             if (resultCode == Activity.RESULT_OK) {
                 // Successfully signed in
+
                 val user = FirebaseAuth.getInstance().currentUser
 
-                if(user != null) {
-                    setUserInformations(user)
-                }
+                user!!.getIdToken(true).addOnCompleteListener(OnCompleteListener {
+//                    if(it.isSuccessful){
+//                        val token : String = it.result!!.token!!
+//
+//                        val service = ApiUtils.getApiService()
+//
+//                        var tokenPayload = SignUp()
+//                        tokenPayload.setToken(token)
+//
+//                        service.sendSignUpToken(tokenPayload)
+//                    }
+                })
+
+                setUserInformations(user!!)
+
             } else {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
@@ -241,6 +252,22 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
                 // ...
             }
         }
+    }
+
+    fun sendToken(user : FirebaseUser)
+    {
+        user!!.getIdToken(true).addOnCompleteListener(OnCompleteListener {
+            if(it.isSuccessful){
+                val token : String = it.result!!.token!!
+
+                val service = ApiUtils.getApiService()
+
+                var tokenPayload = SignUp()
+                tokenPayload.setToken(token)
+
+                service.sendSignUpToken(tokenPayload)
+            }
+        })
     }
 
     private fun setUserInformations(user: FirebaseUser) {
