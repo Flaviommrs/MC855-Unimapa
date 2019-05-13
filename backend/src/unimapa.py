@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 import os
 import click
+import firebase_admin
 
 from flask import Flask, request, jsonify
-from flask_restful import Resource, Api, reqparse
 from flask.cli import AppGroup, with_appcontext
-
+from flask_restful import Resource, Api, reqparse
+from firebase_admin import credentials
 
 from .config import settings
 from .models import db
@@ -24,6 +25,11 @@ def create_app():
         app.config['SQLALCHEMY_DATABASE_URI'] = settings.DATABASE_CONFIG
 
     db.init_app(app)
+
+
+    # Firebase auth configuration
+    cred = credentials.Certificate('./serviceAccountKey.json')
+    firebase_app = firebase_admin.initialize_app(cred)
 
     return app
 
