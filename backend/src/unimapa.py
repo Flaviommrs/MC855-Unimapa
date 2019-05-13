@@ -38,7 +38,9 @@ app = create_app()
 
 @app.cli.command()
 def create_database():
+    db.drop_all()
     db.create_all()
+    db.session.commit()
     print("Database created")
 
 @app.cli.command()
@@ -51,6 +53,7 @@ def send_notification():
     notifications.send_notification([], "Hello", "World")
     print("Notification Sent")
 
+# Commands
 app.cli.add_command(mock_database)
 app.cli.add_command(create_database)
 app.cli.add_command(send_notification)
@@ -74,3 +77,5 @@ api.add_resource(resources.SubscriptionListResource, '/subscriptions')
 api.add_resource(resources.SubscriptionResource, '/subscriptions/<int:subscription_id>')
 
 api.add_resource(resources.PostListResource, '/posts')
+
+api.add_resource(resources.TokenResource, '/token/<string:uid>/')

@@ -5,6 +5,8 @@ from .post_resource import *
 
 from .signup_resource import *
 
+from .token_resource import *
+
 __all__ = [
     'SignupResource'
     'UserResource', 'UserListResource', 
@@ -12,4 +14,5 @@ __all__ = [
     'UserSubscriptionListResource', 'SubscriptionListResource', 
     'MapSubscriptionResource', 'MapSubscriptionListResource',
     'MapPostListResource', 'PostListResource', 'UserPostListResource',
+    'TokenResource',
 ]
