@@ -4,6 +4,7 @@ import os
 
 load_dotenv()
 
+API_KEY = os.getenv("API_KEY", None)
 FCM_KEY = os.getenv("FCM_KEY", None)
 FCM_TEST_USER = os.getenv("FCM_TEST_USER", None)
 FIREBASE_PROJECT_ID = os.getenv("FCM_ID", None)

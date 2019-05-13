@@ -1,6 +1,5 @@
 from flask_restful import Resource, reqparse
 
-
 from ..schemas import SubscriptionSchema
 from ..models import Subscription, User, Map
 
