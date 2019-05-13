@@ -14,6 +14,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle;
 import android.os.Debug
 import android.support.design.widget.NavigationView
+import android.support.v4.app.DialogFragment
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -23,25 +24,33 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.firebase.ui.auth.data.model.User
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.mapbox.android.gestures.AndroidGesturesManager
 
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.camera.CameraPosition
+import com.mapbox.mapboxsdk.geometry.LatLng
+import com.mapbox.mapboxsdk.geometry.LatLngBounds
 import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.layers.CircleLayer
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.unimapa.unimapa.servercomunication.ApiUtils
 import com.unimapa.unimapa.servercomunication.datamodels.SignUp
+import java.net.URL
+import java.util.*
 
 
-class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelectedListener{
+class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelectedListener, PublicationDialogFragment.PublicationDialogListener{
 
     private var mapView: MapView? = null
     private var routeCoordinates: MutableList<Point>? = null
@@ -61,8 +70,6 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
         mapSetupFlow(savedInstanceState)
 
         createMenu()
-
-
     }
 
     private fun signInFlow(){
@@ -86,20 +93,50 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
         mapView = this.findViewById(R.id.mapView)
         mapView!!.onCreate(savedInstanceState)
         mapView!!.getMapAsync(OnMapReadyCallback { mapboxMap ->
-//            mapboxMap.setStyle(Style.OUTDOORS) { style ->
-//
-//                runOnUiThread {
-//                    val geojsonUrl = URL("https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev/maps/1/posts")
-//
-//                    val source = GeoJsonSource("geojson-source", geojsonUrl)
-//
-//                    style.addSource(source)
-//
-//                    style.addLayer(CircleLayer("circlelayer", "geojson-source"))
-//                }
-//
-//            }
+
+            val position = CameraPosition.Builder()
+            position.target(LatLng(-22.8184,-47.0647))
+            position.zoom(15.toDouble())
+
+            mapboxMap.cameraPosition = position.build()
+
+            mapboxMap.setMinZoomPreference(13.toDouble())
+            mapboxMap.setMaxZoomPreference(20.toDouble())
+
+            mapboxMap.addOnMapLongClickListener{ point ->
+                showPublicationDialog()
+                true
+            }
+
+            mapboxMap.setStyle(Style.OUTDOORS) { style ->
+
+                runOnUiThread {
+                    val geojsonUrl = URL("https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev/maps/1/posts")
+
+                    val source = GeoJsonSource("geojson-source", geojsonUrl)
+
+
+
+                    style.addSource(source)
+
+                    style.addLayer(CircleLayer("circlelayer", "geojson-source"))
+                }
+
+            }
         })
+    }
+
+    fun showPublicationDialog(){
+        val dialog = PublicationDialogFragment()
+        dialog.show(supportFragmentManager, "publication")
+    }
+
+    override fun onDialogNegativeClick(dialog: DialogFragment) {
+        dialog.dismiss()
+    }
+
+    override fun onDialogPositiveClick(dialog: DialogFragment) {
+        dialog.dismiss()
     }
 
     private fun createMenu(){
