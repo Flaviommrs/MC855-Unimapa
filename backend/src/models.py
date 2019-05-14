@@ -21,6 +21,16 @@ class User(db.Model):
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
+    def get_or_create(uid, **kwargs):
+        instance = User.query.filter_by(uid = uid).first()
+        if instance:
+            return instance
+        else:
+            instance = User(uid=uid, **kwargs)
+            db.session.add(instance)
+            db.session.commit()
+            return instance
+
     
 class Map(db.Model):
     id = db.Column(db.Integer, primary_key=True)
