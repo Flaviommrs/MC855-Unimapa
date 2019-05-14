@@ -1,4 +1,3 @@
-import argparse
 import json
 
 from urllib import request
@@ -20,9 +19,7 @@ class TokenResource(Resource):
         url = "https://www.googleapis.com/identitytoolkit/v3/relyingparty" \
                 "/verifyCustomToken?key={}".format(API_KEY)
 
-        req = request.Request(url,
-                                json.dumps(data).encode("utf-8"),
-                                {'Content-Type': 'application/json'})
+        req = request.Request(url, json.dumps(data).encode("utf-8"), {'Content-Type': 'application/json'})
         response = request.urlopen(req).read()
 
         return json.loads(response)["idToken"]
