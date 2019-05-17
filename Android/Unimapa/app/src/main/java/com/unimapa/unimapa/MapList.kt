@@ -6,6 +6,7 @@ import android.os.StrictMode
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.widget.ListView
+import android.widget.Toast
 import com.unimapa.unimapa.dataBase.MapaDataBase
 
 import com.unimapa.unimapa.domain.Mapa
@@ -59,6 +60,7 @@ class MapList : AppCompatActivity() {
         this.mapas = mapas2
     }
 
+    @SuppressLint("WrongConstant")
     private fun getMapasFromServer(){
         if (android.os.Build.VERSION.SDK_INT > 9) {
             val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
@@ -68,7 +70,9 @@ class MapList : AppCompatActivity() {
             this.mapas.add(Mapa(-1,"",0,false))
             this.mapas.addAll(JsonReader.getMapas("https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev/maps"))
         } catch (e: IOException) {
+            Toast.makeText(this,"Não conseguiu carregar mapas",60000)
             e.printStackTrace()
+            getMapasFromServer()
         }
     }
 

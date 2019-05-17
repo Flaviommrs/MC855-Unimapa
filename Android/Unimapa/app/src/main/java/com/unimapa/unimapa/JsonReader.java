@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -100,6 +101,7 @@ public class JsonReader {
             URL url = new URL(params);
             connection = (HttpURLConnection) url.openConnection();
             connection.connect();
+            connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/json");
 
             InputStream stream = connection.getInputStream();
@@ -116,7 +118,62 @@ public class JsonReader {
             }
 
             return new JSONObject(jsonText);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
 
+    public static JSONObject sendJson(String params, String json, String token) throws JSONException {
+        HttpURLConnection connection = null;
+        BufferedReader reader = null;
+
+        try {
+            String jsonText = "";
+            URL url = new URL(params);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Authorization", "Bearer " + token);
+            //connection.setRequestProperty("Cookie", login("http://ec2-54-189-74-87.us-west-2.compute.amazonaws.com:8080/j_spring_security_check?j_username=df@email.com&j_password=df"));
+            connection.setRequestMethod("POST");
+            connection.connect();
+
+            OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
+            wr.write(json);
+            wr.flush();
+            wr.close();
+
+            if (connection.getResponseCode() < 400) {
+                InputStream stream = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+
+                StringBuffer buffer = new StringBuffer();
+                String line = "";
+
+                while ((line = reader.readLine()) != null) {
+                    jsonText += line;
+                    buffer.append(line + "\n");
+                }
+
+                return new JSONObject(jsonText);
+
+            }else {
+                System.out.println("ERROO ao pfazer o post, ERRO_CODIGO: " + connection.getResponseCode());
+                return null;
+            }
 
         } catch (MalformedURLException e) {
             e.printStackTrace();

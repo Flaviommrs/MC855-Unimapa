@@ -16,13 +16,4 @@
 
     </group>
 
-    <item android:title="Ambientes">
-        <menu>
-            <item
-                android:id="@+id/addEnvironment"
-                android:icon="@drawable/ic_menu_add"
-                android:title="Adicionar Mapa" />
-        </menu>
-    </item>
-
 </menu>

@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
         try {
             var MDB: MapaDataBase? = MapaDataBase(this)
             if (MDB != null) {
-                mapas = MDB.getData()//JsonReader.getMapas("https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev/maps")
+                mapas = MDB.getData()
             }
         } catch (e: IOException) {
             e.printStackTrace()
@@ -153,11 +153,9 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
 
                     val source = GeoJsonSource("geojson-source", geojsonUrl)
 
-
-
                     style.addSource(source)
 
-                    style.addLayer(CircleLayer("circlelayer", "geojson-source"))
+                    style.addLayer(CircleLayer("urban-areas-fill", "geojson-source"))//TODO:circlelayer
                 }
 
             }
@@ -213,14 +211,14 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
         while (i < mapas.size) {
             item = menu.add(R.id.main_pages, i, 0, mapas[i].getName())
 
-            if(i == selectedMap)
+            if(i == selectedMap)//mapas[i].getId()
                 item.setIcon(R.drawable.ic_selected)
 
             menu.addSubMenu("submenu")
             i++
         }
 
-        item = menu.addSubMenu("Configurações").add(R.id.main_pages, 4000, 0, "Adicionar Mapas")
+        item = menu.addSubMenu("Configurações").add(R.id.main_pages, 4000, 0, "Selecionar mapas")
         item.setIcon(R.drawable.ic_menu_add)
         item = menu.add(R.id.main_pages, 5000, 0, "Logout")
         item.setIcon(R.drawable.ic_cancel_black_24dp)
@@ -230,9 +228,6 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         val id = item.itemId
 
-        /*if (id == R.id.nav_home) {
-            alert("HOME")
-        } else */
         if (id == 5000) {
             signOutUser()
         } else if (id == 4000) {
@@ -241,7 +236,7 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
         } else {//se selecionar um mapas
             //alert("selecionou um mapa " + item.itemId)
             item.setIcon(R.drawable.ic_selected)
-            selectedMap = item.itemId
+            selectedMap = item.itemId//mapas[item.itemId].getId()!!
             addItensInMenu()
         }
 
@@ -355,12 +350,6 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
 
         txtInfoName.text = user.displayName
         txtInfoEmail.text = user.email
-        try {
-            //TODO:GradientDrawable backgroundColor = (GradientDrawable) mNavigationView.getHeaderView(0).getBackground();
-            //backgroundColor.setColor(Color.parseColor(environment.getColor()));
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-        }
     }
 
     // Add the mapView's own lifecycle methods to the activity's lifecycle methods
