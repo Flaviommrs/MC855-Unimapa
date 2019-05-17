@@ -4,7 +4,7 @@ from .subscription_resource import *
 from .post_resource import *
 
 from .signup_resource import *
-
+from .account_resource import *
 from .token_resource import *
 
 __all__ = [
@@ -15,4 +15,5 @@ __all__ = [
     'MapSubscriptionResource', 'MapSubscriptionListResource',
     'MapPostListResource', 'PostListResource', 'UserPostListResource',
     'TokenResource',
+    'MyMaps', 'MyAccount',
 ]

@@ -9,8 +9,7 @@ from geojson import Feature, Point, FeatureCollection
 class UserPostListResource(Resource):
     def get(self, user_id):
         user = User.query.get(user_id)
-        posts = Post.query.filter_by(user=user)
-        return PostSchema().dump(posts, many=True).data, 200
+        return PostSchema().dump(Post.query.filter_by(user=user), many=True).data, 200
 
 class MapPostListResource(Resource):
     def get(self, map_id):

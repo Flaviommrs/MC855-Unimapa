@@ -66,7 +66,6 @@ api.add_resource(resources.SignUpResource, '/sign-up')
 
 api.add_resource(resources.UserListResource, '/users')
 api.add_resource(resources.UserResource, '/users/<int:user_id>')
-
 api.add_resource(resources.UserSubscriptionListResource, '/users/<int:user_id>/subscriptions')
 api.add_resource(resources.UserPostListResource, '/users/<int:user_id>/posts')
 
@@ -81,3 +80,6 @@ api.add_resource(resources.SubscriptionResource, '/subscriptions/<int:subscripti
 api.add_resource(resources.PostListResource, '/posts')
 
 api.add_resource(resources.TokenResource, '/token/<string:uid>')
+
+api.add_resource(resources.MyAccount, '/my_account')
+api.add_resource(resources.MyMaps, '/my_subscriptions')

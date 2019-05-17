@@ -18,7 +18,7 @@ def authenticate(func):
 
                 decoded_token = auth.verify_id_token(id_token)
                 uid = decoded_token['uid']
-                user = User.query.filter_by(uid=uid).first()
+                user = User.query.filter_by(id=uid).first()
 
                 if user:
                     args[0].user = user

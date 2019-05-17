@@ -10,13 +10,11 @@ from ..config import settings
 
 
 class SignUpResource(Resource):
-
-    @authenticate
-    def get(self):
-        return UserSchema().dump(self.user).data, 200
-
+    
     @decode_token
     def post(self):
         uid = self.decoded_token['uid']
-        user = User.get_or_create(uid = uid, name=uid, email=uid, username=uid)
+        name = self.decoded_token['name']
+        email = self.decoded_token['email']
+        user = User.get_or_create(id = uid, name=name, email=email)
         return UserSchema().dump(user).data, 201
