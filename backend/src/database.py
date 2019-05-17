@@ -14,8 +14,7 @@ def mock_database(db):
 
         for i in range(50):
             new_user = User(
-                uid=i,
-                username="Username {}".format(i),
+                id=i,
                 name="Nome {}".format(i),
                 email='username{}@gmail.com'.format(i)
             )

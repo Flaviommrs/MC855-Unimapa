@@ -6,6 +6,8 @@ import firebase_admin
 from flask import Flask, request, jsonify
 from flask.cli import AppGroup, with_appcontext
 from flask_restful import Resource, Api, reqparse
+from flask_migrate import Migrate
+
 from firebase_admin import credentials
 
 from .config import settings
@@ -25,7 +27,7 @@ def create_app():
         app.config['SQLALCHEMY_DATABASE_URI'] = settings.DATABASE_CONFIG
 
     db.init_app(app)
-
+    migrate = Migrate(app, db)
 
     # Firebase auth configuration
     cred = credentials.Certificate('./serviceAccountKey.json')

@@ -6,9 +6,7 @@ import geojson
 
 
 class UserSchema(Schema):
-    id = fields.Integer()
-    uid = fields.Str()
-    username = fields.Str()
+    id = fields.Str()
     email = fields.Str()
     name = fields.Str()
 
@@ -29,7 +27,7 @@ class PostSchema(Schema):
     id = fields.Integer()
 
     user = fields.Nested(UserSchema)
-    mapa = fields.Nested(MapSchema)
+    map = fields.Nested(MapSchema)
 
     post_time = fields.DateTime()
     message = fields.String()
@@ -42,7 +40,7 @@ class PostSchema(Schema):
 
 class SubscriptionSchema(Schema):
     user = fields.Nested(UserSchema)
-    mapa = fields.Nested(MapSchema)
+    map = fields.Nested(MapSchema)
     subscription_date = fields.DateTime()
 
     @post_load
