@@ -11,9 +11,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
+import android.location.Location
 import android.os.Bundle;
 import android.os.Debug
+import android.os.StrictMode
 import android.support.design.widget.NavigationView
+import android.support.v4.app.DialogFragment
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -23,25 +26,38 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.firebase.ui.auth.data.model.User
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.mapbox.android.gestures.AndroidGesturesManager
 
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.camera.CameraPosition
+import com.mapbox.mapboxsdk.geometry.LatLng
+import com.mapbox.mapboxsdk.geometry.LatLngBounds
 import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.layers.CircleLayer
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import com.unimapa.unimapa.dataBase.MapaDataBase
+import com.unimapa.unimapa.domain.Mapa
 import com.unimapa.unimapa.servercomunication.ApiUtils
 import com.unimapa.unimapa.servercomunication.datamodels.SignUp
+import java.io.IOException
+import java.net.URL
+import java.util.*
 
 
-class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelectedListener{
+class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelectedListener, PublicationDialogFragment.PublicationDialogListener{
 
     private var mapView: MapView? = null
     private var routeCoordinates: MutableList<Point>? = null
@@ -53,6 +69,13 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
 
     private val RC_SIGN_IN = 100
 
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var latitude:Double? = 0.0
+    private var longitude:Double? = 0.0
+
+    private var mapas = java.util.ArrayList<Mapa>()
+    private var selectedMap:Int = 0
+
     @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,9 +83,31 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
         signInFlow()
         mapSetupFlow(savedInstanceState)
 
+        getMapas()
+
         createMenu()
 
+        ///LOCATION///////////////////////////////////////////////////////////////////////////////////////////////////
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
+        obtieneLocalizacion()
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    }
+
+    private fun getMapas(){
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+            StrictMode.setThreadPolicy(policy)
+        }
+        try {
+            var MDB: MapaDataBase? = MapaDataBase(this)
+            if (MDB != null) {
+                mapas = MDB.getData()//JsonReader.getMapas("https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev/maps")
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
     }
 
     private fun signInFlow(){
@@ -86,20 +131,50 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
         mapView = this.findViewById(R.id.mapView)
         mapView!!.onCreate(savedInstanceState)
         mapView!!.getMapAsync(OnMapReadyCallback { mapboxMap ->
-//            mapboxMap.setStyle(Style.OUTDOORS) { style ->
-//
-//                runOnUiThread {
-//                    val geojsonUrl = URL("https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev/maps/1/posts")
-//
-//                    val source = GeoJsonSource("geojson-source", geojsonUrl)
-//
-//                    style.addSource(source)
-//
-//                    style.addLayer(CircleLayer("circlelayer", "geojson-source"))
-//                }
-//
-//            }
+
+            val position = CameraPosition.Builder()
+            position.target(LatLng(-22.8184,-47.0647))
+            position.zoom(15.toDouble())
+
+            mapboxMap.cameraPosition = position.build()
+
+            mapboxMap.setMinZoomPreference(13.toDouble())
+            mapboxMap.setMaxZoomPreference(20.toDouble())
+
+            mapboxMap.addOnMapLongClickListener{ point ->
+                showPublicationDialog()
+                true
+            }
+
+            mapboxMap.setStyle(Style.OUTDOORS) { style ->
+
+                runOnUiThread {
+                    val geojsonUrl = URL("https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev/maps/1/posts")
+
+                    val source = GeoJsonSource("geojson-source", geojsonUrl)
+
+
+
+                    style.addSource(source)
+
+                    style.addLayer(CircleLayer("circlelayer", "geojson-source"))
+                }
+
+            }
         })
+    }
+
+    fun showPublicationDialog(){
+        val dialog = PublicationDialogFragment()
+        dialog.show(supportFragmentManager, "publication")
+    }
+
+    override fun onDialogNegativeClick(dialog: DialogFragment) {
+        dialog.dismiss()
+    }
+
+    override fun onDialogPositiveClick(dialog: DialogFragment) {
+        dialog.dismiss()
     }
 
     private fun createMenu(){
@@ -125,44 +200,49 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
         addItensInMenu()
     }
 
+    @SuppressLint("ResourceType")
     private fun addItensInMenu() {
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
-        val menu = navigationView.menu
-
+        var menu = navigationView.menu
+        var item:MenuItem
         var i = 0
 
-        //coloca os ambientes no menu
-        while (i < 6) {
-            val item = menu.add(R.id.main_pages, i, 0, "Nome do mapa")
+        menu.clear()
 
-            item.setIcon(R.drawable.ic_selected)
+        //coloca os ambientes no menu
+        while (i < mapas.size) {
+            item = menu.add(R.id.main_pages, i, 0, mapas[i].getName())
+
+            if(i == selectedMap)
+                item.setIcon(R.drawable.ic_selected)
 
             menu.addSubMenu("submenu")
             i++
-            i++
         }
 
-        //menu.addSubMenu("").add("");
-        val item = menu.addSubMenu("Opção").add(R.id.main_pages, 9000, 0, "Excluir Mapas")
-        item.setIcon(R.drawable.ic_home)
+        item = menu.addSubMenu("Configurações").add(R.id.main_pages, 4000, 0, "Adicionar Mapas")
+        item.setIcon(R.drawable.ic_menu_add)
+        item = menu.add(R.id.main_pages, 5000, 0, "Logout")
+        item.setIcon(R.drawable.ic_cancel_black_24dp)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         val id = item.itemId
 
-        if (id == R.id.nav_home) {
-            alert("Selecione um ambiente")
-        } else if (id == R.id.nav_logout) {
+        /*if (id == R.id.nav_home) {
+            alert("HOME")
+        } else */
+        if (id == 5000) {
             signOutUser()
-        } else if (id == R.id.addEnvironment) {
-            openEnvironment()
+        } else if (id == 4000) {
+            openListMapas()
             return true
-        } else if (id == 9000) {
-            confirmationDeleteEnvironment(this)
-            return true
-        } else {//se selecionar um ambiente
-            alert("selecionou um ambiente")
+        } else {//se selecionar um mapas
+            //alert("selecionou um mapa " + item.itemId)
+            item.setIcon(R.drawable.ic_selected)
+            selectedMap = item.itemId
+            addItensInMenu()
         }
 
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
@@ -178,25 +258,13 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
                 }
     }
 
-    private fun confirmationDeleteEnvironment(context: Context) {
-        // set title
-        alertDialogBuilder?.setTitle("Mensagem")
 
-        // set dialog message
-        alertDialogBuilder?.setMessage("Deseja excluir os ambientes?")?.setPositiveButton("Sim") { dialog, id ->
-            //faz algo
-        }?.setNegativeButton("Não") { dialog, id ->
-            //colocar alguma coisa para fazer
-        }
-
-        // create alert dialog
-        val alertDialog = alertDialogBuilder?.create()
-        // show it
-        alertDialog?.show()
-    }
-
-    private fun openEnvironment() {
-        alert("Abrindo novo mapa")
+    private fun openListMapas() {
+        //alert("Abrindo novo mapa")
+        intent = Intent(this, MapList::class.java)
+        startActivity(intent)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        setResult(Activity.RESULT_OK)
     }
 
     private fun alert(msg: String) {
@@ -270,6 +338,17 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
         })
     }
 
+    @SuppressLint("MissingPermission")
+    private fun obtieneLocalizacion(){
+        fusedLocationClient.lastLocation
+                .addOnSuccessListener { location: Location? ->
+                    latitude =  location?.latitude
+                    longitude = location?.longitude
+
+                    alert("lon: " + longitude + " lat: " + latitude)
+                }
+    }
+
     private fun setUserInformations(user: FirebaseUser) {
         val txtInfoName = mNavigationView!!.getHeaderView(0).findViewById<TextView>(R.id.txtInfoName)
         val txtInfoEmail = mNavigationView!!.getHeaderView(0).findViewById<TextView>(R.id.txtInfoEmail)
@@ -293,6 +372,8 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
     public override fun onResume() {
         super.onResume()
         mapView!!.onResume()
+        getMapas()
+        addItensInMenu()
     }
 
     public override fun onPause() {

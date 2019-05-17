@@ -9,7 +9,7 @@ import retrofit2.Retrofit
 object RetrofitClientInstance {
 
     private var retrofit: Retrofit? = null
-    private val BASE_URL = "http://07f465a1.ngrok.io/"
+    private val BASE_URL = "https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev/"
 
     fun getRetrofitInstance(): Retrofit {
         if (retrofit == null) {

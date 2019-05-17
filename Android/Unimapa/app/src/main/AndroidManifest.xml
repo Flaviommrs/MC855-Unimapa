@@ -3,6 +3,7 @@
     package="com.unimapa.unimapa">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -32,10 +33,14 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".LoginActivity" />
-        <activity
-            android:name=".Main"
+        <!--<activity
+            android:name=".MainActivity"
             android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar"></activity>-->
+
+        <activity
+            android:name=".MapList"
+            android:label="@string/title_activity_map_list"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
