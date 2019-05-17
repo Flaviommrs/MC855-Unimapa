@@ -9,8 +9,11 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.unimapa.unimapa.JsonReader;
 import com.unimapa.unimapa.R;
 import com.unimapa.unimapa.dataBase.MapaDataBase;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -92,6 +95,12 @@ public class CustomAdapter extends BaseAdapter {
                 }else {
                     modelArrayList.get(pos).setSelected(true);
                     MDB.insertData(modelArrayList.get(pos));
+                    try {
+                        JsonReader.sendJson("http://235f3279.ngrok.io/maps"    //TODO: em producao"https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev/maps/"
+                                ,"{\"name\": \"testando \"}","");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     Toast.makeText(context, "Adicionou: " + modelArrayList.get(pos).getName(), Toast.LENGTH_SHORT).show();
                 }
             }
