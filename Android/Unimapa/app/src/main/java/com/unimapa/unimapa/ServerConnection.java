@@ -26,14 +26,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class JsonReader {
+public class ServerConnection {
 
     private final Context context;
 
-    public JsonReader(Context context) {
+    public ServerConnection(Context context) {
         this.context = context;
     }
 
+    private static final String BASE_URL = "http://235f3279.ngrok.io";
 
     public static ArrayList<Mapa> getMapas(String url){
         ArrayList<Mapa> mapas = new ArrayList<Mapa>();
@@ -143,7 +144,7 @@ public class JsonReader {
 
         try {
             String jsonText = "";
-            URL url = new URL(params);
+            URL url = new URL(BASE_URL + params);
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setRequestProperty("Authorization", "Bearer " + token);

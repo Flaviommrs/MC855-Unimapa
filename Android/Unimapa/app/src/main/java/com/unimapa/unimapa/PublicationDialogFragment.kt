@@ -6,6 +6,11 @@ import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import android.widget.TextView
+import org.w3c.dom.Text
+import android.widget.EditText
+
+
 
 /**
  * Created by flavio.matheus on 13/05/19.
@@ -15,7 +20,7 @@ class PublicationDialogFragment : DialogFragment() {
     internal lateinit var listener: PublicationDialogListener
 
     interface PublicationDialogListener {
-        fun onDialogPositiveClick(dialog: DialogFragment)
+        fun onDialogPositiveClick(dialog: DialogFragment, description: String)
         fun onDialogNegativeClick(dialog: DialogFragment)
     }
 
@@ -33,14 +38,15 @@ class PublicationDialogFragment : DialogFragment() {
 
             builder.setPositiveButton("Post", DialogInterface.OnClickListener{ dialog, id ->
                 print("Post")
-                listener.onDialogPositiveClick(this)
-                dialog.dismiss()
+
+                val edit = (dialog as AlertDialog).findViewById<EditText>(R.id.descrição) as EditText
+
+                listener.onDialogPositiveClick(this, edit.text.toString() )
             })
 
             builder.setNegativeButton("Cancel", DialogInterface.OnClickListener{dialog, id ->
                 print("Cancel")
                 listener.onDialogNegativeClick(this)
-                dialog.cancel()
             })
 
 

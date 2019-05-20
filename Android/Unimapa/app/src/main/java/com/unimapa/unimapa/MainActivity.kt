@@ -9,11 +9,8 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
-import android.graphics.drawable.Drawable
 import android.location.Location
 import android.os.Bundle;
-import android.os.Debug
 import android.os.StrictMode
 import android.support.design.widget.NavigationView
 import android.support.v4.app.DialogFragment
@@ -24,9 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.firebase.ui.auth.data.model.User
@@ -35,26 +30,20 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.mapbox.android.gestures.AndroidGesturesManager
 
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
-import com.mapbox.mapboxsdk.geometry.LatLngBounds
 import com.mapbox.mapboxsdk.maps.MapView;
-import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.layers.CircleLayer
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.unimapa.unimapa.dataBase.MapaDataBase
 import com.unimapa.unimapa.domain.Mapa
-import com.unimapa.unimapa.servercomunication.ApiUtils
-import com.unimapa.unimapa.servercomunication.datamodels.SignUp
 import java.io.IOException
 import java.net.URL
-import java.util.*
 
 
 class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelectedListener, PublicationDialogFragment.PublicationDialogListener{
@@ -64,7 +53,7 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
 
     private var mNavigationView: NavigationView? = null
     private var toolbar: Toolbar? = null
-    private val jsonReader: JsonReader? = null
+    private val serverConnection: ServerConnection? = null
     private var alertDialogBuilder: AlertDialog.Builder? = null
 
     private val RC_SIGN_IN = 100
@@ -75,6 +64,9 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
 
     private var mapas = java.util.ArrayList<Mapa>()
     private var selectedMap:Int = 0
+
+    private var postLat: Double = 0.0
+    private var postLong: Double = 0.0
 
     @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -143,6 +135,8 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
 
             mapboxMap.addOnMapLongClickListener{ point ->
                 showPublicationDialog()
+                postLat = point.latitude
+                postLong = point.longitude
                 true
             }
 
@@ -171,8 +165,23 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
         dialog.dismiss()
     }
 
-    override fun onDialogPositiveClick(dialog: DialogFragment) {
-        dialog.dismiss()
+    override fun onDialogPositiveClick(dialog: DialogFragment, description: String) {
+        val user = FirebaseAuth.getInstance().currentUser
+
+        user!!.getIdToken(true).addOnCompleteListener(OnCompleteListener {
+            if(it.isSuccessful){
+                val token : String = it.result!!.token!!
+
+                ServerConnection.sendJson("/posts", "{\n" +
+                        "\"message\" : \"$description\",\n" +
+                        "\"point_x\" : $postLong,\n" +
+                        "\"point_y\" : $postLat\n" +
+                        "}", token)
+
+                print("long $postLong, lat $postLat")
+                dialog.dismiss()
+            }
+        })
     }
 
     private fun createMenu(){
@@ -294,16 +303,22 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
                 val user = FirebaseAuth.getInstance().currentUser
 
                 user!!.getIdToken(true).addOnCompleteListener(OnCompleteListener {
-//                    if(it.isSuccessful){
-//                        val token : String = it.result!!.token!!
-//
-//                        val service = ApiUtils.getApiService()
-//
-//                        var tokenPayload = SignUp()
-//                        tokenPayload.setToken(token)
-//
-//                        service.sendSignUpToken(tokenPayload)
-//                    }
+                    if(it.isSuccessful){
+                        val token : String = it.result!!.token!!
+
+                        var preferences = applicationContext.getSharedPreferences("Unimapa", Context.MODE_PRIVATE)
+
+                        var notificationToken = preferences.getString(R.string.notification_token_preferences.toString(),"")
+
+                        if(notificationToken != "") {
+                            ServerConnection.sendJson("/sign-up", "{ notification_token: $notificationToken }", token)
+                        }
+                        else {
+                            ServerConnection.sendJson("/sign-up", "", token)
+                        }
+
+
+                    }
                 })
 
                 setUserInformations(user!!)
@@ -315,22 +330,6 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
                 // ...
             }
         }
-    }
-
-    fun sendToken(user : FirebaseUser)
-    {
-        user!!.getIdToken(true).addOnCompleteListener(OnCompleteListener {
-            if(it.isSuccessful){
-                val token : String = it.result!!.token!!
-
-                val service = ApiUtils.getApiService()
-
-                var tokenPayload = SignUp()
-                tokenPayload.setToken(token)
-
-                service.sendSignUpToken(tokenPayload)
-            }
-        })
     }
 
     @SuppressLint("MissingPermission")

@@ -9,7 +9,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.unimapa.unimapa.JsonReader;
+import com.unimapa.unimapa.ServerConnection;
 import com.unimapa.unimapa.R;
 import com.unimapa.unimapa.dataBase.MapaDataBase;
 
@@ -96,7 +96,7 @@ public class CustomAdapter extends BaseAdapter {
                     modelArrayList.get(pos).setSelected(true);
                     MDB.insertData(modelArrayList.get(pos));
                     try {
-                        JsonReader.sendJson("http://235f3279.ngrok.io/maps"    //TODO: em producao"https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev/maps/"
+                        ServerConnection.sendJson("http://235f3279.ngrok.io/maps"    //TODO: em producao"https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev/maps/"
                                 ,"{\"name\": \"testando \"}","");
                     } catch (JSONException e) {
                         e.printStackTrace();
