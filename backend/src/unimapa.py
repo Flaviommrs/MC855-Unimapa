@@ -79,7 +79,7 @@ api.add_resource(resources.SubscriptionResource, '/subscriptions/<int:subscripti
 
 api.add_resource(resources.PostListResource, '/posts')
 
-api.add_resource(resources.TokenResource, '/token/<string:uid>')
+api.add_resource(resources.TokenResource, '/token')
 
 api.add_resource(resources.MyAccount, '/my_account')
 api.add_resource(resources.MyMaps, '/my_subscriptions')

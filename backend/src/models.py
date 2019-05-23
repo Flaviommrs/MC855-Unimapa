@@ -29,6 +29,12 @@ class User(db.Model):
             db.session.commit()
             return instance
 
+    def exists(id):
+        instance = User.query.filter_by(id = id).first()
+        if instance:
+            return True
+        return False
+    
 class Map(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
