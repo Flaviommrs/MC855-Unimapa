@@ -16,5 +16,5 @@ class SignUpResource(Resource):
         uid = self.decoded_token['uid']
         name = self.decoded_token['name']
         email = self.decoded_token['email']
-        user = User.get_or_create(id = uid, name=name, email=email)
+        user = User.get_or_create(id=uid, name=name, email=email)
         return UserSchema().dump(user).data, 201

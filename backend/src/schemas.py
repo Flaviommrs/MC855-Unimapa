@@ -6,7 +6,6 @@ import geojson
 
 
 class UserSchema(Schema):
-    id = fields.Str()
     email = fields.Str()
     name = fields.Str()
 

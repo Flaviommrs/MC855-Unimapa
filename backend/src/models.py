@@ -29,10 +29,9 @@ class User(db.Model):
             db.session.commit()
             return instance
 
-    
 class Map(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), unique=True, nullable=False)
+    name = db.Column(db.String(100), nullable=False)
     
     posts = db.relationship('Post', backref='map', lazy=True)
     subscriptions = db.relationship('Subscription', backref='map', lazy=True)
@@ -45,7 +44,7 @@ class Post(db.Model):
     point_x = db.Column(db.Float, nullable=False)
     point_y = db.Column(db.Float, nullable=False)
 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.String, db.ForeignKey('user.id'), nullable=False)
     map_id = db.Column(db.Integer, db.ForeignKey('map.id'), nullable=False)
 
 
@@ -53,5 +52,5 @@ class Subscription(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     subscription_time = db.Column(db.DateTime, nullable=False)
 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.String, db.ForeignKey('user.id'), nullable=False)
     map_id = db.Column(db.Integer, db.ForeignKey('map.id'), nullable=False)
