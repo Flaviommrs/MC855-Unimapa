@@ -2,6 +2,7 @@
     <string name="app_name">Unimapa</string>
     <string name="access_token" translatable="false">pk.eyJ1IjoiZ3VudGVybWluZ2F0byIsImEiOiJjanVlbnJ2aDAwNHJmNDNwODd0ZG53NnU1In0.RpQSPeyHV7exvw8i7Alziw</string>
     <string name="action_sign_in_short">Logar</string>
+    <string name="notification_token_preferences" translatable="false">notification_token</string>
     <string name="prompt_password">Senha</string>
     <string name="prompt_email">email</string>
     <string name="error_invalid_password">Senha inválida</string>
@@ -19,7 +20,7 @@
     <string name="title_activity_main">Main</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_map_list">Lista de Mapas</string>
-
+    <!--<string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>-->
     <integer name="btnplusview">1</integer>
     <integer name="btnpluspos">2</integer>
 </resources>
