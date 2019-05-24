@@ -47,7 +47,7 @@ class PostResource(Resource):
 
 
 class PostListResource(Resource):
-    
+
     @authenticate
     def get(self):
         return PostSchema().dump(Post.query.all(), many=True).data, 200
@@ -64,7 +64,7 @@ class PostListResource(Resource):
         _map = Map.query.get_or_404(args['map_id'], "Map with this id does not exist")
 
         new_post = Post(
-            user_id=self.user.id,
+            user = self.user,
             post_time=datetime.utcnow(),
             map = _map,
             message=args['message'],
