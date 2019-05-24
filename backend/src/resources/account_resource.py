@@ -1,5 +1,5 @@
-from flask import request
-from flask_restful import Resource, reqparse
+from flask import request, Blueprint
+from flask_restful import Resource, reqparse, Api
 
 from .decorators import authenticate, decode_token
 
@@ -8,6 +8,8 @@ from ..models import User, Map, Subscription, Post
 
 from ..config import settings
 
+api_bp = Blueprint('my_account_api', __name__)
+api = Api(api_bp)
 
 class MyAccount(Resource):
 

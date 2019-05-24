@@ -1,12 +1,15 @@
 import json
 import urllib
 
-from flask_restful import Resource
 from firebase_admin import auth
-from flask import request
+from flask import request, Blueprint
+from flask_restful import Resource, reqparse, Api
 
 from ..config import settings
 from ..models import User
+
+api_bp = Blueprint('token_api', __name__)
+api = Api(api_bp)
 
 API_KEY = settings.API_KEY
 

@@ -1,9 +1,13 @@
-from flask_restful import Resource, reqparse
+from flask import request, Blueprint
+from flask_restful import Resource, reqparse, Api
 
 from ..schemas import SubscriptionSchema
 from ..models import Subscription, User, Map
 
 from datetime import datetime
+
+api_bp = Blueprint('subscription_api', __name__)
+api = Api(api_bp)
 
 class UserSubscriptionListResource(Resource):
     def get(self, user_id):

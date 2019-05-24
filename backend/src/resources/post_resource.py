@@ -1,10 +1,16 @@
-from flask_restful import Resource, reqparse
-
-from ..schemas import PostSchema
-from ..models import Post, User
+from flask import request, Blueprint
+from flask_restful import Resource, reqparse, Api
 
 from datetime import datetime
 from geojson import Feature, Point, FeatureCollection
+
+from ..schemas import PostSchema
+from ..models import Post, User, Map, db
+
+from .decorators import authenticate
+
+api_bp = Blueprint('post_api', __name__)
+api = Api(api_bp)
 
 class UserPostListResource(Resource):
     def get(self, user_id):

@@ -1,7 +1,16 @@
-from flask_restful import Resource, reqparse
+from flask import request, Blueprint
+from flask_restful import Resource, reqparse, Api
 
-from ..schemas import MapSchema
-from ..models import Map
+from datetime import datetime
+from geojson import Feature, Point, FeatureCollection
+
+from ..schemas import MapSchema, PostSchema, SubscriptionSchema
+from ..models import Map, Post, Subscription, db
+
+from .decorators import authenticate
+
+api_bp = Blueprint('map_api', __name__)
+api = Api(api_bp)
 
 class MapResource(Resource):
     def get(self, map_id):
