@@ -43,6 +43,9 @@ def create_app(test_config=None):
             database.mock_database(db)
 
     # Routes
+    app.register_blueprint(resources.account_bp)
+    app.register_blueprint(resources.signup_bp)
+    app.register_blueprint(resources.token_bp)
 
     @app.cli.command()
     def create_database():

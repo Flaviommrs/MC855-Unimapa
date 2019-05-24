@@ -33,3 +33,5 @@ class TokenResource(Resource):
         response = urllib.request.urlopen(req).read()
 
         return json.loads(response)["idToken"]
+
+api.add_resource(TokenResource, '/token')

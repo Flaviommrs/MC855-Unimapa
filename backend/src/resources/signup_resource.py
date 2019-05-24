@@ -20,3 +20,5 @@ class SignUpResource(Resource):
         email = self.decoded_token['email']
         user = User.get_or_create(User, id=uid, name=name, email=email)
         return UserSchema().dump(user).data, 201
+
+api.add_resource(SignUpResource, '/sign-up')
