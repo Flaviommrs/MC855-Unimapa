@@ -1,12 +1,15 @@
 import json
 import urllib
 
-from flask_restful import Resource
 from firebase_admin import auth
-from flask import request
+from flask import request, Blueprint
+from flask_restful import Resource, reqparse, Api
 
 from ..config import settings
 from ..models import User
+
+api_bp = Blueprint('token_api', __name__)
+api = Api(api_bp)
 
 API_KEY = settings.API_KEY
 
@@ -14,7 +17,7 @@ class TokenResource(Resource):
     def get(self):
         uid = request.args.get('uid', None)
 
-        if not User.exists(uid):
+        if not User.exists(User, uid):
             return 'User does not exist', 400
 
         token = auth.create_custom_token(uid)
@@ -30,3 +33,5 @@ class TokenResource(Resource):
         response = urllib.request.urlopen(req).read()
 
         return json.loads(response)["idToken"]
+
+api.add_resource(TokenResource, '/token')
