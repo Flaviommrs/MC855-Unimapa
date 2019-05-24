@@ -21,7 +21,7 @@ class InstanceIdService : FirebaseMessagingService() {
 
         var editor = preferences.edit()
 
-        editor.putString(R.string.notification_token_preferences.toString(), refreshedToken)
-        editor.apply()
+        editor.putString("notification_token", refreshedToken)
+        editor.commit()
     }
 }

@@ -19,6 +19,7 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
@@ -30,6 +31,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.iid.FirebaseInstanceId
 
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
@@ -306,18 +308,17 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
                     if(it.isSuccessful){
                         val token : String = it.result!!.token!!
 
-                        var preferences = applicationContext.getSharedPreferences("Unimapa", Context.MODE_PRIVATE)
+                        FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener(OnCompleteListener { task ->
+                            if (!task.isSuccessful) {
+                                ServerConnection.sendJson("/sign-up", "", token)
+                                Log.w("[Sign Up]", "getInstanceId failed", task.exception)
+                                return@OnCompleteListener
+                            }
 
-                        var notificationToken = preferences.getString(R.string.notification_token_preferences.toString(),"")
-
-                        if(notificationToken != "") {
-                            ServerConnection.sendJson("/sign-up", "{ notification_token: $notificationToken }", token)
-                        }
-                        else {
-                            ServerConnection.sendJson("/sign-up", "", token)
-                        }
-
-
+                            // Get new Instance ID token
+                            val notification = task.result?.token
+                            ServerConnection.sendJson("/sign-up", "{ notification_token: $notification }", token)
+                        })
                     }
                 })
 
