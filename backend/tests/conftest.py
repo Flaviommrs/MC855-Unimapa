@@ -70,3 +70,18 @@ def session(db, request):
 
     request.addfinalizer(teardown)
     return session
+
+
+@pytest.fixture(scope='function')
+def client(app, session, request):
+    """Session-wide test database."""
+    return app.test_client()
+
+
+@pytest.fixture(scope='function')
+def auth_client(client, request):
+    """"""
+    res = client.get('/token?uid={}'.format(settings.FIREBASE_UID))
+    token = json.loads(res.data.decode('utf-8'))
+    client.environ_base['HTTP_AUTHORIZATION'] = 'Bearer {}'.format(token)
+    return client
