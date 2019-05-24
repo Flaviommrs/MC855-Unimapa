@@ -12,43 +12,75 @@ from .decorators import authenticate
 api_bp = Blueprint('post_api', __name__)
 api = Api(api_bp)
 
-class UserPostListResource(Resource):
-    def get(self, user_id):
-        user = User.query.get(user_id)
-        return PostSchema().dump(Post.query.filter_by(user=user), many=True).data, 200
+class PostResource(Resource):
+    
+    @authenticate
+    def get(self, post_id):
+        post = Post.query.get_or_404(post_id, "Post with this id does not exist")
 
-class MapPostListResource(Resource):
-    def get(self, map_id):
-        posts = Post.query(map_id)
-        feature_collection_list = [] 
-        for post in posts:
-            feature_collection_list.append(Feature(geometry=post.point))
-        return FeatureCollection(feature_collection_list), 200
+        return PostSchema().dump(post).data, 200
+
+    @authenticate
+    def delete(self, post_id):
+        post = Post.query.get_or_404(post_id, "Post with this id does not exist")
+
+        db.session.delete(post)
+        db.session.commit()
+        return '', 204
+
+    @authenticate
+    def put(self, post_id):
+        post = Post.query.get_or_404(post_id, "Post with this id does not exist")
+
+        edit_parser = reqparse.RequestParser()
+        edit_parser.add_argument('message')
+        edit_parser.add_argument('point_x', type=float)
+        edit_parser.add_argument('point_y', type=float)
+        args = edit_parser.parse_args()
+
+        for key, value in args.items():
+            setattr(post, key, value)
+
+        db.session.commit()
+
+        return PostSchema().dump(post).data, 201
+
 
 class PostListResource(Resource):
+    
+    @authenticate
     def get(self):
-        res = []
-        for post in Post.query.all():
-            res.append(PostSchema().dump(post).data)
-        return res, 200
+        return PostSchema().dump(Post.query.all(), many=True).data, 200
 
+    @authenticate
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('map_id', type=int)
-        parser.add_argument('post_id', type=int)
-        parser.add_argument('username')
         parser.add_argument('message')
-        parser.add_argument('pos_x', type=float)
-        parser.add_argument('pos_y', type=float)
+        parser.add_argument('map_id', type=int, required=True, help="Map id is required")
+        parser.add_argument('point_x', type=float)
+        parser.add_argument('point_y', type=float)
 
         args = parser.parse_args()
-        new_post = Post(args['map_id'],
-            args['post_id'],
+        _map = Map.query.get_or_404(args['map_id'], "Map with this id does not exist")
+
+        new_post = Post(
+            user_id=self.user.id,
             post_time=datetime.utcnow(),
-            username=args['username'],
+            map = _map,
             message=args['message'],
-            point=Point((args['pos_x'], args['pos_y'])),
-            )
-        new_post.save()
+            point_x=args['point_x'], 
+            point_y=args['point_y'],
+        )
+        db.session.add(new_post)
+
+        try:
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            db.session.flush()
+            return '', 500
         
         return PostSchema().dump(new_post).data, 201
+
+api.add_resource(PostResource, '/posts/<int:post_id>')
+api.add_resource(PostListResource, '/posts')
