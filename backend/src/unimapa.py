@@ -81,3 +81,8 @@ def create_app(test_config=None):
     app.cli.add_command(send_notification)
 
     return app
+
+app = create_app()
+if __name__ == '__main__':
+    app.run()
+    
