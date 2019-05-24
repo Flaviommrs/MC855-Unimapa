@@ -14,14 +14,3 @@ class UserListResource(Resource):
         for u in User.query.all():
             res.append(UserSchema().dump(u).data)
         return res
-
-    def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('username')
-        parser.add_argument('name')
-
-        args = parser.parse_args()
-        newUser = User(args['username'], name=args['name'])
-        newUser.save()
-        
-        return UserSchema().dump(newUser).data, 201

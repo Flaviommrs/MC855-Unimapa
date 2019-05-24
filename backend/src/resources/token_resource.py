@@ -14,7 +14,7 @@ class TokenResource(Resource):
     def get(self):
         uid = request.args.get('uid', None)
 
-        if not User.exists(uid):
+        if not User.exists(User, uid):
             return 'User does not exist', 400
 
         token = auth.create_custom_token(uid)
