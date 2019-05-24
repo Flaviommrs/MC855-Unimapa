@@ -25,13 +25,6 @@ class myModel():
             return True
         return False
 
-    def get_or_404(self, id):
-        instance = self.query.filter_by(id = id).first()
-        if instance:
-            return instance
-        abort(404, "{} with this id does not exist".format(self.__name__))
-
-
 class User(db.Model, myModel):
     id = db.Column(db.String, primary_key=True)
     email = db.Column(db.String(100), unique=True, nullable=False)
