@@ -50,6 +50,7 @@ def create_app(test_config=None):
     app.register_blueprint(resources.post_bp)
     app.register_blueprint(resources.user_bp)
     app.register_blueprint(resources.subscription_bp)
+    app.register_blueprint(resources.map_bp)
 
     @app.cli.command()
     def create_database():
