@@ -1,43 +1,65 @@
-from flask_restful import Resource, reqparse
+from flask import request, Blueprint
+from flask_restful import Resource, reqparse, Api
 
 from ..schemas import SubscriptionSchema
-from ..models import Subscription, User, Map
+from ..models import Subscription, User, Map, db
 
 from datetime import datetime
 
-class UserSubscriptionListResource(Resource):
-    def get(self, user_id):
-        user = User.query.get(user_id)
-        return SubscriptionSchema().dump(Subscription.query.filter_by(user=user), many=True).data, 200
+from .decorators import authenticate
 
-
-class MapSubscriptionListResource(Resource):
-    def get(self, map_id):
-        mapa = Map.query.get(map_id)
-        return SubscriptionSchema().dump(Subscription.query.filter_by(map=mapa), many=True).data, 200
-
+api_bp = Blueprint('subscription_api', __name__)
+api = Api(api_bp)
 
 class SubscriptionResource(Resource):
-    def get(self, subscription_id):
-        return SubscriptionSchema().dump(Subscription.query.get(subscription_id)).data, 200
 
-    def delete(self, subscription_id):
-        subscription = Subscription.query.get(subscription_id)
-        subscription.delete()
+    @authenticate
+    def get(self, subscription_id):
+        subs = Subscription.query.get_or_404(post_id, "Subscription with this id does not exist")
+        return SubscriptionSchema().dump(subs).data, 200
+
+    @authenticate
+    def delete(self, post_id):
+        subs = Subscription.query.get_or_404(post_id, "Subscription with this id does not exist")
+
+        db.session.delete(subs)
+        db.session.commit()
         return '', 204
 
 
 class SubscriptionListResource(Resource):
+    @authenticate
     def get(self):
         return SubscriptionSchema().dump(Subscription.query.all(), many=True).data, 200
 
+    @authenticate
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('map_id',  type=int)
-        parser.add_argument('username')
+        parser.add_argument('map_id', type=int, required=True)
 
         args = parser.parse_args()
-        new_subscription = Subscription(args['map_id'], username=args['username'], subscription_time=datetime.now())
-        new_subscription.save()
+
+        _map = Map.query.get_or_404(args['map_id'], "Map with this id does not exist")
+
+        if Subscription.query.filter_by(user=self.user, map=_map).first() != None:
+            return 'User has already subscribed in this map', 400
+
+        new_subscription = Subscription(
+            map = _map,
+            user = self.user,
+            subscription_time=datetime.now()
+        )
+        
+        db.session.add(new_subscription)
+
+        try:
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            db.session.flush()
+            return '', 500
         
         return SubscriptionSchema().dump(new_subscription).data, 201
+
+api.add_resource(SubscriptionListResource, '/subscriptions')
+api.add_resource(SubscriptionResource, '/subscriptions/<int:post_id>')

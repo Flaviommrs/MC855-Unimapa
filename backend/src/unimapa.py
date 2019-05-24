@@ -43,29 +43,14 @@ def create_app(test_config=None):
             database.mock_database(db)
 
     # Routes
-    api = Api(app)
-    api.add_resource(resources.SignUpResource, '/sign-up')
+    app.register_blueprint(resources.account_bp)
+    app.register_blueprint(resources.signup_bp)
+    app.register_blueprint(resources.token_bp)
 
-    api.add_resource(resources.UserListResource, '/users')
-    api.add_resource(resources.UserResource, '/users/<int:user_id>')
-    api.add_resource(resources.UserSubscriptionListResource, '/users/<int:user_id>/subscriptions')
-    api.add_resource(resources.UserPostListResource, '/users/<int:user_id>/posts')
-
-    api.add_resource(resources.MapListResource, '/maps')
-    api.add_resource(resources.MapResource, '/maps/<int:map_id>')
-    api.add_resource(resources.MapSubscriptionListResource, '/maps/<int:map_id>/subscriptions')
-    api.add_resource(resources.MapPostListResource, '/maps/<int:map_id>/posts')
-
-    api.add_resource(resources.SubscriptionListResource, '/subscriptions')
-    api.add_resource(resources.SubscriptionResource, '/subscriptions/<int:subscription_id>')
-
-    api.add_resource(resources.PostListResource, '/posts')
-
-    api.add_resource(resources.TokenResource, '/token')
-
-    api.add_resource(resources.MyAccount, '/my_account')
-    api.add_resource(resources.MyMaps, '/my_subscriptions')
-
+    app.register_blueprint(resources.post_bp)
+    app.register_blueprint(resources.user_bp)
+    app.register_blueprint(resources.subscription_bp)
+    app.register_blueprint(resources.map_bp)
 
     @app.cli.command()
     def create_database():
