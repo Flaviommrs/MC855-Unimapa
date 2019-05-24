@@ -7,6 +7,7 @@ from datetime import datetime
 from geojson import Point
 
 from .models import User, Map, Subscription, Post
+from .config import settings
 
 from functools import wraps
 
@@ -35,6 +36,22 @@ def create_database(db):
     db.create_all()
     db.session.commit()
 
+@development_or_test
+def mock_database(db):
+    new_user = User(
+        id=settings.FIREBASE_UID,
+        name="Nome {}".format(random_id()),
+        email=random_email()
+    )
+    db.session.add(new_user)
+
+    session = db.session
+    mock_database_users(session, 50)
+    mock_database_maps(session, 5)
+    mock_database_subscriptions(session, 5)
+    mock_database_posts(session, 20)
+
+    db.session.commit()
 
 @development_or_test
 def mock_database_users(session, users_qty = 0):
@@ -45,9 +62,8 @@ def mock_database_users(session, users_qty = 0):
             email=random_email()
         )
         session.add(new_user)
-
+    
     session.commit()
-
 
 @development_or_test
 def mock_database_maps(session, maps_qty = 0):

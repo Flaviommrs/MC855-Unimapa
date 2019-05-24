@@ -1,28 +1,31 @@
 import os
+import json
 import tempfile
 
 import pytest
 
 from src.unimapa import create_app
 from src.models import db as _db
-from src.database import create_database
+from src.database import mock_database
+
+from src.config import settings
 
 TESTDB = 'test_project.db'
 TESTDB_PATH = "/tmp/{}".format(TESTDB)
 TEST_DATABASE_URI = 'sqlite:///' + TESTDB_PATH
 
+
 @pytest.fixture(scope='session')
 def app(request):
+    os.environ['FLASK_ENV'] = 'development'
+    
     app = create_app({
         'TESTING': True,
         'SQLALCHEMY_DATABASE_URI': TEST_DATABASE_URI,
     })
-    os.environ['FLASK_ENV'] = 'development'
 
     ctx = app.app_context()
     ctx.push()
-
-    create_database(_db)
 
     def teardown():
         ctx.pop()
@@ -43,13 +46,14 @@ def db(app, request):
 
     _db.app = app
     _db.create_all()
+    mock_database(_db)
 
     request.addfinalizer(teardown)
     return _db
 
 
 @pytest.fixture(scope='function')
-def session(db, app, request):
+def session(db, request):
     """Creates a new database session for a test."""
     connection = db.engine.connect()
     transaction = connection.begin()
