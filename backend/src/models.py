@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-# from pynamodb.models import Model
-# from pynamodb.attributes import NumberAttribute, UnicodeAttribute, UTCDateTimeAttribute, JSONAttribute
 from flask_sqlalchemy import SQLAlchemy
+from flask import abort
 
 import geojson
 import os
@@ -26,6 +25,12 @@ class myModel():
             return True
         return False
 
+    def get_or_404(self, id):
+        instance = self.query.filter_by(id = id).first()
+        if instance:
+            return instance
+        abort(404, "{} with this id does not exist".format(self.__name__))
+
 
 class User(db.Model, myModel):
     id = db.Column(db.String, primary_key=True)
@@ -39,15 +44,14 @@ class User(db.Model, myModel):
         return '<User {}>'.format(self.email)
 
     
-class Map(db.Model):
+class Map(db.Model, myModel):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     
     posts = db.relationship('Post', backref='map', lazy=True)
     subscriptions = db.relationship('Subscription', backref='map', lazy=True)
     
-    
-class Post(db.Model):
+class Post(db.Model, myModel):
     id = db.Column(db.Integer, primary_key=True)
     post_time = db.Column(db.DateTime, nullable=False)
     message = db.Column(db.Text)
@@ -58,7 +62,7 @@ class Post(db.Model):
     map_id = db.Column(db.Integer, db.ForeignKey('map.id'), nullable=False)
 
 
-class Subscription(db.Model):
+class Subscription(db.Model, myModel):
     id = db.Column(db.Integer, primary_key=True)
     subscription_time = db.Column(db.DateTime, nullable=False)
 
