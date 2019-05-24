@@ -165,7 +165,7 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
         dialog.dismiss()
     }
 
-    override fun onDialogPositiveClick(dialog: DialogFragment, description: String) {
+    override fun onDialogPositiveClick(dialog: DialogFragment, description: String, selectedMap: String) {
         val user = FirebaseAuth.getInstance().currentUser
 
         user!!.getIdToken(true).addOnCompleteListener(OnCompleteListener {
@@ -178,7 +178,7 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
                         "\"point_y\" : $postLat\n" +
                         "}", token)
 
-                print("long $postLong, lat $postLat")
+                println("long $postLong, lat $postLat, map $selectedMap")
                 dialog.dismiss()
             }
         })
