@@ -317,7 +317,7 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
 
                             // Get new Instance ID token
                             val notification = task.result?.token
-                            ServerConnection.sendJson("/sign-up", "{ notification_token: $notification }", token)
+                            ServerConnection.sendJson("/sign-up", "{ notification_token: \"$notification\" }", token)
                         })
                     }
                 })
