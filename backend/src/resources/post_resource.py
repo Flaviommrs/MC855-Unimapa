@@ -7,6 +7,8 @@ from geojson import Feature, Point, FeatureCollection
 from ..schemas import PostSchema
 from ..models import Post, User, Map, db
 
+from ..services.notification_service import send_notification
+
 from .decorators import authenticate
 
 api_bp = Blueprint('post_api', __name__)
@@ -72,6 +74,7 @@ class PostListResource(Resource):
             point_y=args['point_y'],
         )
         db.session.add(new_post)
+        send_notification(_map, new_post)
 
         try:
             db.session.commit()
