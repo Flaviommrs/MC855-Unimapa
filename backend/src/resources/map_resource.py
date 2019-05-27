@@ -18,12 +18,12 @@ class MapResource(Resource):
 
     @authenticate
     def get(self, map_id):
-        _map = Map.query.get_or_404(map_id, "Map with this id does not exist")
+        _map = Map.get_or_404(map_id)
         return MapSchema().dump(_map).data, 200
 
     @authenticate
     def delete(self, map_id):
-        _map = Map.query.get_or_404(map_id, "Map with this id does not exist")
+        _map = Map.get_or_404(map_id)
 
         for post in _map.posts:
             db.session.delete(post)
@@ -35,7 +35,7 @@ class MapResource(Resource):
 
     @authenticate
     def put(self, map_id):
-        _map = Map.query.get_or_404(map_id, "Map with this id does not exist")
+        _map = Map.get_or_404(map_id)
 
         edit_parser = reqparse.RequestParser()
         edit_parser.add_argument('name', required=True)
@@ -74,15 +74,19 @@ class MapPostResource(Resource):
 
     @authenticate
     def get(self, map_id):
-        posts = Post.query.filter_by(map_id=map_id)
+        _map = Map.get_or_404(map_id)
+        posts = Post.query.filter_by(map=map_id)
         feature_collection_list = [] 
         for post in posts:
-            feature_collection_list.append(Feature(geometry=Point((post.point_x, post.point_y))))
+            if post.point_x and post.point_y:
+                feature_collection_list.append(Feature(geometry=Point((post.point_x, post.point_y))))
+            else:
+                feature_collection_list.append(Feature(geometry=Point((0, 0))))
         return FeatureCollection(feature_collection_list), 200
 
     @authenticate
     def post(self, map_id):
-        _map = Map.query.get_or_404(map_id, "Map with this id does not exist")
+        _map = Map.get_or_404(map_id)
 
         parser = reqparse.RequestParser()
         parser.add_argument('message')
@@ -114,13 +118,13 @@ class MapSubscriptionResource(Resource):
 
     @authenticate
     def get(self, map_id):
-        mapa = Map.query.get(map_id)
+        mapa = Map.get_or_404(map_id)
         return SubscriptionSchema().dump(Subscription.query.filter_by(map=mapa), many=True).data, 200
 
     
     @authenticate
     def post(self, map_id):
-        _map = Map.query.get_or_404(map_id, "Map with this id does not exist")
+        _map = Map.get_or_404(map_id)
 
         if Subscription.query.filter_by(user=self.user, map=_map).first() != None:
             return 'User has already subscribed in this map', 400

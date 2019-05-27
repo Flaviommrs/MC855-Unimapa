@@ -18,13 +18,13 @@ class PostResource(Resource):
     
     @authenticate
     def get(self, post_id):
-        post = Post.query.get_or_404(post_id, "Post with this id does not exist")
+        post = Post.get_or_404(post_id)
 
         return PostSchema().dump(post).data, 200
 
     @authenticate
     def delete(self, post_id):
-        post = Post.query.get_or_404(post_id, "Post with this id does not exist")
+        post = Post.get_or_404(post_id)
 
         db.session.delete(post)
         db.session.commit()
@@ -32,7 +32,7 @@ class PostResource(Resource):
 
     @authenticate
     def put(self, post_id):
-        post = Post.query.get_or_404(post_id, "Post with this id does not exist")
+        post = Post.get_or_404(post_id)
 
         edit_parser = reqparse.RequestParser()
         edit_parser.add_argument('message')
@@ -63,7 +63,7 @@ class PostListResource(Resource):
         parser.add_argument('point_y', type=float)
 
         args = parser.parse_args()
-        _map = Map.query.get_or_404(args['map_id'], "Map with this id does not exist")
+        _map = Map.get_or_404(args['map_id'])
 
         new_post = Post(
             user = self.user,

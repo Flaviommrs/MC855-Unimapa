@@ -25,6 +25,13 @@ class myModel():
             return True
         return False
 
+    @classmethod
+    def get_or_404(self, *args, **kwargs):
+        if 'description' in kwargs:
+            return self.query.get_or_404(*args, **kwargs)
+        return self.query.get_or_404(*args, **kwargs, description='{} with this id does not exist'.format(self.__name__))
+        
+
 class User(db.Model, myModel):
     id = db.Column(db.String, primary_key=True)
     email = db.Column(db.String(100), unique=True, nullable=False)

@@ -15,12 +15,12 @@ class SubscriptionResource(Resource):
 
     @authenticate
     def get(self, subscription_id):
-        subs = Subscription.query.get_or_404(post_id, "Subscription with this id does not exist")
+        subs = Subscription.get_or_404(subscription_id)
         return SubscriptionSchema().dump(subs).data, 200
 
     @authenticate
-    def delete(self, post_id):
-        subs = Subscription.query.get_or_404(post_id, "Subscription with this id does not exist")
+    def delete(self, subscription_id):
+        subs = Subscription.get_or_404(Subscription, subscription_id)
 
         db.session.delete(subs)
         db.session.commit()
@@ -39,7 +39,7 @@ class SubscriptionListResource(Resource):
 
         args = parser.parse_args()
 
-        _map = Map.query.get_or_404(args['map_id'], "Map with this id does not exist")
+        _map = Map.get_or_404(args['map_id'])
 
         if Subscription.query.filter_by(user=self.user, map=_map).first() != None:
             return 'User has already subscribed in this map', 400
@@ -62,4 +62,4 @@ class SubscriptionListResource(Resource):
         return SubscriptionSchema().dump(new_subscription).data, 201
 
 api.add_resource(SubscriptionListResource, '/subscriptions')
-api.add_resource(SubscriptionResource, '/subscriptions/<int:post_id>')
+api.add_resource(SubscriptionResource, '/subscriptions/<int:subscription_id>')

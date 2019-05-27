@@ -13,13 +13,13 @@ class UserResource(Resource):
 
     @authenticate
     def get(self, user_id):
-        user = User.query.get_or_404(user_id, "User with this id does not exist")
+        user = User.get_or_404(user_id)
 
         return UserSchema().dump(user).data, 200
 
     @authenticate
     def delete(self, user_id):
-        user = User.query.get_or_404(user_id, "User with this id does not exist")
+        user = User.get_or_404(user_id)
 
         db.session.delete(user)
         db.session.commit()
@@ -27,7 +27,7 @@ class UserResource(Resource):
 
     @authenticate
     def put(self, user_id):
-        user = User.query.get_or_404(user_id, "User with this id does not exist")
+        user = User.get_or_404(user_id)
 
         edit_parser = reqparse.RequestParser()
         edit_parser.add_argument('name', required=True)
@@ -50,14 +50,14 @@ class UserListResource(Resource):
 class UserPostsResource(Resource):
     @authenticate
     def get(self, user_id):
-        user = User.query.get_or_404(user_id, "User with this id does not exist")
+        user = User.get_or_404(user_id)
         return PostSchema().dump(user.posts, many=True).data, 200
 
 
 class UserSubscriptionListResource(Resource):
     @authenticate
     def get(self, user_id):
-        user = User.query.get_or_404(user_id, "User with this id does not exist")
+        user = User.get_or_404(user_id)
         return SubscriptionSchema().dump(user.subscriptions, many=True).data, 200
 
 
