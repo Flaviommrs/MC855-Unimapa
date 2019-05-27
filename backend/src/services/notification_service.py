@@ -13,9 +13,6 @@ def send_notification(_map, post):
         tokens += user_token
     tokens = [token.notification_token for token in tokens]
 
-    print(tokens)
-    print(post)
-
     URL = 'https://fcm.googleapis.com/fcm/send'
     FCM_KEY = settings.FCM_KEY
 

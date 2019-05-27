@@ -24,8 +24,6 @@ class SignUpResource(Resource):
         parser.add_argument('notification_token')
         args = parser.parse_args()
 
-        print(args['notification_token'])
-
         notification_token = NotificationToken(
             notification_token = args['notification_token'],
             user = user
