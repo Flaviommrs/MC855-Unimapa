@@ -29,6 +29,8 @@ def create_app(test_config=None):
     app.config['SQLALCHEMY_DATABASE_URI'] = settings.DATABASE_CONFIG
     if 'FLASK_ENV' in os.environ and os.environ['FLASK_ENV'] == 'development':
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+        if settings.DATABASE_CONFIG_LOCAL:
+            app.config['SQLALCHEMY_DATABASE_URI'] = settings.DATABASE_CONFIG_LOCAL
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     if test_config:
@@ -37,10 +39,6 @@ def create_app(test_config=None):
     db.init_app(app)
     migrate = Migrate(app, db)
 
-    if 'FLASK_ENV' in os.environ and os.environ['FLASK_ENV'] == 'development':
-        with app.app_context():
-            database.create_database(db)
-            database.mock_database(db)
 
     # Routes
     app.register_blueprint(resources.account_bp)
@@ -83,6 +81,7 @@ def create_app(test_config=None):
     return app
 
 app = create_app()
+
 if __name__ == '__main__':
     app.run()
     
