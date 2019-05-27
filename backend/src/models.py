@@ -32,6 +32,7 @@ class User(db.Model, myModel):
 
     posts = db.relationship('Post', backref='user', lazy=True)
     subscriptions = db.relationship('Subscription', backref='user', lazy=True)
+    notification_tokens = db.relationship('NotificationToken', backref='user', lazy=True)
 
     def __repr__(self):
         return '<User {}>'.format(self.email)
@@ -61,3 +62,9 @@ class Subscription(db.Model, myModel):
 
     user_id = db.Column(db.String, db.ForeignKey('user.id'), nullable=False)
     map_id = db.Column(db.Integer, db.ForeignKey('map.id'), nullable=False)
+
+
+class NotificationToken(db.Model, myModel):
+    notification_token = db.Column(db.String, primary_key=True)
+
+    user_id = db.Column(db.String, db.ForeignKey('user.id'), nullable=False)
