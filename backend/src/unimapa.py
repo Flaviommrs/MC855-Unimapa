@@ -15,7 +15,6 @@ from .models import db
 
 from . import resources
 from . import database
-from . import notifications
 
 # Firebase auth configuration
 cred = credentials.Certificate('./serviceAccountKey.json')
@@ -66,17 +65,9 @@ def create_app(test_config=None):
         
         print("Database mocked")
 
-
-    @app.cli.command()
-    def send_notification():
-        notifications.send_notification([], "Hello", "World")
-        print("Notification Sent")
-
-
     # Commands
     app.cli.add_command(mock_database)
     app.cli.add_command(create_database)
-    app.cli.add_command(send_notification)
 
     return app
 
