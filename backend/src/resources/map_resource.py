@@ -6,6 +6,7 @@ from geojson import Feature, Point, FeatureCollection
 
 from ..schemas import MapSchema, PostSchema, SubscriptionSchema
 from ..models import Map, Post, Subscription, db
+from ..services.notification_service import send_notification
 
 from .decorators import authenticate
 
@@ -71,6 +72,7 @@ class MapListResource(Resource):
 
 class MapPostResource(Resource):
 
+    @authenticate
     def get(self, map_id):
         posts = Post.query.filter_by(map_id=map_id)
         feature_collection_list = [] 
@@ -97,6 +99,7 @@ class MapPostResource(Resource):
             point_y=args['point_y'],
         )
         db.session.add(new_post)
+        send_notification(_map, new_post)
 
         try:
             db.session.commit()
