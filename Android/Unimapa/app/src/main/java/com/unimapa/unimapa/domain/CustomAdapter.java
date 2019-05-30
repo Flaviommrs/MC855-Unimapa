@@ -102,6 +102,7 @@ public class CustomAdapter extends BaseAdapter {
                         e.printStackTrace();
                     }
                     Toast.makeText(context, "Adicionou: " + modelArrayList.get(pos).getName(), Toast.LENGTH_SHORT).show();
+                    //TODO: sincronizar com o servidor
                 }
             }
         });
