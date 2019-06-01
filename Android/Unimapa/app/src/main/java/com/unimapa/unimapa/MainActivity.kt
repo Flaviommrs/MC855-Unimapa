@@ -7,11 +7,13 @@ package com.unimapa.unimapa
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.location.Location
 import android.os.Bundle;
 import android.os.StrictMode
+import android.support.annotation.NonNull
 import android.support.design.widget.NavigationView
 import android.support.v4.app.DialogFragment
 import android.support.v4.view.GravityCompat
@@ -25,7 +27,6 @@ import android.view.View
 import android.widget.TextView
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
-import com.firebase.ui.auth.data.model.User
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.OnCompleteListener
@@ -40,7 +41,13 @@ import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.style.expressions.Expression
+import com.mapbox.mapboxsdk.style.expressions.Expression.*
 import com.mapbox.mapboxsdk.style.layers.CircleLayer
+import com.mapbox.mapboxsdk.style.layers.HeatmapLayer
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory.*
+import com.mapbox.mapboxsdk.style.layers.SymbolLayer
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.unimapa.unimapa.dataBase.MapaDataBase
 import com.unimapa.unimapa.domain.Mapa
@@ -69,6 +76,13 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
 
     private var postLat: Double = 0.0
     private var postLong: Double = 0.0
+
+    private var listOfHeatmapColors: Array<Expression>? = null
+    private var listOfHeatmapRadiusStops: Array<Expression>? = null
+    private var listOfHeatmapIntensityStops: Array<Float>? = null
+    private val index: Int = 0
+    private val SOURCE_ID = "geojson-source"
+    private val HEATMAP_LAYER_ID = "HEATMAP_LAYER"
 
     @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -132,7 +146,7 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
 
             mapboxMap.cameraPosition = position.build()
 
-            mapboxMap.setMinZoomPreference(13.toDouble())
+            mapboxMap.setMinZoomPreference(4.toDouble())
             mapboxMap.setMaxZoomPreference(20.toDouble())
 
             mapboxMap.addOnMapLongClickListener{ point ->
@@ -147,15 +161,81 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
                 runOnUiThread {
                     val geojsonUrl = URL("https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev/maps/1/posts")
 
-                    val source = GeoJsonSource("geojson-source", geojsonUrl)
+                    val source = GeoJsonSource(SOURCE_ID, geojsonUrl)
 
                     style.addSource(source)
 
-                    style.addLayer(CircleLayer("urban-areas-fill", "geojson-source"))//TODO:circlelayer
+                    addHeatMapLayer2(style)
+
+                    addMarkerLayer(style)
+
+                    style.addLayer(CircleLayer("urban-areas-fill", SOURCE_ID))//TODO:circlelayer
                 }
 
             }
         })
+    }
+
+    private fun addMarkerLayer(style: Style){
+        // Add the marker image to map
+        style.addImage("my-marker-image", BitmapFactory.decodeResource(
+                this.getResources(), R.drawable.ic_user_round))
+
+
+        style.addLayer(SymbolLayer("marker-layer", SOURCE_ID)
+                .withProperties(
+                        PropertyFactory.iconImage("my-marker-image"),
+                        iconAllowOverlap(true),
+                        iconOffset(arrayOf(0f, -9f))
+                )
+            )
+
+    }
+
+    private fun addHeatMapLayer2(style: Style){
+
+        // Each point range gets a different fill color.
+        val layers = arrayOf(intArrayOf(150, Color.parseColor("#E55E5E")), intArrayOf(20, Color.parseColor("#F9886C")), intArrayOf(0, Color.parseColor("#FBB03B")))
+
+        var unclustered = CircleLayer("unclustered-points", SOURCE_ID)
+
+        unclustered.setProperties(circleColor(Color.parseColor("#FBB03B")),
+                circleRadius(20f),
+                circleBlur(1f))
+
+        unclustered.setFilter(Expression.neq(get("cluster"), literal(true)))
+        style.addLayerBelow(unclustered, "building")
+
+        val i = 0
+        for(i in 0 until layers.size){
+            val circles = CircleLayer("cluster-$i", SOURCE_ID)
+            circles.setProperties(
+                    circleColor(layers[i][1]),
+                    circleRadius(70f),
+                    circleBlur(1f)
+            )
+            var pointCount = toNumber(get("point_count"))
+
+            circles.setFilter(
+                    if (i === 0)
+                        Expression.gte(pointCount, literal(layers[i][0]))
+                    else
+                        Expression.all(
+                                Expression.gte(pointCount, literal(layers[i][0])),
+                                Expression.lt(pointCount, literal(layers[i - 1][0]))
+                        )
+            )
+            style.addLayerBelow(circles, "building");
+        }
+
+    }
+
+    private fun addHeatMapLayer(style: Style) {
+        initHeatmapColors()
+        initHeatmapRadiusStops()
+        initHeatmapIntensityStops()
+
+        addHeatmapLayer(style);
     }
 
     fun showPublicationDialog(){
@@ -389,4 +469,280 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
         super.onSaveInstanceState(outState)
         mapView!!.onSaveInstanceState(outState!!)
     }
+
+
+
+
+    private fun addHeatmapLayer(@NonNull loadedMapStyle: Style) {
+        // Create the heatmap layer
+        val layer = HeatmapLayer(HEATMAP_LAYER_ID, SOURCE_ID)
+
+        // Heatmap layer disappears at whatever zoom level is set as the maximum
+        layer.setMaxZoom(18F)
+
+        layer.setProperties(
+                // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+                // Begin color ramp at 0-stop with a 0-transparency color to create a blur-like effect.
+                heatmapColor(this!!.listOfHeatmapColors!![index]),
+
+                // Increase the heatmap color weight weight by zoom level
+                // heatmap-intensity is a multiplier on top of heatmap-weight
+                heatmapIntensity(this!!.listOfHeatmapIntensityStops!![index]),
+
+                // Adjust the heatmap radius by zoom level
+                heatmapRadius(this!!.listOfHeatmapRadiusStops!![index]
+                ),
+
+                heatmapOpacity(1f)
+        )
+
+        // Add the heatmap layer to the map and above the "water-label" layer
+        loadedMapStyle.addLayerAbove(layer, "waterway-label")
+    }
+
+    private fun initHeatmapColors() {
+        listOfHeatmapColors = arrayOf<Expression>(
+                // 0
+                interpolate(
+                        linear(), heatmapDensity(),
+                        literal(0.01), rgba(0, 0, 0, 0.01),
+                        literal(0.25), rgba(224, 176, 63, 0.5),
+                        literal(0.5), rgb(247, 252, 84),
+                        literal(0.75), rgb(186, 59, 30),
+                        literal(0.9), rgb(255, 0, 0)
+                ),
+                // 1
+                interpolate(
+                        linear(), heatmapDensity(),
+                        literal(0.01), rgba(255, 255, 255, 0.4),
+                        literal(0.25), rgba(4, 179, 183, 1.0),
+                        literal(0.5), rgba(204, 211, 61, 1.0),
+                        literal(0.75), rgba(252, 167, 55, 1.0),
+                        literal(1), rgba(255, 78, 70, 1.0)
+                ),
+                // 2
+                interpolate(
+                        linear(), heatmapDensity(),
+                        literal(0.01), rgba(12, 182, 253, 0.0),
+                        literal(0.25), rgba(87, 17, 229, 0.5),
+                        literal(0.5), rgba(255, 0, 0, 1.0),
+                        literal(0.75), rgba(229, 134, 15, 0.5),
+                        literal(1), rgba(230, 255, 55, 0.6)
+                ),
+                // 3
+                interpolate(
+                        linear(), heatmapDensity(),
+                        literal(0.01), rgba(135, 255, 135, 0.2),
+                        literal(0.5), rgba(255, 99, 0, 0.5),
+                        literal(1), rgba(47, 21, 197, 0.2)
+                ),
+                // 4
+                interpolate(
+                        linear(), heatmapDensity(),
+                        literal(0.01), rgba(4, 0, 0, 0.2),
+                        literal(0.25), rgba(229, 12, 1, 1.0),
+                        literal(0.30), rgba(244, 114, 1, 1.0),
+                        literal(0.40), rgba(255, 205, 12, 1.0),
+                        literal(0.50), rgba(255, 229, 121, 1.0),
+                        literal(1), rgba(255, 253, 244, 1.0)
+                ),
+                // 5
+                interpolate(
+                        linear(), heatmapDensity(),
+                        literal(0.01), rgba(0, 0, 0, 0.01),
+                        literal(0.05), rgba(0, 0, 0, 0.05),
+                        literal(0.4), rgba(254, 142, 2, 0.7),
+                        literal(0.5), rgba(255, 165, 5, 0.8),
+                        literal(0.8), rgba(255, 187, 4, 0.9),
+                        literal(0.95), rgba(255, 228, 173, 0.8),
+                        literal(1), rgba(255, 253, 244, .8)
+                ),
+                //6
+                interpolate(
+                        linear(), heatmapDensity(),
+                        literal(0.01), rgba(0, 0, 0, 0.01),
+                        literal(0.3), rgba(82, 72, 151, 0.4),
+                        literal(0.4), rgba(138, 202, 160, 1.0),
+                        literal(0.5), rgba(246, 139, 76, 0.9),
+                        literal(0.9), rgba(252, 246, 182, 0.8),
+                        literal(1), rgba(255, 255, 255, 0.8)
+                ),
+
+                //7
+                interpolate(
+                        linear(), heatmapDensity(),
+                        literal(0.01), rgba(0, 0, 0, 0.01),
+                        literal(0.1), rgba(0, 2, 114, .1),
+                        literal(0.2), rgba(0, 6, 219, .15),
+                        literal(0.3), rgba(0, 74, 255, .2),
+                        literal(0.4), rgba(0, 202, 255, .25),
+                        literal(0.5), rgba(73, 255, 154, .3),
+                        literal(0.6), rgba(171, 255, 59, .35),
+                        literal(0.7), rgba(255, 197, 3, .4),
+                        literal(0.8), rgba(255, 82, 1, 0.7),
+                        literal(0.9), rgba(196, 0, 1, 0.8),
+                        literal(0.95), rgba(121, 0, 0, 0.8)
+                ),
+                // 8
+                interpolate(
+                        linear(), heatmapDensity(),
+                        literal(0.01), rgba(0, 0, 0, 0.01),
+                        literal(0.1), rgba(0, 2, 114, .1),
+                        literal(0.2), rgba(0, 6, 219, .15),
+                        literal(0.3), rgba(0, 74, 255, .2),
+                        literal(0.4), rgba(0, 202, 255, .25),
+                        literal(0.5), rgba(73, 255, 154, .3),
+                        literal(0.6), rgba(171, 255, 59, .35),
+                        literal(0.7), rgba(255, 197, 3, .4),
+                        literal(0.8), rgba(255, 82, 1, 0.7),
+                        literal(0.9), rgba(196, 0, 1, 0.8),
+                        literal(0.95), rgba(121, 0, 0, 0.8)
+                ),
+                // 9
+                interpolate(
+                        linear(), heatmapDensity(),
+                        literal(0.01), rgba(0, 0, 0, 0.01),
+                        literal(0.1), rgba(0, 2, 114, .1),
+                        literal(0.2), rgba(0, 6, 219, .15),
+                        literal(0.3), rgba(0, 74, 255, .2),
+                        literal(0.4), rgba(0, 202, 255, .25),
+                        literal(0.5), rgba(73, 255, 154, .3),
+                        literal(0.6), rgba(171, 255, 59, .35),
+                        literal(0.7), rgba(255, 197, 3, .4),
+                        literal(0.8), rgba(255, 82, 1, 0.7),
+                        literal(0.9), rgba(196, 0, 1, 0.8),
+                        literal(0.95), rgba(121, 0, 0, 0.8)
+                ),
+                // 10
+                interpolate(
+                        linear(), heatmapDensity(),
+                        literal(0.01), rgba(0, 0, 0, 0.01),
+                        literal(0.1), rgba(0, 2, 114, .1),
+                        literal(0.2), rgba(0, 6, 219, .15),
+                        literal(0.3), rgba(0, 74, 255, .2),
+                        literal(0.4), rgba(0, 202, 255, .25),
+                        literal(0.5), rgba(73, 255, 154, .3),
+                        literal(0.6), rgba(171, 255, 59, .35),
+                        literal(0.7), rgba(255, 197, 3, .4),
+                        literal(0.8), rgba(255, 82, 1, 0.7),
+                        literal(0.9), rgba(196, 0, 1, 0.8),
+                        literal(0.95), rgba(121, 0, 0, 0.8)
+                ),
+                // 11
+                interpolate(
+                        linear(), heatmapDensity(),
+                        literal(0.01), rgba(0, 0, 0, 0.25),
+                        literal(0.25), rgba(229, 12, 1, .7),
+                        literal(0.30), rgba(244, 114, 1, .7),
+                        literal(0.40), rgba(255, 205, 12, .7),
+                        literal(0.50), rgba(255, 229, 121, .8),
+                        literal(1), rgba(255, 253, 244, .8)
+                ))
+    }
+
+    private fun initHeatmapRadiusStops() {
+        listOfHeatmapRadiusStops = arrayOf<Expression>(
+                // 0
+                interpolate(
+                        linear(), zoom(),
+                        literal(6), literal(50),
+                        literal(20), literal(100)
+                ),
+                // 1
+                interpolate(
+                        linear(), zoom(),
+                        literal(12), literal(70),
+                        literal(20), literal(100)
+                ),
+                // 2
+                interpolate(
+                        linear(), zoom(),
+                        literal(1), literal(7),
+                        literal(5), literal(50)
+                ),
+                // 3
+                interpolate(
+                        linear(), zoom(),
+                        literal(1), literal(7),
+                        literal(5), literal(50)
+                ),
+                // 4
+                interpolate(
+                        linear(), zoom(),
+                        literal(1), literal(7),
+                        literal(5), literal(50)
+                ),
+                // 5
+                interpolate(
+                        linear(), zoom(),
+                        literal(1), literal(7),
+                        literal(15), literal(200)
+                ),
+                // 6
+                interpolate(
+                        linear(), zoom(),
+                        literal(1), literal(10),
+                        literal(8), literal(70)
+                ),
+                // 7
+                interpolate(
+                        linear(), zoom(),
+                        literal(1), literal(10),
+                        literal(8), literal(200)
+                ),
+                // 8
+                interpolate(
+                        linear(), zoom(),
+                        literal(1), literal(10),
+                        literal(8), literal(200)
+                ),
+                // 9
+                interpolate(
+                        linear(), zoom(),
+                        literal(1), literal(10),
+                        literal(8), literal(200)
+                ),
+                // 10
+                interpolate(
+                        linear(), zoom(),
+                        literal(1), literal(10),
+                        literal(8), literal(200)
+                ),
+                // 11
+                interpolate(
+                        linear(), zoom(),
+                        literal(1), literal(10),
+                        literal(8), literal(200)
+                ))
+    }
+
+    private fun initHeatmapIntensityStops() {
+        listOfHeatmapIntensityStops = arrayOf(
+                // 0
+                0.6f,
+                // 1
+                0.3f,
+                // 2
+                1f,
+                // 3
+                1f,
+                // 4
+                1f,
+                // 5
+                1f,
+                // 6
+                1.5f,
+                // 7
+                0.8f,
+                // 8
+                0.25f,
+                // 9
+                0.8f,
+                // 10
+                0.25f,
+                // 11
+                0.5f)
+    }
+
+
 }
