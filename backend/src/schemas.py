@@ -18,6 +18,7 @@ class UserSchema(Schema):
 class MapSchema(Schema):
     id = fields.Integer()
     name = fields.Str()
+    owner = fields.Nested(UserSchema, attribute="user")
 
     @post_load
     def make_map(self, data):

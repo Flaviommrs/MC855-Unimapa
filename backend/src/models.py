@@ -42,6 +42,7 @@ class User(db.Model, MyModel):
     email = db.Column(db.String(100), unique=True, nullable=False)
     name = db.Column(db.String(100))
 
+    created_maps = db.relationship('Map', backref='user', lazy=True)
     posts = db.relationship('Post', backref='user', lazy=True)
     subscriptions = db.relationship('Subscription', backref='user', lazy=True)
     notification_tokens = db.relationship('NotificationToken', backref='user', lazy=True)
@@ -53,6 +54,8 @@ class User(db.Model, MyModel):
 class Map(db.Model, MyModel):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
+
+    user_id = db.Column(db.String, db.ForeignKey('user.id'), nullable=False)
     
     posts = db.relationship('Post', backref='map', lazy=True)
     subscriptions = db.relationship('Subscription', backref='map', lazy=True)
@@ -74,7 +77,7 @@ class Subscription(db.Model, MyModel, OwneredModel):
 
     user_id = db.Column(db.String, db.ForeignKey('user.id'), nullable=False)
     map_id = db.Column(db.Integer, db.ForeignKey('map.id'), nullable=False)
-    
+
 
 class NotificationToken(db.Model, MyModel, OwneredModel):
     notification_token = db.Column(db.String, primary_key=True)
