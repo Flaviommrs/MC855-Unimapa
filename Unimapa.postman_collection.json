@@ -37,7 +37,7 @@
 					},
 					"response": [
 						{
-							"id": "37e63bda-081a-494f-a7f5-1e43d51f2036",
+							"id": "4f2448ef-3fb9-4cf6-8924-6e46f9f0ad7d",
 							"name": "Generate Token Invalid",
 							"originalRequest": {
 								"method": "GET",
@@ -92,7 +92,7 @@
 							"body": "\"User does not exist\"\n"
 						},
 						{
-							"id": "0a333462-9d3b-4f59-beba-c0ba28ad5393",
+							"id": "2310318b-3a47-414d-9486-500d4420cfc7",
 							"name": "Generate Token Valid",
 							"originalRequest": {
 								"method": "GET",
@@ -800,7 +800,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\" : \"new name\"\n}"
+							"raw": "{\n\t\"name\" : \"Novo nome\"\n}"
 						},
 						"url": {
 							"raw": "{{host}}/users/b9hgSznuuXOT1FaGh1LpsqmR5S92",
@@ -864,7 +864,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjY2NDNkZDM5ZDM4ZGI4NWU1NjAxN2E2OGE3NWMyZjM4YmUxMGM1MzkiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiQWxsYW4gTm96b211IEZ1a2FzYXdhIiwicGljdHVyZSI6Imh0dHBzOi8vbGg0Lmdvb2dsZXVzZXJjb250ZW50LmNvbS8taXJpX2U3Y1ctU0UvQUFBQUFBQUFBQUkvQUFBQUFBQUFDUWsvX19zLVYwYjB1X3cvczk2LWMvcGhvdG8uanBnIiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL3VuaW1hcGEtM2YxMmUiLCJhdWQiOiJ1bmltYXBhLTNmMTJlIiwiYXV0aF90aW1lIjoxNTU4NzM5Mjc3LCJ1c2VyX2lkIjoiYjloZ1N6bnV1WE9UMUZhR2gxTHBzcW1SNVM5MiIsInN1YiI6ImI5aGdTem51dVhPVDFGYUdoMUxwc3FtUjVTOTIiLCJpYXQiOjE1NTg3MzkyNzcsImV4cCI6MTU1ODc0Mjg3NywiZW1haWwiOiJhbGxhbm5vem9tdUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJnb29nbGUuY29tIjpbIjEwNDE2NzAzOTA4NTIwOTIxNDQ1NyJdLCJlbWFpbCI6WyJhbGxhbm5vem9tdUBnbWFpbC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJjdXN0b20ifX0.KCq5nvhzbBwSvuzrkAaq3AryrZHgnstd1uqZGbvSXLWodstZSVtLgXSXIJzJRhcmBS81azsODR-1dwqaQNd4lO5iEYmZh9N7xxJIH2r63n4esXKU8e5QfHAtfL99_7RtQH9W1oBwUaoFrq7TolIIuArojpm_1Une_uw6j_yJJ-D2kVkMnWkIWs4fNK19YG37Af6hqPEfcfZJseu_su4PX2rZcS_O6JJfGjDpwkeNR-xvTczYdvZWg7EXf9FRmbvqW1xFw9nLbPLtt5n_4xX217t_trlrcAqg4YSU0oz5y__G3P68mySJa_Q4YtYg7y76UGVGmNf6p5tiAeH2bhAQFg",
+				"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjY2NDNkZDM5ZDM4ZGI4NWU1NjAxN2E2OGE3NWMyZjM4YmUxMGM1MzkiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiQWxsYW4gTm96b211IEZ1a2FzYXdhIiwicGljdHVyZSI6Imh0dHBzOi8vbGg0Lmdvb2dsZXVzZXJjb250ZW50LmNvbS8taXJpX2U3Y1ctU0UvQUFBQUFBQUFBQUkvQUFBQUFBQUFDUWsvX19zLVYwYjB1X3cvczk2LWMvcGhvdG8uanBnIiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL3VuaW1hcGEtM2YxMmUiLCJhdWQiOiJ1bmltYXBhLTNmMTJlIiwiYXV0aF90aW1lIjoxNTU5MzQ3MDk2LCJ1c2VyX2lkIjoiYjloZ1N6bnV1WE9UMUZhR2gxTHBzcW1SNVM5MiIsInN1YiI6ImI5aGdTem51dVhPVDFGYUdoMUxwc3FtUjVTOTIiLCJpYXQiOjE1NTkzNDcwOTYsImV4cCI6MTU1OTM1MDY5NiwiZW1haWwiOiJhbGxhbm5vem9tdUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJnb29nbGUuY29tIjpbIjEwNDE2NzAzOTA4NTIwOTIxNDQ1NyJdLCJlbWFpbCI6WyJhbGxhbm5vem9tdUBnbWFpbC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJjdXN0b20ifX0.Kkp6sn88nmdbMhvxb4clspeJCMTip4X5sKv2_2S0uOp0DKEKkyJY0AouayI9inaXwNYb-bqYyT7jIneVGPEsHSzrl8BcuSv_VgSKyL4Fx-6bI7vg6v0hphxTyWyI0tL0z6zb-aOJxEVX6mQ-rI_SApR3MiPEtCLxoVF-wxmvJ40aucHr_gb7j-zpECvxUk8Qp4_gxnvv6Y5IYOioc8KDF7dJUz9QW170iCimhYOhI5LRVLc4qlXQr4h5Tl9zQcwfZ0rkYPBMo8CwIJLnePU_bNMEGexuBHuc_qvsGQgwJhMcoNQBovl8MSKD1jUqi2clFKMrBN5d47br4-iUpMdQ8w",
 				"type": "string"
 			}
 		]
