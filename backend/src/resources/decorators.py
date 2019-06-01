@@ -75,7 +75,6 @@ def get_or_404(model):
             instance_id = kwargs.pop(list(kwargs)[0])
             instance = model.get_or_404(instance_id)
 
-            instance.has_ownership(args[0].user)
             return func(*args, instance, **kwargs)
         return wrapper
     return decorator
