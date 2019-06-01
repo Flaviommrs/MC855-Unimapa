@@ -9,7 +9,7 @@ from ..models import Post, User, Map, db
 
 from ..services.notification_service import send_notification
 
-from .decorators import authenticate
+from .decorators import authenticate, owner_or_404, get_or_404
 
 api_bp = Blueprint('post_api', __name__)
 api = Api(api_bp)
@@ -17,23 +17,23 @@ api = Api(api_bp)
 class PostResource(Resource):
     
     @authenticate
-    def get(self, post_id):
-        post = Post.get_or_404(post_id)
-
+    @get_or_404(Post)
+    def get(self, post):
         return PostSchema().dump(post).data, 200
 
-    @authenticate
-    def delete(self, post_id):
-        post = Post.get_or_404(post_id)
 
+    @authenticate
+    @owner_or_404(Post)
+    def delete(self, post):
         db.session.delete(post)
         db.session.commit()
         return '', 204
 
-    @authenticate
-    def put(self, post_id):
-        post = Post.get_or_404(post_id)
 
+    @authenticate
+    @owner_or_404(Post)
+    def put(self, post):
+    
         edit_parser = reqparse.RequestParser()
         edit_parser.add_argument('message')
         edit_parser.add_argument('point_x', type=float)

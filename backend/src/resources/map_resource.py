@@ -8,7 +8,7 @@ from ..schemas import MapSchema, PostSchema, SubscriptionSchema
 from ..models import Map, Post, Subscription, db
 from ..services.notification_service import send_notification
 
-from .decorators import authenticate
+from .decorators import authenticate, get_or_404, owner_or_404
 
 api_bp = Blueprint('map_api', __name__)
 api = Api(api_bp)
@@ -17,14 +17,13 @@ api = Api(api_bp)
 class MapResource(Resource):
 
     @authenticate
-    def get(self, map_id):
-        _map = Map.get_or_404(map_id)
+    @get_or_404(Map)
+    def get(self, _map):
         return MapSchema().dump(_map).data, 200
 
     @authenticate
-    def delete(self, map_id):
-        _map = Map.get_or_404(map_id)
-
+    @owner_or_404(Map)
+    def delete(self, _map):
         for post in _map.posts:
             db.session.delete(post)
         for sub in _map.subscriptions:
@@ -34,9 +33,8 @@ class MapResource(Resource):
         return '', 204
 
     @authenticate
-    def put(self, map_id):
-        _map = Map.get_or_404(map_id)
-
+    @owner_or_404(Map)
+    def put(self, _map):
         edit_parser = reqparse.RequestParser()
         edit_parser.add_argument('name', required=True)
         args = edit_parser.parse_args()
@@ -73,11 +71,10 @@ class MapListResource(Resource):
 class MapPostResource(Resource):
 
     @authenticate
-    def get(self, map_id):
-        _map = Map.get_or_404(map_id)
-        posts = Post.query.filter_by(map=map_id)
+    @get_or_404(Map)
+    def get(self, _map):
         feature_collection_list = [] 
-        for post in posts:
+        for post in _map.posts:
             if post.point_x and post.point_y:
                 feature_collection_list.append(Feature(geometry=Point((post.point_x, post.point_y))))
             else:
@@ -85,9 +82,8 @@ class MapPostResource(Resource):
         return FeatureCollection(feature_collection_list), 200
 
     @authenticate
-    def post(self, map_id):
-        _map = Map.get_or_404(map_id)
-
+    @get_or_404(Map)
+    def post(self, _map):
         parser = reqparse.RequestParser()
         parser.add_argument('message')
         parser.add_argument('point_x', type=float)
@@ -117,15 +113,14 @@ class MapPostResource(Resource):
 class MapSubscriptionResource(Resource):
 
     @authenticate
-    def get(self, map_id):
-        mapa = Map.get_or_404(map_id)
-        return SubscriptionSchema().dump(Subscription.query.filter_by(map=mapa), many=True).data, 200
+    @get_or_404(Map)
+    def get(self, _map):
+        return SubscriptionSchema().dump(Subscription.query.filter_by(map=_map), many=True).data, 200
 
     
     @authenticate
-    def post(self, map_id):
-        _map = Map.get_or_404(map_id)
-
+    @get_or_404(Map)
+    def post(self, _map):
         if Subscription.query.filter_by(user=self.user, map=_map).first() != None:
             return 'User has already subscribed in this map', 400
 

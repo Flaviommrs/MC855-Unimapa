@@ -6,7 +6,7 @@ from ..models import Subscription, User, Map, db
 
 from datetime import datetime
 
-from .decorators import authenticate
+from .decorators import authenticate, owner_or_404, get_or_404
 
 api_bp = Blueprint('subscription_api', __name__)
 api = Api(api_bp)
@@ -14,15 +14,14 @@ api = Api(api_bp)
 class SubscriptionResource(Resource):
 
     @authenticate
-    def get(self, subscription_id):
-        subs = Subscription.get_or_404(subscription_id)
-        return SubscriptionSchema().dump(subs).data, 200
+    @get_or_404(Subscription)
+    def get(self, subscription):
+        return SubscriptionSchema().dump(subscription).data, 200
 
     @authenticate
-    def delete(self, subscription_id):
-        subs = Subscription.get_or_404(Subscription, subscription_id)
-
-        db.session.delete(subs)
+    @owner_or_404(Subscription)
+    def delete(self, subscription):
+        db.session.delete(subscription)
         db.session.commit()
         return '', 204
 

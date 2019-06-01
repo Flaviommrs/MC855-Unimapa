@@ -7,7 +7,7 @@ import os
 
 db = SQLAlchemy()
 
-class myModel():
+class MyModel():
     def get_or_create(self, id, **kwargs):
         instance = self.query.filter_by(id = id).first()
         if instance:
@@ -32,11 +32,17 @@ class myModel():
         return self.query.get_or_404(*args, **kwargs, description='{} with this id does not exist'.format(self.__name__))
         
 
-class User(db.Model, myModel):
+class OwneredModel():
+
+    def has_ownership(self, authenticated_user):
+        return self.user == authenticated_user
+
+class User(db.Model, MyModel):
     id = db.Column(db.String, primary_key=True)
     email = db.Column(db.String(100), unique=True, nullable=False)
     name = db.Column(db.String(100))
 
+    created_maps = db.relationship('Map', backref='user', lazy=True)
     posts = db.relationship('Post', backref='user', lazy=True)
     subscriptions = db.relationship('Subscription', backref='user', lazy=True)
     notification_tokens = db.relationship('NotificationToken', backref='user', lazy=True)
@@ -45,14 +51,16 @@ class User(db.Model, myModel):
         return '<User {}>'.format(self.email)
 
     
-class Map(db.Model, myModel):
+class Map(db.Model, MyModel):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
+
+    user_id = db.Column(db.String, db.ForeignKey('user.id'), nullable=False)
     
     posts = db.relationship('Post', backref='map', lazy=True)
     subscriptions = db.relationship('Subscription', backref='map', lazy=True)
     
-class Post(db.Model, myModel):
+class Post(db.Model, MyModel, OwneredModel):
     id = db.Column(db.Integer, primary_key=True)
     post_time = db.Column(db.DateTime, nullable=False)
     message = db.Column(db.Text)
@@ -63,7 +71,7 @@ class Post(db.Model, myModel):
     map_id = db.Column(db.Integer, db.ForeignKey('map.id'), nullable=False)
 
 
-class Subscription(db.Model, myModel):
+class Subscription(db.Model, MyModel, OwneredModel):
     id = db.Column(db.Integer, primary_key=True)
     subscription_time = db.Column(db.DateTime, nullable=False)
 
@@ -71,7 +79,7 @@ class Subscription(db.Model, myModel):
     map_id = db.Column(db.Integer, db.ForeignKey('map.id'), nullable=False)
 
 
-class NotificationToken(db.Model, myModel):
+class NotificationToken(db.Model, MyModel, OwneredModel):
     notification_token = db.Column(db.String, primary_key=True)
 
     user_id = db.Column(db.String, db.ForeignKey('user.id'), nullable=False)

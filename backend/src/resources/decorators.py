@@ -51,3 +51,30 @@ def decode_token(func):
             
         return 'Unauthorized', 401 
     return wrapper
+
+
+def owner_or_404(model):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            instance_id = kwargs.pop(list(kwargs)[0])
+            instance = model.get_or_404(instance_id)
+
+            if instance.has_ownership(args[0].user):
+                return func(*args, instance, **kwargs)
+            else:
+                return 'You do not have permission to this {}'.format(model.__name__), 401
+        return wrapper
+    return decorator
+
+
+def get_or_404(model):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            instance_id = kwargs.pop(list(kwargs)[0])
+            instance = model.get_or_404(instance_id)
+
+            return func(*args, instance, **kwargs)
+        return wrapper
+    return decorator
