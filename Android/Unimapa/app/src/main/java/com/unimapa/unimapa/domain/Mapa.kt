@@ -10,11 +10,14 @@ class Mapa {
 
     private var selected:Boolean? = false
 
-    constructor(id:Int?, name: String?, posts:Int?, selected:Boolean?) {
+    private var tipo:String? = ""
+
+    constructor(id:Int?, name: String?, posts:Int?, selected:Boolean?, tipo:String?) {
         this.id  = id
         this.name = name
         this.posts = posts
         this.selected = selected
+        this.tipo = tipo
     }
 
 
@@ -50,6 +53,14 @@ class Mapa {
         this.selected = selected
     }
 
+    fun getTipo(): String? {
+        return tipo
+    }
+
+    fun setTipo(tipo: String?){
+        this.tipo = tipo
+    }
+
 
     override fun toString(): String {
         return "Mapa(id=$id, name=$name, posts=$posts, selected=$selected)"
@@ -67,6 +78,9 @@ class Mapa {
 
         @JvmField
         var POSTS: String = "posts"
+
+        @JvmField
+        var TIPO: String = "tipo"
     }
 
 

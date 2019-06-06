@@ -78,13 +78,24 @@ public class UserDataBase {
         return count;
     }
 
-    public int updateToken(String newToken, String id) {
+    public int updateToken(String newToken) {
         SQLiteDatabase db = myhelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        String[] whereArgs = {id};
-        contentValues.put("TOKEN", newToken);
-        int count = db.update(User.TABLE_NAME, contentValues, User.ID + " = ?", whereArgs);
+
+        contentValues.put(User.TOKEN, newToken);
+        int count = db.update(User.TABLE_NAME, contentValues, null, null);
         return count;
+    }
+
+
+    public String getToken(){
+        ArrayList<User> users = getData();
+
+        for(User user : users){
+            return user.getToken();
+        }
+
+        return null;
     }
 
     public void resetDataBase() {

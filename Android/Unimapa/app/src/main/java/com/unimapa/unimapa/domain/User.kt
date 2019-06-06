@@ -10,6 +10,8 @@ class User {
 
     private var name:String? = ""
 
+    private var token:String? = ""
+
     constructor(id:String?, username: String, name: String?) {
         this.id  = id
         this.username = username
@@ -41,6 +43,16 @@ class User {
         this.name = name
     }
 
+    fun getToken(): String? {
+        return token
+    }
+
+    fun setToken(token: String?){
+        this.token = token
+    }
+
+
+
     companion object {
         @JvmField
         var TABLE_NAME: String = "user"
@@ -53,6 +65,9 @@ class User {
 
         @JvmField
         var NAME: String  = "names"
+
+        @JvmField
+        var TOKEN: String  = "token"
     }
 
 }

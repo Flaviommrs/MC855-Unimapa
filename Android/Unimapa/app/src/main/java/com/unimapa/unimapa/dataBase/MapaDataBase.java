@@ -23,13 +23,14 @@ public class MapaDataBase {
         String id = "";
         //TODO: retirar
         //SQLiteDatabase db = myhelper.getWritableDatabase();
-        //db.execSQL(Tables.DELETE_TABLE_USER);
-        //db.execSQL(Tables.CREATE_TABLE_USER);
+        //db.execSQL(Tables.DELETE_TABLE_MAPA);
+        //db.execSQL(Tables.CREATE_TABLE_MAPA);
 
         SQLiteDatabase dbb = myhelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(Mapa.ID, mapa.getId());
         contentValues.put(Mapa.NAME, mapa.getName());
+        contentValues.put(Mapa.TIPO, mapa.getTipo());
         //TODO:contentValues.put(Mapa.POSTS, mapa.getPosts());
 
         id = String.valueOf(dbb.insert(Mapa.TABLE_NAME, null, contentValues));
@@ -48,8 +49,9 @@ public class MapaDataBase {
                 int id = cursor.getInt(cursor.getColumnIndex(Mapa.ID));
                 String name = cursor.getString(cursor.getColumnIndex(Mapa.NAME));
                 int posts = cursor.getInt(cursor.getColumnIndex(Mapa.POSTS));
+                String tipo = cursor.getString(cursor.getColumnIndex(Mapa.TIPO));
 
-                users.add(new Mapa(id, name, posts, false));
+                users.add(new Mapa(id, name, posts, false, tipo));
             }
         } catch (Exception e) {
             e.printStackTrace();

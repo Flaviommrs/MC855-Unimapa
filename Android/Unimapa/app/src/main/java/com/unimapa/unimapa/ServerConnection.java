@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.StrictMode;
 
 import com.google.gson.Gson;
+import com.unimapa.unimapa.dataBase.UserDataBase;
 import com.unimapa.unimapa.domain.Mapa;
 
 import java.io.BufferedReader;
@@ -28,7 +29,7 @@ import org.json.JSONObject;
 
 public class ServerConnection {
 
-    private final Context context;
+    private static Context context;
 
     public ServerConnection(Context context) {
         this.context = context;
@@ -138,9 +139,11 @@ public class ServerConnection {
         return null;
     }
 
-    public static JSONObject sendJson(String params, String json, String token) throws JSONException {
+    public static JSONObject sendJson(String params, String json, String method) throws JSONException {
         HttpURLConnection connection = null;
         BufferedReader reader = null;
+        UserDataBase UDB = new UserDataBase(context);
+        String token = UDB.getToken();
 
         try {
             String jsonText = "";
@@ -149,7 +152,7 @@ public class ServerConnection {
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setRequestProperty("Authorization", "Bearer " + token);
             //connection.setRequestProperty("Cookie", login("http://ec2-54-189-74-87.us-west-2.compute.amazonaws.com:8080/j_spring_security_check?j_username=df@email.com&j_password=df"));
-            connection.setRequestMethod("POST");
+            connection.setRequestMethod(method);
             connection.connect();
 
             OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());

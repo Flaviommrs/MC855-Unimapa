@@ -51,9 +51,9 @@ class MapList : AppCompatActivity() {
 
         for(mapa in mapas){
             if(findMapaById(mapa.getId()!!) != null){
-                mapas2.add(Mapa(mapa.getId(), mapa.getName(), mapa.getPosts(), true))
+                mapas2.add(Mapa(mapa.getId(), mapa.getName(), mapa.getPosts(), true, mapa.getTipo()))
             }else{
-                mapas2.add(Mapa(mapa.getId(), mapa.getName(), mapa.getPosts(), false))
+                mapas2.add(Mapa(mapa.getId(), mapa.getName(), mapa.getPosts(), false, mapa.getTipo()))
             }
         }
 
@@ -67,7 +67,7 @@ class MapList : AppCompatActivity() {
             StrictMode.setThreadPolicy(policy)
         }
         try {
-            this.mapas.add(Mapa(-1,"",0,false))
+            this.mapas.add(Mapa(-1,"",0,false, ""))
             this.mapas.addAll(ServerConnection.getMapas("https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev/maps"))
         } catch (e: IOException) {
             Toast.makeText(this,"Não conseguiu carregar mapas",60000)
