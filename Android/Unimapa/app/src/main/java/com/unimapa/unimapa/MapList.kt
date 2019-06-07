@@ -68,7 +68,7 @@ class MapList : AppCompatActivity() {
         }
         try {
             this.mapas.add(Mapa(-1,"",0,false, ""))
-            this.mapas.addAll(ServerConnection.getMapas("https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev/maps"))
+            this.mapas.addAll(ServerConnection(this).getMapas("https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev/maps"))
         } catch (e: IOException) {
             Toast.makeText(this,"Não conseguiu carregar mapas",60000)
             e.printStackTrace()

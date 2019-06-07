@@ -29,15 +29,15 @@ import org.json.JSONObject;
 
 public class ServerConnection {
 
-    private static Context context;
+    private Context context;
 
     public ServerConnection(Context context) {
         this.context = context;
     }
 
-    private static final String BASE_URL = "http://235f3279.ngrok.io";
+    private final String BASE_URL = "http://235f3279.ngrok.io";
 
-    public static ArrayList<Mapa> getMapas(String url){
+    public ArrayList<Mapa> getMapas(String url){
         ArrayList<Mapa> mapas = new ArrayList<Mapa>();
         try {
             JSONArray mapasJson = readJsonArray(url);
@@ -59,7 +59,7 @@ public class ServerConnection {
         return mapas;
     }
 
-    public static JSONArray readJsonArray(String url) throws IOException {
+    public JSONArray readJsonArray(String url) throws IOException {
         InputStream is = new URL(url).openStream();
         try {
             BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
@@ -76,7 +76,7 @@ public class ServerConnection {
         }
     }
 
-    private static String readAll(Reader rd) throws IOException {
+    private String readAll(Reader rd) throws IOException {
 
         //TODO: para dar permeissao para acesso http
         /*if (android.os.Build.VERSION.SDK_INT > 9){
@@ -93,7 +93,7 @@ public class ServerConnection {
         return sb.toString();
     }
 
-    public static JSONObject getJson(String params) throws JSONException {
+    public JSONObject getJson(String params) throws JSONException {
         HttpURLConnection connection = null;
         BufferedReader reader = null;
 
@@ -139,7 +139,7 @@ public class ServerConnection {
         return null;
     }
 
-    public static JSONObject sendJson(String params, String json, String method) throws JSONException {
+    public JSONObject sendJson(String params, String json, String method) throws JSONException {
         HttpURLConnection connection = null;
         BufferedReader reader = null;
         UserDataBase UDB = new UserDataBase(context);

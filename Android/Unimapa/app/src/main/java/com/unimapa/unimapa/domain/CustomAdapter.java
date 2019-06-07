@@ -96,7 +96,8 @@ public class CustomAdapter extends BaseAdapter {
                     modelArrayList.get(pos).setSelected(true);
                     MDB.insertData(modelArrayList.get(pos));
                     try {
-                        ServerConnection.sendJson("http://235f3279.ngrok.io/maps"    //TODO: em producao"https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev/maps/"
+                        ServerConnection serverConnection = new ServerConnection(context);
+                        serverConnection.sendJson("http://235f3279.ngrok.io/maps"    //TODO: em producao"https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev/maps/"
                                 ,"{\"name\": \"testando \"}","POST");
                     } catch (JSONException e) {
                         e.printStackTrace();

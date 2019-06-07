@@ -78,6 +78,7 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
     private var postLat: Double = 0.0
     private var postLong: Double = 0.0
 
+
     private var listOfHeatmapColors: Array<Expression>? = null
     private var listOfHeatmapRadiusStops: Array<Expression>? = null
     private var listOfHeatmapIntensityStops: Array<Float>? = null
@@ -101,7 +102,6 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
 
         obtieneLocalizacion()
         //////////////////////////////////////////////////////////////////////////////////////////////////////
-
     }
 
     private fun getMapas(){
@@ -247,7 +247,7 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
             if(it.isSuccessful){
                 val token : String = it.result!!.token!!
 
-                ServerConnection.sendJson("/posts", "{\n" +
+                ServerConnection(this).sendJson("/posts", "{\n" +
                         "\"message\" : \"$description\",\n" +
                         "\"point_x\" : $postLong,\n" +
                         "\"point_y\" : $postLat\n" +
@@ -384,15 +384,15 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
 
                         FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener(OnCompleteListener { task ->
                             if (!task.isSuccessful) {
-                                ServerConnection.sendJson("/sign-up", "", "POST")
+                                ServerConnection(this).sendJson("/sign-up", "", "POST")
                                 Log.w("[Sign Up]", "getInstanceId failed", task.exception)
                                 return@OnCompleteListener
                             }
 
                             // Get new Instance ID token
                             val notification = task.result?.token
-                            ServerConnection.sendJson("/sign-up", "{ \"notification_token\": \"$notification\" }", "POST")
-                            saveToken(token);
+                            saveToken(token)
+                            ServerConnection(this).sendJson("/sign-up", "{ \"notification_token\": \"$notification\" }", "POST")
                         })
                     }
                 })
