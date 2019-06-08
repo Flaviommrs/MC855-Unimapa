@@ -248,7 +248,7 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
             if(it.isSuccessful){
                 val token : String = it.result!!.token!!
 
-                ServerConnection(this).sendJson("/posts", "{\n" +
+                ServerConnection(this).sendJson("/maps/"+selectedMap+"/posts", "{\n" +
                         "\"message\" : \"$description\",\n" +
                         "\"point_x\" : $postLong,\n" +
                         "\"point_y\" : $postLat\n" +
