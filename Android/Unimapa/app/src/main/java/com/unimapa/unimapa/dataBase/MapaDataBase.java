@@ -40,7 +40,7 @@ public class MapaDataBase {
     public ArrayList<Mapa> getData() {
         ArrayList<Mapa> users = new ArrayList<Mapa>();
         SQLiteDatabase db = myhelper.getWritableDatabase();
-        String[] columns = {Mapa.ID, Mapa.NAME, Mapa.POSTS};
+        String[] columns = {Mapa.ID, Mapa.NAME, Mapa.POSTS, Mapa.TIPO};
 
         try {
             Cursor cursor = db.query(Mapa.TABLE_NAME, columns, null, null, null, null, Mapa.NAME);
