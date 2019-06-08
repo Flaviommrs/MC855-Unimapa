@@ -35,12 +35,12 @@ public class ServerConnection {
         this.context = context;
     }
 
-    private final String BASE_URL = "http://235f3279.ngrok.io";
+    private final String BASE_URL = "http://418fefcd.ngrok.io";
 
-    public ArrayList<Mapa> getMapas(String url){
+    public ArrayList<Mapa> getMapas(){
         ArrayList<Mapa> mapas = new ArrayList<Mapa>();
         try {
-            JSONArray mapasJson = readJsonArray(url);
+            JSONArray mapasJson = sendJson("/maps", "", "GET").getJSONArray("maps");
 
             for(int i = 0; i < mapasJson.length(); i++) {
                 Gson gson = new Gson(); // Or use new GsonBuilder().create();
@@ -50,30 +50,70 @@ public class ServerConnection {
                 mapas.add(mapa);
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }catch (JSONException ex) {
+        } catch (JSONException ex) {
             ex.printStackTrace();
         }
 
         return mapas;
     }
 
-    public JSONArray readJsonArray(String url) throws IOException {
-        InputStream is = new URL(url).openStream();
+    public JSONArray readJsonArray(String params, String json, String method) throws JSONException{
+
+        HttpURLConnection connection = null;
+        BufferedReader reader = null;
+        UserDataBase UDB = new UserDataBase(context);
+        String token = UDB.getToken();
+
         try {
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-            String jsonText = readAll(rd);
-            JSONArray json = null;
+            String jsonText = "";
+            URL url = new URL(BASE_URL + params);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Authorization", "Bearer " + token);
+            //connection.setRequestProperty("Cookie", login("http://ec2-54-189-74-87.us-west-2.compute.amazonaws.com:8080/j_spring_security_check?j_username=df@email.com&j_password=df"));
+            connection.setRequestMethod(method);
+            connection.connect();
+
+            OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
+            wr.write(json);
+            wr.flush();
+            wr.close();
+
+            if (connection.getResponseCode() < 400) {
+                InputStream stream = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+
+                String jT = readAll(reader);
+                JSONArray jsonArray = null;
+                try {
+                    jsonArray = new JSONArray(jT);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return jsonArray;
+
+            }else {
+                System.out.println("ERROO ao pfazer o post, ERRO_CODIGO: " + connection.getResponseCode());
+                return null;
+            }
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
             try {
-                json = new JSONArray(jsonText);
-            } catch (JSONException e) {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-            return json;
-        } finally {
-            is.close();
         }
+        return null;
     }
 
     private String readAll(Reader rd) throws IOException {
@@ -155,10 +195,13 @@ public class ServerConnection {
             connection.setRequestMethod(method);
             connection.connect();
 
-            OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
-            wr.write(json);
-            wr.flush();
-            wr.close();
+            if(method.equals("POST")) {
+                OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
+                wr.write(json);
+                wr.flush();
+                wr.close();
+            }
+
 
             if (connection.getResponseCode() < 400) {
                 InputStream stream = connection.getInputStream();

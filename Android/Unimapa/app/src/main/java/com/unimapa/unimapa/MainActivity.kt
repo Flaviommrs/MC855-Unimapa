@@ -52,6 +52,7 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.unimapa.unimapa.dataBase.MapaDataBase
 import com.unimapa.unimapa.dataBase.UserDataBase
 import com.unimapa.unimapa.domain.Mapa
+import com.unimapa.unimapa.domain.User
 import java.io.IOException
 import java.net.URL
 
@@ -389,9 +390,10 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
                                 return@OnCompleteListener
                             }
 
+                            UserDataBase(this).insertData(User(user.displayName!!,user.email!!,user.displayName!!, token ))
+
                             // Get new Instance ID token
                             val notification = task.result?.token
-                            saveToken(token)
                             ServerConnection(this).sendJson("/sign-up", "{ \"notification_token\": \"$notification\" }", "POST")
                         })
                     }

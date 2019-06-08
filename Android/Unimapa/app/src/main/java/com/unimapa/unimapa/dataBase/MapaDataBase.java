@@ -31,7 +31,7 @@ public class MapaDataBase {
         contentValues.put(Mapa.ID, mapa.getId());
         contentValues.put(Mapa.NAME, mapa.getName());
         contentValues.put(Mapa.TIPO, mapa.getTipo());
-        //TODO:contentValues.put(Mapa.POSTS, mapa.getPosts());
+        contentValues.put(Mapa.POSTS, mapa.getPosts());
 
         id = String.valueOf(dbb.insert(Mapa.TABLE_NAME, null, contentValues));
         return id;

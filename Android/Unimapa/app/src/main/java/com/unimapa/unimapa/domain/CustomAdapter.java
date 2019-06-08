@@ -94,10 +94,10 @@ public class CustomAdapter extends BaseAdapter {
                     Toast.makeText(context, "Retirou: " + modelArrayList.get(pos).getName(), Toast.LENGTH_SHORT).show();
                 }else {
                     modelArrayList.get(pos).setSelected(true);
-                    MDB.insertData(modelArrayList.get(pos));
+                    MDB.insertData(new Mapa(modelArrayList.get(pos).getId(),modelArrayList.get(pos).getName(),modelArrayList.get(pos).getPosts(),true, "HEAT"));
                     try {
                         ServerConnection serverConnection = new ServerConnection(context);
-                        serverConnection.sendJson("http://235f3279.ngrok.io/maps"    //TODO: em producao"https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev/maps/"
+                        serverConnection.sendJson("/maps/"+ modelArrayList.get(pos).getId()+"/subscriptions"   //TODO: em producao"https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev/maps/"
                                 ,"{\"name\": \"testando \"}","POST");
                     } catch (JSONException e) {
                         e.printStackTrace();

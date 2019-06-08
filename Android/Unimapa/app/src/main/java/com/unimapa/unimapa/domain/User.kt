@@ -12,10 +12,11 @@ class User {
 
     private var token:String? = ""
 
-    constructor(id:String?, username: String, name: String?) {
+    constructor(id:String?, username: String, name: String?, token: String) {
         this.id  = id
         this.username = username
         this.name = name
+        this.token = token
     }
 
 

@@ -21,15 +21,16 @@ public class UserDataBase {
 
     public String insertData(User user) {
         String id = "";
-        SQLiteDatabase db = myhelper.getWritableDatabase();
-        //db.execSQL(Tables.DELETE_TABLE_USER);
-        //db.execSQL(Tables.CREATE_TABLE_USER);
 
         SQLiteDatabase dbb = myhelper.getWritableDatabase();
+
+        dbb.delete(User.TABLE_NAME, null, null);
+
         ContentValues contentValues = new ContentValues();
         contentValues.put(User.ID, user.getId());
         contentValues.put(User.USERNAME, user.getUsername());
         contentValues.put(User.NAME, user.getName());
+        contentValues.put(User.TOKEN, user.getToken());
 
         String.valueOf(dbb.insert(User.TABLE_NAME, null, contentValues));
 
@@ -39,7 +40,7 @@ public class UserDataBase {
     public ArrayList<User> getData() {
         ArrayList<User> users = new ArrayList<User>();
         SQLiteDatabase db = myhelper.getWritableDatabase();
-        String[] columns = {User.ID, User.USERNAME, User.NAME};
+        String[] columns = {User.ID, User.USERNAME, User.NAME, User.TOKEN};
 
         try {
             Cursor cursor = db.query(User.TABLE_NAME, columns, null, null, null, null, null);
@@ -48,8 +49,9 @@ public class UserDataBase {
                 String id = cursor.getString(cursor.getColumnIndex(User.ID));
                 String username = cursor.getString(cursor.getColumnIndex(User.USERNAME));
                 String name = cursor.getString(cursor.getColumnIndex(User.NAME));
+                String token = cursor.getString(cursor.getColumnIndex(User.TOKEN));
 
-                users.add(new User(id, username, name));
+                users.add(new User(id, username, name, token));
             }
         } catch (Exception e) {
 
