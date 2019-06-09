@@ -7,10 +7,13 @@ package com.unimapa.unimapa
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.location.Location
+import android.os.Build
 import android.os.Bundle;
 import android.os.StrictMode
 import android.support.annotation.NonNull
@@ -98,6 +101,8 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
 
         createMenu()
 
+        createNotificationChannel()
+
         ///LOCATION///////////////////////////////////////////////////////////////////////////////////////////////////
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -118,6 +123,23 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
         } catch (e: IOException) {
             e.printStackTrace()
         }
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create the NotificationChannel
+            val name = getString(R.string.maps_channel)
+            val descriptionText = getString(R.string.maps_channel_description)
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val mChannel = NotificationChannel("maps_1", name, importance)
+            mChannel.description = descriptionText
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(mChannel)
+        }
+
+
     }
 
     private fun signInFlow(){
