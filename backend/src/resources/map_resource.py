@@ -52,7 +52,7 @@ class MapListResource(Resource):
 
     @authenticate
     def get(self):
-        return MapSchema().dump(Map.query.all(), many=True).data
+        return {'maps' : MapSchema().dump(Map.query.all(), many=True).data}
 
     @authenticate
     def post(self):
@@ -93,7 +93,7 @@ class MapPostResource(Resource):
         new_post = Post(
             user_id=self.user.id,
             post_time=datetime.utcnow(),
-            map_id=map_id,
+            map=_map,
             message=args['message'],
             point_x=args['point_x'], 
             point_y=args['point_y'],
@@ -127,7 +127,7 @@ class MapSubscriptionResource(Resource):
         new_subscription = Subscription(
             user_id=self.user.id,
             subscription_time=datetime.utcnow(),
-            map_id=map_id,
+            map=_map,
         )
         db.session.add(new_subscription)
 
@@ -139,6 +139,18 @@ class MapSubscriptionResource(Resource):
             return '', 500
         
         return SubscriptionSchema().dump(new_subscription).data, 201
+
+    @authenticate
+    @get_or_404(Map)
+    def delete(self, _map):
+        subscription = Subscription.query.filter_by(user=self.user, map=_map).first()
+        if subscription == None:
+            return 'User is not subscribed to this map', 400
+
+        db.session.delete(subscription)
+        db.session.commit()
+
+        return '', 204
 
 
 api.add_resource(MapListResource, '/maps')
