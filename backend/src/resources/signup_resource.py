@@ -24,13 +24,14 @@ class SignUpResource(Resource):
         parser.add_argument('notification_token')
         args = parser.parse_args()
 
-        notification_token = NotificationToken(
-            notification_token = args['notification_token'],
-            user = user
-        )
+        if not NotificationToken.query.get(args['notification_token']):
+            notification_token = NotificationToken(
+                notification_token = args['notification_token'],
+                user = user
+            )
 
-        db.session.add(notification_token)
-        db.session.commit()
+            db.session.add(notification_token)
+            db.session.commit()
         
         return UserSchema().dump(user).data, 201
 
