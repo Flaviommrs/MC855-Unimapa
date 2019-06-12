@@ -91,6 +91,13 @@ public class CustomAdapter extends BaseAdapter {
                 if(modelArrayList.get(pos).getSelected()){
                     modelArrayList.get(pos).setSelected(false);
                     MDB.removeById(modelArrayList.get(pos).getId());
+                    try {
+                        ServerConnection serverConnection = new ServerConnection(context);
+                        serverConnection.sendJson("/maps/"+ modelArrayList.get(pos).getId()+"/subscriptions"   //TODO: em producao"https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev/maps/"
+                                ,"{\"name\": \"testando \"}","DELETE");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     Toast.makeText(context, "Retirou: " + modelArrayList.get(pos).getName(), Toast.LENGTH_SHORT).show();
                 }else {
                     modelArrayList.get(pos).setSelected(true);
