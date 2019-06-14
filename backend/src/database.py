@@ -67,8 +67,12 @@ def mock_database_users(session, users_qty = 0):
 
 @development_or_test
 def mock_database_maps(session, maps_qty = 0):
+    users = User.query.all()
     for i in range(maps_qty):
-        new_map = Map(name="Mapa {}".format(i))
+        new_map = Map(
+            name="Mapa {}".format(i),
+            user = users[random.randint(0, len(users) - 1)],
+        )
         session.add(new_map)
 
     session.commit()

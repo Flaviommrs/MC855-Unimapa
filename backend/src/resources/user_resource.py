@@ -45,21 +45,21 @@ class UserResource(Resource):
 class UserListResource(Resource):
     @authenticate
     def get(self):
-        return UserSchema().dump(User.query.all(), many=True).data, 200
+        return {'users' : UserSchema().dump(User.query.all(), many=True).data } , 200
 
 
 class UserPostsResource(Resource):
     @authenticate
     @get_or_404(User)
     def get(self, user):
-        return PostSchema().dump(user.posts, many=True).data, 200
+        return {'posts' : PostSchema().dump(user.posts, many=True).data}, 200
 
 
 class UserSubscriptionListResource(Resource):
     @authenticate
     @get_or_404(User)
     def get(self, user):
-        return SubscriptionSchema().dump(user.subscriptions, many=True).data, 200
+        return {'subscriptions' : SubscriptionSchema().dump(user.subscriptions, many=True).data}, 200
 
 
 api.add_resource(UserListResource, '/users')

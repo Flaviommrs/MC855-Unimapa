@@ -37,14 +37,16 @@ class MapResource(Resource):
     def put(self, _map):
         edit_parser = reqparse.RequestParser()
         edit_parser.add_argument('name', required=True)
+        edit_parser.add_argument('read_only', type=bool, required=False)
         args = edit_parser.parse_args()
 
         for key, value in args.items():
-            setattr(_map, key, value)
+            if value:
+                setattr(_map, key, value)
 
         db.session.commit()
 
-        return PostSchema().dump(_map).data, 200
+        return MapSchema().dump(_map).data, 200
 
 
 
@@ -52,7 +54,7 @@ class MapListResource(Resource):
 
     @authenticate
     def get(self):
-        return {'maps' : MapSchema().dump(Map.query.all(), many=True).data}
+        return {'maps' : MapSchema().dump(Map.query.all(), many=True).data}, 200
 
     @authenticate
     def post(self):
@@ -73,17 +75,32 @@ class MapPostResource(Resource):
     @authenticate
     @get_or_404(Map)
     def get(self, _map):
-        feature_collection_list = [] 
-        for post in _map.posts:
+        page = request.args.get('page', None)
+        if page:
+            page = int(page)
+        per_page = int(request.args.get('per_page', 10))
+
+        feature_collection_list = []
+        posts = Post.query.filter_by(map=_map).order_by(Post.post_time.desc()).paginate(page=page, per_page=per_page).items
+
+        for post in posts:
+            print(post.post_time)
             if post.point_x and post.point_y:
                 feature_collection_list.append(Feature(geometry=Point((post.point_x, post.point_y))))
             else:
                 feature_collection_list.append(Feature(geometry=Point((0, 0))))
-        return FeatureCollection(feature_collection_list), 200
+        return {'posts' : FeatureCollection(feature_collection_list)}, 200
 
     @authenticate
     @get_or_404(Map)
     def post(self, _map):
+        if _map.read_only:
+            return 'The map is read only, it is not possible to create posts', 400
+
+        subscription = Subscription.query.filter_by(user=self.user, map=_map).first()
+        if subscription == None:
+            return 'The user need to be subscribed to the map to create a new post', 400
+
         parser = reqparse.RequestParser()
         parser.add_argument('message')
         parser.add_argument('point_x', type=float)
@@ -115,7 +132,7 @@ class MapSubscriptionResource(Resource):
     @authenticate
     @get_or_404(Map)
     def get(self, _map):
-        return SubscriptionSchema().dump(Subscription.query.filter_by(map=_map), many=True).data, 200
+        return {'subscriptions' : SubscriptionSchema().dump(Subscription.query.filter_by(map=_map), many=True).data}, 200
 
     
     @authenticate

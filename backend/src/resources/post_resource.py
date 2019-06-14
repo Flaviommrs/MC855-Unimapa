@@ -52,7 +52,7 @@ class PostListResource(Resource):
 
     @authenticate
     def get(self):
-        return PostSchema().dump(Post.query.all(), many=True).data, 200
+        return {'posts' : PostSchema().dump(Post.query.all(), many=True).data}, 200
 
     @authenticate
     def post(self):
@@ -64,6 +64,13 @@ class PostListResource(Resource):
 
         args = parser.parse_args()
         _map = Map.get_or_404(args['map_id'])
+
+        if _map.read_only:
+            return 'The map is read only, it is not possible to create posts', 400
+
+        subscription = Subscription.query.filter_by(user=self.user, map=_map).first()
+        if subscription == None:
+            return 'The user need to be subscribed to the map to create a new post', 400
 
         new_post = Post(
             user = self.user,
