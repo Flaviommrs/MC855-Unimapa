@@ -35,7 +35,7 @@ public class ServerConnection {
         this.context = context;
     }
 
-    private final String BASE_URL = "http://5792a9f6.ngrok.io";
+    private final String BASE_URL = "http://5fb55775.ngrok.io";
 
     public ArrayList<Mapa> getMapas(){
         ArrayList<Mapa> mapas = new ArrayList<Mapa>();

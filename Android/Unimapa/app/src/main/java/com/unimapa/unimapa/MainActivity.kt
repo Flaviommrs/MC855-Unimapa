@@ -101,8 +101,6 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
 
         createMenu()
 
-        createNotificationChannel()
-
         ///LOCATION///////////////////////////////////////////////////////////////////////////////////////////////////
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -123,23 +121,6 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
         } catch (e: IOException) {
             e.printStackTrace()
         }
-    }
-
-    private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // Create the NotificationChannel
-            val name = getString(R.string.maps_channel)
-            val descriptionText = getString(R.string.maps_channel_description)
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val mChannel = NotificationChannel("maps_1", name, importance)
-            mChannel.description = descriptionText
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(mChannel)
-        }
-
-
     }
 
     private fun signInFlow(){
@@ -493,5 +474,4 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
         super.onSaveInstanceState(outState)
         mapView!!.onSaveInstanceState(outState!!)
     }
-
 }

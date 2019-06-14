@@ -11,9 +11,7 @@ import org.w3c.dom.Text
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.ArrayAdapter
-
-
-
+import com.unimapa.unimapa.dataBase.MapaDataBase
 
 /**
  * Created by flavio.matheus on 13/05/19.
@@ -21,6 +19,8 @@ import android.widget.ArrayAdapter
 class PublicationDialogFragment : DialogFragment() {
 
     internal lateinit var listener: PublicationDialogListener
+
+    private var MDB: MapaDataBase? = null
 
     interface PublicationDialogListener {
         fun onDialogPositiveClick(dialog: DialogFragment, description: String, selectedMap: String)
@@ -30,6 +30,9 @@ class PublicationDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
 
+            MDB = MapaDataBase(this.context)
+
+            var maps = MDB!!.data
 
             val builder = AlertDialog.Builder(it)
 
@@ -39,7 +42,11 @@ class PublicationDialogFragment : DialogFragment() {
 
             val spinner = view.findViewById<Spinner>(R.id.mapa) as Spinner
 
-            val arraySpinner = arrayOf("1", "2", "3", "4", "5", "6", "7")
+            var arraySpinner = mutableListOf<String>()
+
+            for(map in maps){
+                arraySpinner.add(map.getName()!!)
+            }
 
             val adapter = ArrayAdapter<String>(this.context, android.R.layout.simple_spinner_item, arraySpinner)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)

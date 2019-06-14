@@ -1,6 +1,10 @@
 package com.unimapa.unimapa.domain;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +20,10 @@ import com.unimapa.unimapa.dataBase.MapaDataBase;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
+import static android.content.Context.NOTIFICATION_SERVICE;
 
 /**
  * Created by hardik on 9/1/17.
@@ -99,6 +107,8 @@ public class CustomAdapter extends BaseAdapter {
                         e.printStackTrace();
                     }
                     Toast.makeText(context, "Retirou: " + modelArrayList.get(pos).getName(), Toast.LENGTH_SHORT).show();
+
+                    deleteNotificationChannel(modelArrayList.get(pos).getName());
                 }else {
                     modelArrayList.get(pos).setSelected(true);
                     MDB.insertData(new Mapa(modelArrayList.get(pos).getId(),modelArrayList.get(pos).getName(),modelArrayList.get(pos).getPosts(),true, "HEAT"));
@@ -110,12 +120,33 @@ public class CustomAdapter extends BaseAdapter {
                         e.printStackTrace();
                     }
                     Toast.makeText(context, "Adicionou: " + modelArrayList.get(pos).getName(), Toast.LENGTH_SHORT).show();
-                    //TODO: sincronizar com o servidor
+
+                    createNotificationChannel(modelArrayList.get(pos).getName());
                 }
             }
         });
 
         return convertView;
+    }
+
+    private void createNotificationChannel(String name) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String descriptionText = context.getResources().getString(R.string.maps_channel_description);
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel mChannel = new NotificationChannel(name, name, importance);
+            mChannel.setDescription(descriptionText);
+
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(mChannel);
+        }
+    }
+
+    private void deleteNotificationChannel(String name){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+
+            notificationManager.deleteNotificationChannel(name);
+        }
     }
 
     private class ViewHolder {
