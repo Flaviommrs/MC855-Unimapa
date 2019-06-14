@@ -29,7 +29,7 @@ class SubscriptionResource(Resource):
 class SubscriptionListResource(Resource):
     @authenticate
     def get(self):
-        return SubscriptionSchema().dump(Subscription.query.all(), many=True).data, 200
+        return {'subscriptions' : SubscriptionSchema().dump(Subscription.query.all(), many=True).data}, 200
 
     @authenticate
     def post(self):

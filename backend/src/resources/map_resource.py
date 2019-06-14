@@ -52,7 +52,7 @@ class MapListResource(Resource):
 
     @authenticate
     def get(self):
-        return {'maps' : MapSchema().dump(Map.query.all(), many=True).data}
+        return {'maps' : MapSchema().dump(Map.query.all(), many=True).data}, 200
 
     @authenticate
     def post(self):
@@ -115,7 +115,7 @@ class MapSubscriptionResource(Resource):
     @authenticate
     @get_or_404(Map)
     def get(self, _map):
-        return SubscriptionSchema().dump(Subscription.query.filter_by(map=_map), many=True).data, 200
+        return {'subscriptions' : SubscriptionSchema().dump(Subscription.query.filter_by(map=_map), many=True).data}, 200
 
     
     @authenticate

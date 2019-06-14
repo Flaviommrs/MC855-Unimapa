@@ -52,7 +52,7 @@ class PostListResource(Resource):
 
     @authenticate
     def get(self):
-        return PostSchema().dump(Post.query.all(), many=True).data, 200
+        return {'posts' : PostSchema().dump(Post.query.all(), many=True).data}, 200
 
     @authenticate
     def post(self):
