@@ -73,13 +73,21 @@ class MapPostResource(Resource):
     @authenticate
     @get_or_404(Map)
     def get(self, _map):
-        feature_collection_list = [] 
-        for post in _map.posts:
+        page = request.args.get('page', None)
+        if page:
+            page = int(page)
+        per_page = int(request.args.get('per_page', 10))
+
+        feature_collection_list = []
+        posts = Post.query.filter_by(map=_map).order_by(Post.post_time.desc()).paginate(page=page, per_page=per_page).items
+
+        for post in posts:
+            print(post.post_time)
             if post.point_x and post.point_y:
                 feature_collection_list.append(Feature(geometry=Point((post.point_x, post.point_y))))
             else:
                 feature_collection_list.append(Feature(geometry=Point((0, 0))))
-        return FeatureCollection(feature_collection_list), 200
+        return {'posts' : FeatureCollection(feature_collection_list)}, 200
 
     @authenticate
     @get_or_404(Map)
