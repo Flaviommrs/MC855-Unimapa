@@ -18,6 +18,8 @@ class UserSchema(Schema):
 class MapSchema(Schema):
     id = fields.Integer()
     name = fields.Str()
+    read_only = fields.Boolean()
+    
     owner = fields.Nested(UserSchema, attribute="user")
 
     @post_load

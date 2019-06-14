@@ -37,14 +37,16 @@ class MapResource(Resource):
     def put(self, _map):
         edit_parser = reqparse.RequestParser()
         edit_parser.add_argument('name', required=True)
+        edit_parser.add_argument('read_only', type=bool, required=False)
         args = edit_parser.parse_args()
 
         for key, value in args.items():
-            setattr(_map, key, value)
+            if value:
+                setattr(_map, key, value)
 
         db.session.commit()
 
-        return PostSchema().dump(_map).data, 200
+        return MapSchema().dump(_map).data, 200
 
 
 
@@ -92,6 +94,13 @@ class MapPostResource(Resource):
     @authenticate
     @get_or_404(Map)
     def post(self, _map):
+        if _map.read_only:
+            return 'The map is read only, it is not possible to create posts', 400
+
+        subscription = Subscription.query.filter_by(user=self.user, map=_map).first()
+        if subscription == None:
+            return 'The user need to be subscribed to the map to create a new post', 400
+
         parser = reqparse.RequestParser()
         parser.add_argument('message')
         parser.add_argument('point_x', type=float)
