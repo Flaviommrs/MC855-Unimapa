@@ -23,7 +23,7 @@ class PublicationDialogFragment : DialogFragment() {
     private var MDB: MapaDataBase? = null
 
     interface PublicationDialogListener {
-        fun onDialogPositiveClick(dialog: DialogFragment, description: String, selectedMap: String)
+        fun onDialogPositiveClick(dialog: DialogFragment, description: String, selectedMap: String, title: String, id: Int)
         fun onDialogNegativeClick(dialog: DialogFragment)
     }
 
@@ -54,14 +54,23 @@ class PublicationDialogFragment : DialogFragment() {
 
             builder.setView(view)
 
-            builder.setPositiveButton("Post", DialogInterface.OnClickListener{ dialog, id ->
+            builder.setPositiveButton("Post") { dialog, id ->
                 print("Post")
 
+                val title = (dialog as AlertDialog).findViewById<EditText>(R.id.title) as EditText
                 val edit = (dialog as AlertDialog).findViewById<EditText>(R.id.descrição) as EditText
                 val spinner = (dialog as AlertDialog).findViewById<Spinner>(R.id.mapa) as Spinner
 
-                listener.onDialogPositiveClick(this, edit.text.toString(), spinner.selectedItem.toString() )
-            })
+                var id = -1
+
+                for(map in maps){
+                    if(map.getName().equals(spinner.selectedItem.toString())){
+                        id = map.getId()!!
+                    }
+                }
+
+                listener.onDialogPositiveClick(this, edit.text.toString(), spinner.selectedItem.toString(), title.text.toString(), id)
+            }
 
             builder.setNegativeButton("Cancel", DialogInterface.OnClickListener{dialog, id ->
                 print("Cancel")

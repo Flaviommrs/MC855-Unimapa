@@ -244,14 +244,15 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
         dialog.dismiss()
     }
 
-    override fun onDialogPositiveClick(dialog: DialogFragment, description: String, selectedMap: String) {
+    override fun onDialogPositiveClick(dialog: DialogFragment, description: String, selectedMap: String, title: String, id:Int) {
         val user = FirebaseAuth.getInstance().currentUser
 
         user!!.getIdToken(true).addOnCompleteListener(OnCompleteListener {
             if(it.isSuccessful){
                 val token : String = it.result!!.token!!
 
-                ServerConnection(this).sendJson("/maps/"+selectedMap+"/posts", "{\n" +
+                ServerConnection(this).sendJson("/maps/"+id.toString()+"/posts", "{\n" +
+                        "\"title\" : \"$title\", \n" +
                         "\"message\" : \"$description\",\n" +
                         "\"point_x\" : $postLong,\n" +
                         "\"point_y\" : $postLat\n" +
