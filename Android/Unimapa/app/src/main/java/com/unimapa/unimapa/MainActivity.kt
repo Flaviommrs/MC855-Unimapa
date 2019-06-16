@@ -7,16 +7,11 @@ package com.unimapa.unimapa
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.location.Location
-import android.os.Build
-import android.os.Bundle;
+import android.os.Bundle
 import android.os.StrictMode
-import android.support.annotation.NonNull
 import android.support.design.widget.NavigationView
 import android.support.v4.app.DialogFragment
 import android.support.v4.view.GravityCompat
@@ -28,6 +23,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -36,6 +32,8 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.iid.FirebaseInstanceId
+import com.mapbox.android.core.permissions.PermissionsListener
+import com.mapbox.android.core.permissions.PermissionsManager
 
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
@@ -47,11 +45,16 @@ import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.expressions.Expression
 import com.mapbox.mapboxsdk.style.expressions.Expression.*
 import com.mapbox.mapboxsdk.style.layers.CircleLayer
-import com.mapbox.mapboxsdk.style.layers.HeatmapLayer
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory.*
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer
-import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
+import com.mapbox.mapboxsdk.location.LocationComponent
+import com.mapbox.mapboxsdk.location.LocationComponentOptions
+import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions
+import com.mapbox.mapboxsdk.location.modes.RenderMode
+import com.mapbox.mapboxsdk.maps.MapboxMap
+
 import com.unimapa.unimapa.dataBase.MapaDataBase
 import com.unimapa.unimapa.dataBase.UserDataBase
 import com.unimapa.unimapa.domain.Mapa
@@ -60,10 +63,13 @@ import java.io.IOException
 import java.net.URL
 
 
-class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelectedListener, PublicationDialogFragment.PublicationDialogListener{
+class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelectedListener, PublicationDialogFragment.PublicationDialogListener, PermissionsListener{
 
     private var mapView: MapView? = null
+    private lateinit var map: MapboxMap
+    private lateinit var locationComponent: LocationComponent
     private var routeCoordinates: MutableList<Point>? = null
+    private lateinit var permissionsManager: PermissionsManager
 
     private var mNavigationView: NavigationView? = null
     private var toolbar: Toolbar? = null
@@ -94,18 +100,14 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
+
         signInFlow()
         mapSetupFlow(savedInstanceState)
 
         getMapas()
 
         createMenu()
-
-        ///LOCATION///////////////////////////////////////////////////////////////////////////////////////////////////
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
-        obtieneLocalizacion()
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
     private fun getMapas(){
@@ -145,6 +147,8 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
         mapView!!.onCreate(savedInstanceState)
         mapView!!.getMapAsync(OnMapReadyCallback { mapboxMap ->
 
+            map = mapboxMap
+
             val position = CameraPosition.Builder()
             position.target(LatLng(-22.8184,-47.0647))
             position.zoom(15.toDouble())
@@ -173,6 +177,8 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
                     addHeatMapLayer(style)
 
                     addMarkerLayer(style)
+
+                    setupLocation(style)
 
                     style.addLayer(CircleLayer("urban-areas-fill", SOURCE_ID))
                 }
@@ -404,7 +410,6 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
                 })
 
                 setUserInformations(user!!)
-
             } else {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
@@ -420,14 +425,40 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
     }
 
     @SuppressLint("MissingPermission")
-    private fun obtieneLocalizacion(){
-        fusedLocationClient.lastLocation
-                .addOnSuccessListener { location: Location? ->
-                    latitude =  location?.latitude
-                    longitude = location?.longitude
+    private fun setupLocation(loadedMapStyle: Style){
 
-                    alert("lon: " + longitude + " lat: " + latitude)
-                }
+        if (PermissionsManager.areLocationPermissionsGranted(this)) {
+
+          // Create and customize the LocationComponent's options
+          var customLocationComponentOptions = LocationComponentOptions.builder(this)
+            .elevation(5f)
+            .accuracyAlpha(.6f)
+
+            .accuracyColor(Color.RED)
+            .build()
+
+          // Get an instance of the component
+          locationComponent = map.getLocationComponent();
+
+          var locationComponentActivationOptions = LocationComponentActivationOptions.builder(this, loadedMapStyle)
+              .locationComponentOptions(customLocationComponentOptions)
+              .useDefaultLocationEngine(true)
+              .build()
+
+          // Activate with options
+          locationComponent.activateLocationComponent(locationComponentActivationOptions);
+
+          // Enable to make component visible
+          locationComponent.setLocationComponentEnabled(true);
+
+          // Set the component's render mode
+          locationComponent.setRenderMode(RenderMode.COMPASS);
+
+
+        } else {
+          permissionsManager = PermissionsManager(this);
+          permissionsManager.requestLocationPermissions(this);
+        }
     }
 
     private fun setUserInformations(user: FirebaseUser) {
@@ -474,5 +505,20 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         mapView!!.onSaveInstanceState(outState!!)
+    }
+
+    override fun onExplanationNeeded(permissionsToExplain: MutableList<String>?) {
+        Toast.makeText(this, "explanation", Toast.LENGTH_LONG).show();
+    }
+
+    override fun onPermissionResult(granted: Boolean) {
+        if (granted) {
+         map.getStyle {
+              setupLocation(it)
+            }
+        } else {
+          Toast.makeText(this, "Permission Denied", Toast.LENGTH_LONG).show()
+          finish()
+        }
     }
 }
