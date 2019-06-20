@@ -7,6 +7,7 @@ from geojson import Feature, Point, FeatureCollection
 from ..schemas import MapSchema, PostSchema, SubscriptionSchema
 from ..models import Map, Post, Subscription, db
 from ..services.notification_service import send_notification
+from ..services.geojson_helpers import posts_to_geojson
 
 from .decorators import authenticate, get_or_404, owner_or_404
 
@@ -41,9 +42,9 @@ class MapResource(Resource):
         args = edit_parser.parse_args()
 
         for key, value in args.items():
-            if value:
+            if value != None:
                 setattr(_map, key, value)
-
+        db.session.add(_map)
         db.session.commit()
 
         return MapSchema().dump(_map).data, 200
@@ -60,9 +61,15 @@ class MapListResource(Resource):
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('name', required=True)
+        parser.add_argument('read_only', type=bool, required=False)
 
         args = parser.parse_args()
-        newMap = Map(name=args['name'])
+        
+        newMap = Map(
+            name=args['name'],
+            user=self.user,
+            read_only=args['read_only']
+        )
 
         db.session.add(newMap)
         db.session.commit()
@@ -78,17 +85,13 @@ class MapPostResource(Resource):
         page = request.args.get('page', None)
         if page:
             page = int(page)
-        per_page = int(request.args.get('per_page', 10))
+        per_page = request.args.get('per_page', (None if _map.read_only else 10))
+        if per_page:
+            per_page = int(per_page)
 
-        feature_collection_list = []
         posts = Post.query.filter_by(map=_map).order_by(Post.post_time.desc()).paginate(page=page, per_page=per_page).items
+        feature_collection_list = posts_to_geojson(posts)
 
-        for post in posts:
-            print(post.post_time)
-            if post.point_x and post.point_y:
-                feature_collection_list.append(Feature(geometry=Point((post.point_x, post.point_y))))
-            else:
-                feature_collection_list.append(Feature(geometry=Point((0, 0))))
         return {'posts' : FeatureCollection(feature_collection_list)}, 200
 
     @authenticate
@@ -97,11 +100,13 @@ class MapPostResource(Resource):
         if _map.read_only:
             return 'The map is read only, it is not possible to create posts', 400
 
-        subscription = Subscription.query.filter_by(user=self.user, map=_map).first()
-        if subscription == None:
-            return 'The user need to be subscribed to the map to create a new post', 400
+        if _map.user != self.user:
+            subscription = Subscription.query.filter_by(user=self.user, map=_map).first()
+            if subscription == None:
+                return 'The user need to be subscribed to the map to create a new post', 400
 
         parser = reqparse.RequestParser()
+        parser.add_argument('title', required=True, help="Post title is required")
         parser.add_argument('message')
         parser.add_argument('point_x', type=float)
         parser.add_argument('point_y', type=float)
@@ -111,6 +116,7 @@ class MapPostResource(Resource):
             user_id=self.user.id,
             post_time=datetime.utcnow(),
             map=_map,
+            title=args['title'],
             message=args['message'],
             point_x=args['point_x'], 
             point_y=args['point_y'],

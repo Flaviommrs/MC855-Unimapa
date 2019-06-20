@@ -57,6 +57,7 @@ class PostListResource(Resource):
     @authenticate
     def post(self):
         parser = reqparse.RequestParser()
+        parser.add_argument('title', required=True, help="Post title is required")
         parser.add_argument('message')
         parser.add_argument('map_id', type=int, required=True, help="Map id is required")
         parser.add_argument('point_x', type=float)
@@ -68,14 +69,16 @@ class PostListResource(Resource):
         if _map.read_only:
             return 'The map is read only, it is not possible to create posts', 400
 
-        subscription = Subscription.query.filter_by(user=self.user, map=_map).first()
-        if subscription == None:
-            return 'The user need to be subscribed to the map to create a new post', 400
+        if _map.user != self.user:
+            subscription = Subscription.query.filter_by(user=self.user, map=_map).first()
+            if subscription == None:
+                return 'The user need to be subscribed to the map to create a new post', 400
 
         new_post = Post(
             user = self.user,
             post_time=datetime.utcnow(),
             map = _map,
+            title=args['title'],
             message=args['message'],
             point_x=args['point_x'], 
             point_y=args['point_y'],
