@@ -13,15 +13,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
-import java.net.CookieHandler;
-import java.net.CookieManager;
-import java.net.CookieStore;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,11 +30,13 @@ public class ServerConnection {
         this.context = context;
     }
 
-    private final String BASE_URL = "http://5fb55775.ngrok.io";
+    //public static final String BASE_URL = "http://a01fa1b5.ngrok.io";
+    public static final String BASE_URL = "https://ac820fm2ig.execute-api.us-east-1.amazonaws.com";
 
     public ArrayList<Mapa> getMapas(){
         ArrayList<Mapa> mapas = new ArrayList<Mapa>();
         try {
+            System.out.println(sendJson("/maps", "", "GET"));
             JSONArray mapasJson = sendJson("/maps", "", "GET").getJSONArray("maps");
 
             for(int i = 0; i < mapasJson.length(); i++) {
@@ -70,7 +67,6 @@ public class ServerConnection {
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setRequestProperty("Authorization", "Bearer " + token);
-            //connection.setRequestProperty("Cookie", login("http://ec2-54-189-74-87.us-west-2.compute.amazonaws.com:8080/j_spring_security_check?j_username=df@email.com&j_password=df"));
             connection.setRequestMethod(method);
             connection.connect();
 

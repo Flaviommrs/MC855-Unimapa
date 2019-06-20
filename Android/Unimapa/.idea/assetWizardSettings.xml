@@ -46,7 +46,7 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="D:\UNICAMP\MC855-Unimapa\Android\Unimapa\app\src\main\res\drawable\marker_2-512.png" />
+                                      <entry key="imageAsset" value="D:\UNICAMP\MC855-Unimapa\Android\Unimapa\app\src\main\res\uec.svg" />
                                       <entry key="theme" value="CUSTOM" />
                                       <entry key="themeColor" value="030003" />
                                     </map>

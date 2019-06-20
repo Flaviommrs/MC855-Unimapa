@@ -27,7 +27,6 @@ import android.widget.Toast
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -92,17 +91,17 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
     private var listOfHeatmapColors: Array<Expression>? = null
     private var listOfHeatmapRadiusStops: Array<Expression>? = null
     private var listOfHeatmapIntensityStops: Array<Float>? = null
-    private val index: Int = 0
     private val SOURCE_ID = "geojson-source"
     private val HEATMAP_LAYER_ID = "HEATMAP_LAYER"
+
+    private var savedInstanceState_global: Bundle? = null
 
     @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
-
         signInFlow()
+        savedInstanceState_global = savedInstanceState
         mapSetupFlow(savedInstanceState)
 
         getMapas()
@@ -165,18 +164,29 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
                 true
             }
 
+            val UDB = UserDataBase(this)
+            val token = UDB.getToken()
+
             mapboxMap.setStyle(Style.OUTDOORS) { style ->
 
                 runOnUiThread {
-                    val geojsonUrl = URL("https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev/maps/1/posts")
+                    val url = URL(ServerConnection.BASE_URL + "/maps/" + mapas.get(selectedMap).getId() + "/posts")
 
+                    //System.out.println(ServerConnection(this).sendJson("/maps/1/posts","","GET"))
+
+                    System.out.println("pegando pontos com geojson")
+                    val geojsonUrl = url
+                    //geojsonUrl.openConnection().setRequestProperty("Authorization", "Bearer $token")
                     val source = GeoJsonSource(SOURCE_ID, geojsonUrl)
+                    System.out.println("pegou pintous")
 
                     style.addSource(source)
 
-                    addHeatMapLayer(style)
-
-                    addMarkerLayer(style)
+                    if(selectedMap % 2 == 0) {//TODO: mudar aq para o tipo do mapa
+                        addHeatMapLayer(style)
+                    }else {
+                        addMarkerLayer(style)
+                    }
 
                     setupLocation(style)
 
@@ -186,6 +196,62 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
             }
         })
     }
+
+    private fun addNewPoints(){
+        mapView!!.getMapAsync(OnMapReadyCallback { mapboxMap ->
+
+            map = mapboxMap
+
+            val position = CameraPosition.Builder()
+            position.target(LatLng(-22.8184,-47.0647))
+            position.zoom(15.toDouble())
+
+            mapboxMap.cameraPosition = position.build()
+
+            mapboxMap.setMinZoomPreference(4.toDouble())
+            mapboxMap.setMaxZoomPreference(20.toDouble())
+
+            mapboxMap.addOnMapLongClickListener{ point ->
+                showPublicationDialog()
+                postLat = point.latitude
+                postLong = point.longitude
+                true
+            }
+
+            val UDB = UserDataBase(this)
+            val token = UDB.getToken()
+
+            mapboxMap.setStyle(Style.OUTDOORS) { style ->
+
+                runOnUiThread {
+                    val url = URL(ServerConnection.BASE_URL + "/maps/" + mapas.get(selectedMap).getId() + "/posts")
+
+                    //System.out.println(ServerConnection(this).sendJson("/maps/1/posts","","GET"))
+
+                    System.out.println("pegando pontos com geojson")
+                    val geojsonUrl = url
+                    geojsonUrl.openConnection().setRequestProperty("Authorization", "Bearer $token")
+                    val source = GeoJsonSource(SOURCE_ID, geojsonUrl)
+                    System.out.println("pegou pintous")
+
+                    style.addSource(source)
+
+                    if(selectedMap % 2 == 0) {//TODO: mudar aq para o tipo do mapa
+                        addHeatMapLayer(style)
+                    }else {
+                        addMarkerLayer(style)
+                    }
+
+                    setupLocation(style)
+
+                    style.addLayer(CircleLayer("urban-areas-fill", SOURCE_ID))
+                }
+
+            }
+        })
+    }
+
+
 
     private fun addMarkerLayer(style: Style){
         // Add the marker image to map
@@ -257,14 +323,16 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
             if(it.isSuccessful){
                 val token : String = it.result!!.token!!
 
-                ServerConnection(this).sendJson("/maps/"+id.toString()+"/posts", "{\n" +
+                ServerConnection(this).sendJson("/maps/" + id.toString() + "/posts", "{\n" +//
                         "\"title\" : \"$title\", \n" +
                         "\"message\" : \"$description\",\n" +
-                        "\"point_x\" : $postLong,\n" +
-                        "\"point_y\" : $postLat\n" +
+                        "\"lat\" : $postLat,\n" +
+                        "\"lon\" : $postLong\n" +
                         "}", "POST")
 
                 println("long $postLong, lat $postLat, map $selectedMap")
+                //TODO:mapSetupFlow(savedInstanceState_global)
+                addNewPoints()
                 dialog.dismiss()
             }
         })
@@ -333,7 +401,7 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
             item.setIcon(R.drawable.ic_selected)
             selectedMap = item.itemId//mapas[item.itemId].getId()!!
             addItensInMenu()
-            //TODO: mudar o tipo de mapa
+            addNewPoints()
         }
 
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
