@@ -59,10 +59,11 @@ class Map(db.Model, MyModel, OwneredModel):
     
     posts = db.relationship('Post', backref='map', lazy=True)
     subscriptions = db.relationship('Subscription', backref='map', lazy=True)
-    
+
 class Post(db.Model, MyModel, OwneredModel):
     id = db.Column(db.Integer, primary_key=True)
     post_time = db.Column(db.DateTime, nullable=False)
+    title = db.Column(db.Text)
     message = db.Column(db.Text)
     point_x = db.Column(db.Float)
     point_y = db.Column(db.Float)

@@ -33,6 +33,7 @@ class PostSchema(Schema):
     map = fields.Nested(MapSchema)
 
     post_time = fields.DateTime()
+    title = fields.String()
     message = fields.String()
     point_x = fields.Float()
     point_y = fields.Float()
