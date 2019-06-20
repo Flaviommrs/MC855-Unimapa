@@ -225,14 +225,10 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
 
                 runOnUiThread {
                     val url = URL(ServerConnection.BASE_URL + "/maps/" + mapas.get(selectedMap).getId() + "/posts")
-
-                    //System.out.println(ServerConnection(this).sendJson("/maps/1/posts","","GET"))
-
-                    System.out.println("pegando pontos com geojson")
+                    
                     val geojsonUrl = url
                     geojsonUrl.openConnection().setRequestProperty("Authorization", "Bearer $token")
                     val source = GeoJsonSource(SOURCE_ID, geojsonUrl)
-                    System.out.println("pegou pintous")
 
                     style.addSource(source)
 
