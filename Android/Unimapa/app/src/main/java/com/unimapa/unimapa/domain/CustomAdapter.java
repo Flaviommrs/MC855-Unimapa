@@ -68,7 +68,8 @@ public class CustomAdapter extends BaseAdapter {
         final ViewHolder holder;
         final MapaDataBase MDB;
         if (convertView == null) {
-            holder = new ViewHolder(); LayoutInflater inflater = (LayoutInflater) context
+            holder = new ViewHolder();
+            LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.lv_item, null, true);
 

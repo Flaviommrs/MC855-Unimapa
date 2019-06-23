@@ -20,7 +20,6 @@ class Mapa {
         this.tipo = tipo
     }
 
-
     fun getId(): Int? {
         return id
     }

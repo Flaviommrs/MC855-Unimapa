@@ -20,6 +20,7 @@
     <string name="title_activity_main">Main</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_map_list">Lista de Mapas</string>
+    <string name="title_activity_post_list">Lista de Publicações</string>
     <string name="maps_channel">maps</string>
     <string name="maps_channel_description">Map publications channel</string>
     <!--<string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>-->

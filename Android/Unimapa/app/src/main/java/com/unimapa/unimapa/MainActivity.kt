@@ -377,7 +377,9 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
             i++
         }
 
-        item = menu.addSubMenu("Configurações").add(R.id.main_pages, 4000, 0, "Selecionar mapas")
+        item = menu.addSubMenu("Configurações").add(R.id.main_pages, 3000, 0, "Publicações")
+        item.setIcon(R.drawable.ic_menu_send)
+        item = menu.add(R.id.main_pages, 4000, 0, "Selecionar mapas")
         item.setIcon(R.drawable.ic_menu_add)
         item = menu.add(R.id.main_pages, 5000, 0, "Logout")
         item.setIcon(R.drawable.ic_cancel_black_24dp)
@@ -391,6 +393,12 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
             signOutUser()
         } else if (id == 4000) {
             openListMapas()
+            return true
+        }else if(id == 3000){
+            intent = Intent(this, PostListActivity::class.java)
+            startActivity(intent)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            setResult(Activity.RESULT_OK)
             return true
         } else {//se selecionar um mapas
             //alert("selecionou um mapa " + item.itemId)
