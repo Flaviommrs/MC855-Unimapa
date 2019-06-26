@@ -36,12 +36,17 @@ class PostResource(Resource):
     
         edit_parser = reqparse.RequestParser()
         edit_parser.add_argument('message')
-        edit_parser.add_argument('point_x', type=float)
-        edit_parser.add_argument('point_y', type=float)
+        edit_parser.add_argument('lat', type=float)
+        edit_parser.add_argument('lon', type=float)
         args = edit_parser.parse_args()
 
         for key, value in args.items():
-            setattr(post, key, value)
+            if key == 'lat':
+                setattr(post, 'point_x', value)
+            elif key == 'lon':
+                setattr(post, 'point_y', value)
+            else:
+                setattr(post, key, value)
 
         db.session.commit()
 
@@ -60,8 +65,8 @@ class PostListResource(Resource):
         parser.add_argument('title', required=True, help="Post title is required")
         parser.add_argument('message')
         parser.add_argument('map_id', type=int, required=True, help="Map id is required")
-        parser.add_argument('point_x', type=float)
-        parser.add_argument('point_y', type=float)
+        parser.add_argument('lat', type=float)
+        parser.add_argument('lon', type=float)
 
         args = parser.parse_args()
         _map = Map.get_or_404(args['map_id'])
@@ -80,8 +85,8 @@ class PostListResource(Resource):
             map = _map,
             title=args['title'],
             message=args['message'],
-            point_x=args['point_x'], 
-            point_y=args['point_y'],
+            point_x=args['lat'], 
+            point_y=args['lon'],
         )
         db.session.add(new_post)
         send_notification(_map, new_post)

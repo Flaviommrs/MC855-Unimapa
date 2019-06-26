@@ -35,8 +35,8 @@ class PostSchema(Schema):
     post_time = fields.DateTime()
     title = fields.String()
     message = fields.String()
-    point_x = fields.Float()
-    point_y = fields.Float()
+    lat = fields.Float(attribute="point_x")
+    lon = fields.Float(attribute="point_y")
 
     @post_load
     def make_post(self, data):
