@@ -150,7 +150,7 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
 
             val position = CameraPosition.Builder()
             position.target(LatLng(-22.8184,-47.0647))
-            position.zoom(15.toDouble())
+            position.zoom(14.toDouble())
 
             mapboxMap.cameraPosition = position.build()
 
@@ -204,7 +204,7 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
 
             val position = CameraPosition.Builder()
             position.target(LatLng(-22.8184,-47.0647))
-            position.zoom(15.toDouble())
+            position.zoom(14.toDouble())
 
             mapboxMap.cameraPosition = position.build()
 
