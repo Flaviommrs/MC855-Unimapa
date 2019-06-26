@@ -30,8 +30,8 @@ public class ServerConnection {
         this.context = context;
     }
 
-    //public static final String BASE_URL = "http://a01fa1b5.ngrok.io";
-    public static final String BASE_URL = "https://ac820fm2ig.execute-api.us-east-1.amazonaws.com";
+//    public static final String BASE_URL = "http://0346a33c.ngrok.io";
+    public static final String BASE_URL = "https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev";
 
     public ArrayList<Mapa> getMapas(){
         ArrayList<Mapa> mapas = new ArrayList<Mapa>();
