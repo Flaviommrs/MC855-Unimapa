@@ -79,7 +79,7 @@ class MapListResource(Resource):
 
 class MapPostResource(Resource):
 
-    @authenticate
+    # @authenticate
     @get_or_404(Map)
     def get(self, _map):
         page = request.args.get('page', None)
@@ -92,7 +92,7 @@ class MapPostResource(Resource):
         posts = Post.query.filter_by(map=_map).order_by(Post.post_time.desc()).paginate(page=page, per_page=per_page).items
         feature_collection_list = posts_to_geojson(posts)
 
-        return {'posts' : FeatureCollection(feature_collection_list)}, 200
+        return FeatureCollection(feature_collection_list), 200
 
     @authenticate
     @get_or_404(Map)
@@ -108,8 +108,8 @@ class MapPostResource(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument('title', required=True, help="Post title is required")
         parser.add_argument('message')
-        parser.add_argument('point_x', type=float)
-        parser.add_argument('point_y', type=float)
+        parser.add_argument('lat', type=float)
+        parser.add_argument('lon', type=float)
 
         args = parser.parse_args()
         new_post = Post(
@@ -118,8 +118,8 @@ class MapPostResource(Resource):
             map=_map,
             title=args['title'],
             message=args['message'],
-            point_x=args['point_x'], 
-            point_y=args['point_y'],
+            point_x=args['lat'], 
+            point_y=args['lon'],
         )
         db.session.add(new_post)
         send_notification(_map, new_post)
