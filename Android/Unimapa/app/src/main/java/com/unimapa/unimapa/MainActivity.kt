@@ -277,7 +277,6 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
         }
         mapboxMap.setOnMarkerClickListener { marker ->//TODO
             // Show a toast with the title of the selected marker
-            Toast.makeText(this, marker.getTitle(), Toast.LENGTH_LONG).show()
             marker.setTitle(marker.getTitle())
             marker.setSnippet(marker.title)
             this.mapView?.let {
