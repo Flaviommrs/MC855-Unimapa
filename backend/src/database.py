@@ -8,6 +8,7 @@ from geojson import Point
 
 from .models import User, Map, Subscription, Post
 from .config import settings
+from .scrap_data import get_markers
 
 from functools import wraps
 
@@ -35,6 +36,7 @@ def create_database(db):
     db.drop_all()
     db.create_all()
     db.session.commit()
+
 
 @development_or_test
 def mock_database(db):
@@ -112,3 +114,34 @@ def mock_database_posts(session, posts_qty = 0):
         session.add(new_post)
 
     session.commit()
+
+@development_or_test
+def populate_real_maps(db):
+    admin = User(
+        id=settings.FIREBASE_UID,
+        name=settings.FIREBASE_NAME,
+        email=settings.FIREBASE_EMAIL
+    )
+    group_markers = get_markers()
+    for group in group_markers:
+        new_map = Map(
+            name = group,
+            user = admin,
+            read_only = True
+        )
+        db.session.add(new_map)
+
+        for marker in group_markers[group]:
+            new_post = Post(
+                post_time = datetime.utcnow(),
+                title = marker['title'],
+                message = marker['message'],
+                point_x = marker['lat'],
+                point_y = marker['lon'],
+                user = admin,
+                map = new_map
+            )
+            db.session.add(new_post)
+
+    db.session.add(admin)
+    db.session.commit()

@@ -1,0 +1,1617 @@
+{
+  "markerGroups": [
+    {
+      "label": "DERI",
+      "color": "5a1313",
+      "icon": "administracao.png",
+      "markers": [
+        {
+          "id": "28",
+          "title": "DERI - Diretoria Executiva de Relações Internacionais",
+          "phone": "",
+          "email": "",
+          "address": "Rua da Reitoria",
+          "photo": "img/DERI.jpg",
+          "pos": [
+            -22.824292,
+            -47.067070
+          ]
+        },
+        {
+          "id": "29",
+          "title": "DERI - Diretoria Executiva de Relações Internacionais",
+          "phone": "55 19 35217145",
+          "email": "",
+          "address": "R. Sérgio Buarque de Holanda, 421",
+          "photo": "img/BC.jpg",
+          "pos": [
+            -22.816217,
+            -47.071197
+          ]
+        }
+      ]
+    },
+    {
+      "label": "CULTURA E LAZER",
+      "color": "700e7a",
+      "icon": "cultura-lazer.png",
+      "markers": [
+        {
+          "id": "26",
+          "title": "Museu Exploratório de Ciências",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/MUSEU-CIENCIAS.jpg",
+          "pos": [
+            -22.814867,
+            -47.057655
+          ]
+        },
+        {
+          "id": "36",
+          "title": "Espaço Cultural Casa do Lago",
+          "phone": "tel: +55 19 3521 7701",
+          "email": "",
+          "address": "Av. Érico Veríssimo s/n",
+          "photo": "img/CASA-DO-LAGO.jpg",
+          "pos": [
+            -22.812397,
+            -47.068847
+          ]
+        },
+        {
+          "id": "11",
+          "title": "CDC - Coord. de Desenv. Cultural | Centro de Convenções",
+          "phone": "tel: +55 19 3521 1733",
+          "email": "",
+          "address": "Av. Elis Regina, 131 (Ginásio)",
+          "photo": "img/cdc-2.jpg",
+          "pos": [
+            -22.814764,
+            -47.071503
+          ]
+        },
+        {
+          "id": "39",
+          "title": "Teatro de Arena",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/teatro-arena.jpg",
+          "pos": [
+            -22.822914,
+            -47.067470
+          ]
+        },
+        {
+          "id": "38",
+          "title": "Academia da praça da Paz",
+          "phone": "tel: +55 19 3521 1733",
+          "email": "",
+          "address": "Av. Érico Veríssimo, 800",
+          "photo": "img/academia-praca-paz-2.jpg",
+          "pos": [
+            -22.822578,
+            -47.067731
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Serviços acadêmicos",
+      "color": "ed1888",
+      "icon": "servicos-academicos.png",
+      "markers": [
+        {
+          "id": "5",
+          "title": "BC - Biblioteca Central Cesar Lattes",
+          "phone": "tel: +55 19 3521 6486",
+          "email": "",
+          "address": "R. Sérgio Buarque de Holanda, 421",
+          "photo": "img/BC.jpg",
+          "pos": [
+            -22.816328,
+            -47.071285
+          ]
+        },
+        {
+          "id": "6",
+          "title": "CB I - Ciclo Básico I",
+          "phone": "tel: +55 19 3521 6669",
+          "email": "",
+          "address": "R. Sérgio Buarque de Holanda, 800",
+          "photo": "img/CB-I.jpg",
+          "pos": [
+            -22.817412,
+            -47.068974
+          ]
+        },
+        {
+          "id": "7",
+          "title": "CB II - Ciclo Básico II",
+          "phone": "tel: +55 19 3521 7586",
+          "email": "",
+          "address": "R. Sérgio Buarque de Holanda, s/n",
+          "photo": "img/ciclo-basico-II.jpg",
+          "pos": [
+            -22.817590,
+            -47.070559
+          ]
+        },
+        {
+          "id": "10",
+          "title": "CEL - Centro de Ensino de Línguas",
+          "phone": "",
+          "email": "",
+          "address": "Rua Cora Coralina, 300",
+          "photo": "img/cel.jpg",
+          "pos": [
+            -22.813367,
+            -47.067748
+          ]
+        },
+        {
+          "id": "12",
+          "title": "DAC - Diretoria Acadêmica",
+          "phone": "tel: +55 19 3521 6403",
+          "email": "",
+          "address": "Ciclo Básico II - R. Sérgio Buarque de Holanda s/n",
+          "photo": "img/dac-3.jpg",
+          "pos": [
+            -22.817419,
+            -47.071085
+          ]
+        },
+        {
+          "id": "24",
+          "title": "SAE- Serviço de Apoio ao Estudante",
+          "phone": "tel: +55 19 3521 6544",
+          "email": "",
+          "address": "R. Sérgio Buarque de Holanda, 251",
+          "photo": "img/centro-de-logica-epistemologia-historia-ciencia.jpg",
+          "pos": [
+            -22.818057,
+            -47.071053
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Áreas verdes e Praças",
+      "color": "2DED18",
+      "icon": "areas-verdes.png",
+      "markers": [
+        {
+          "id": "8",
+          "title": "Praça do Ciclo Básico",
+          "phone": "",
+          "email": "",
+          "address": "R. Sérgio Buarque de Holanda, 251",
+          "photo": "img/praca-ciclo-basico-3.jpg",
+          "pos": [
+            -22.817113,
+            -47.069727
+          ]
+        },
+        {
+          "id": "28",
+          "title": "Praça Henfil",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/praca-henfil.jpg",
+          "pos": [
+            -22.818399,
+            -47.072484
+          ]
+        },
+        {
+          "id": "29",
+          "title": "Praça das Bandeiras",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/praca-bandeiras-2.jpg",
+          "pos": [
+            -22.824064,
+            -47.066629
+          ]
+        },
+        {
+          "id": "30",
+          "title": "Praça Carlos Drumond de Andrade",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/praca-drummond.jpg",
+          "pos": [
+            -22.821955,
+            -47.069712
+          ]
+        },
+        {
+          "id": "32",
+          "title": "Praça Milton Santos",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/pc-milton-santos.jpg",
+          "pos": [
+            -22.823508,
+            -47.067041
+          ]
+        }
+      ]
+    },
+    {
+      "label": "FACULDADES E INSTITUTOS",
+      "color": "4897d2",
+      "icon": "faculdades-institutos.png",
+      "markers": [
+        {
+          "id": "1",
+          "title": "FENF - Faculdade de Enfermagem",
+          "phone": "tel: +55 19 3521 8824",
+          "email": "",
+          "address": "R. Tessália Vieira de Camargo, 126",
+          "photo": "img/fenf-enfermagem.jpg",
+          "pos": [-22.830963, -47.063412]
+        },
+        {
+          "id": "2",
+          "title": "FCF - Faculdade de Ciências Farmacêuticas",
+          "phone": "tel: +55 19 3521 7937",
+          "email": "",
+          "address": "R. Sérgio Buarque de Holanda, 250 (CB II)",
+          "photo": "img/ciclo-basico-II.jpg",
+          "pos": [
+            -22.817446,
+            -47.070832
+          ]
+        },
+        {
+          "id": "3",
+          "title": "FCM - Faculdade de Ciências Médicas",
+          "phone": "tel: +55 19 3521 8883",
+          "email": "",
+          "address": "R. Tessália Vieira de Camargo, 126",
+          "photo": "img/fcm-fachada.jpg",
+          "pos": [
+            -22.830083,
+            -47.063183
+          ]
+        },
+        {
+          "id": "4",
+          "title": "FE - Faculdade de Educação",
+          "phone": "tel: +55 19 3521 5605",
+          "email": "",
+          "address": "Av. Bertrand Russel, 801",
+          "photo": "img/FE.jpg",
+          "pos": [
+            -22.816588,
+            -47.065793
+          ]
+        },
+        {
+          "id": "5",
+          "title": "FEA - Faculdade de Engenharia de Alimentos",
+          "phone": "tel: +55 19 3521 7773",
+          "email": "",
+          "address": "R. Monteiro Lobato, 80",
+          "photo": "img/FEA.jpg",
+          "pos": [
+            -22.820380,
+            -47.067198
+          ]
+        },
+        {
+          "id": "6",
+          "title": "FEAGRI - Faculdade de Engenharia Agrícola",
+          "phone": "tel: +55 19 3521 1042",
+          "email": "",
+          "address": "Av. Cândido Rondon, 501",
+          "photo": "img/FEAGRI.jpg",
+          "pos": [
+            -22.819325,
+            -47.060900
+          ]
+        },
+        {
+          "id": "7",
+          "title": "FEC - Faculdade de Engenharia Civil, Arquitetura e Urbanismo",
+          "phone": "tel: +55 19 3521 2468 | + 55 19 3521 2308",
+          "email": "",
+          "address": "R. Saturnino de Brito, 224",
+          "photo": "img/eng-civil-arq-urbanismo.jpg",
+          "pos": [
+            -22.816734,
+            -47.061941
+          ]
+        },
+        {
+          "id": "8",
+          "title": "FEEC - Faculdade de Engenharia Elétrica e de Computação",
+          "phone": "tel: +55 19 3521 3872",
+          "email": "",
+          "address": "R. Albert Einstein, 400",
+          "photo": "img/FEEC.jpg",
+          "pos": [
+            -22.821569,
+            -47.065830
+          ]
+        },
+        {
+          "id": "9",
+          "title": "FEF - Faculdade de Educação Física",
+          "phone": "tel: +55 19 3521 6606",
+          "email": "",
+          "address": "R. Érico Veríssimo, 771",
+          "photo": "img/FEF.jpg",
+          "pos": [
+            -22.815252,
+            -47.072756
+          ]
+        },
+        {
+          "id": "10",
+          "title": "FEM - Faculdade de Engenharia Mecânica",
+          "phone": "tel: +55 19 3521 3158",
+          "email": "",
+          "address": "R. Mendeleyev, 200",
+          "photo": "img/FEM.jpg",
+          "pos": [
+            -22.819322,
+            -47.066002
+          ]
+        },
+        {
+          "id": "11",
+          "title": "FEQ - Faculdade de Engenharia Química",
+          "phone": "tel: +55 19 3521 3900",
+          "email": "",
+          "address": "Av. Albert Einstein, 500",
+          "photo": "img/FEQ.jpg",
+          "pos": [
+            -22.820726,
+            -47.065197
+          ]
+        },
+        {
+          "id": "12",
+          "title": "IA - Instituto de Artes",
+          "phone": "tel: +55 19 3521 6589",
+          "email": "",
+          "address": "R. Pitágoras, 500",
+          "photo": "img/IA-CENICAS.jpg",
+          "pos": [
+            -22.815204,
+            -47.070168
+          ]
+        },
+        {
+          "id": "13",
+          "title": "IB - Instituto de Biologia",
+          "phone": "tel: +55 19 3521 6391",
+          "email": "",
+          "address": "R. Monteiro Lobato, 255",
+          "photo": "img/IB.jpg",
+          "pos": [
+            -22.819501,
+            -47.069320
+          ]
+        },
+        {
+          "id": "14",
+          "title": "IC - Instituto de Computação",
+          "phone": "tel: +55 19 3521 5838",
+          "email": "",
+          "address": "R. Albert Einstein, 1251",
+          "photo": "img/IC.jpg",
+          "pos": [
+            -22.813780,
+            -47.063977
+          ]
+        },
+        {
+          "id": "15",
+          "title": "IE - Instituto de Economia",
+          "phone": "tel: +55 19 3521 5735",
+          "email": "",
+          "address": "R. Pitágoras, 353",
+          "photo": "img/IE.jpg",
+          "pos": [
+            -22.814902,
+            -47.065791
+          ]
+        },
+        {
+          "id": "16",
+          "title": "IEL - Instituto de Estudos da Linguagem ",
+          "phone": "tel: +55 19 3521 1502",
+          "email": "",
+          "address": "R. Sérgio Buarque de Holanda, 571",
+          "photo": "img/iel.jpg",
+          "pos": [
+            -22.815150,
+            -47.069353
+          ]
+        },
+        {
+          "id": "17",
+          "title": "IFCH - Instituto de Filosoﬁa e Ciências Humanas",
+          "phone": "tel: +55 19 3521 1579",
+          "email": "",
+          "address": "R. Sérgio Buarque de Holanda, 611",
+          "photo": "img/ifch-4.jpg",
+          "pos": [
+            -22.815021,
+            -47.068253
+          ]
+        },
+        {
+          "id": "18",
+          "title": "IFGW - Instituto de Física Gleb Wataghin",
+          "phone": "tel: +55 19 3521 0282",
+          "email": "",
+          "address": "R. Sérgio Buarque de Holanda, 777",
+          "photo": "img/IFGW.jpg",
+          "pos": [
+            -22.817147,
+            -47.067470
+          ]
+        },
+        {
+          "id": "19",
+          "title": "IG - Instituto de Geociências",
+          "phone": "tel: +55 19 3521 4577",
+          "email": "",
+          "address": "R. João Pandiá Calógeras, 51",
+          "photo": "img/inst-geociencias.jpg",
+          "pos": [
+            -22.813211,
+            -47.068757
+          ]
+        },
+        {
+          "id": "20",
+          "title": "IMECC - Instituto de Matemática, Estatística e Computação Cientíﬁca",
+          "phone": "tel: +55 19 3521 6050",
+          "email": "",
+          "address": "R. Sérgio Buarque de Holanda, 651",
+          "photo": "img/IMECC.jpg",
+          "pos": [
+            -22.815723,
+            -47.067518
+          ]
+        },
+        {
+          "id": "21",
+          "title": "IQ - Instituto de Química",
+          "phone": "tel: +55 19 3521 3003",
+          "email": "",
+          "address": "R. Monteiro Lobato, 270",
+          "photo": "img/IQ.jpg",
+          "pos": [
+            -22.818430,
+            -47.067633
+          ]
+        }
+      ]
+    },
+    {
+      "label": "BANCOS E SERVIÇOS ",
+      "color": "2856a6",
+      "icon": "bancos.png",
+      "markers": [
+        {
+          "id": "1",
+          "title": "Banco do Brasil",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/banco-brasil-comum-grandao-2.jpg",
+          "pos": [
+            -22.823820,
+            -47.063369
+          ]
+        },
+        {
+          "id": "8",
+          "title": "Banco do Brasil - Agência Estilo",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/banco-estilo-bc.jpg",
+          "pos": [
+            -22.813682,
+            -47.070564
+          ]
+        },
+        {
+          "id": "2",
+          "title": "Banco do Brasil - Estilo",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/bb-estilo-reitoria.jpg",
+          "pos": [
+            -22.823852,
+            -47.067082
+          ]
+        },
+        {
+          "id": "3",
+          "title": "Banco Itaú",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/itau-2.jpg",
+          "pos": [
+            -22.824729,
+            -47.065488
+          ]
+        },
+        {
+          "id": "4",
+          "title": "Banco Santander - Agência Praça do Ciclo Básico",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/santander-cb-i.jpg",
+          "pos": [
+            -22.816952,
+            -47.068688
+          ]
+        },
+        {
+          "id": "5",
+          "title": "Banco Santander - Agência Área Administrativa",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/santander-reitoria.jpg",
+          "pos": [
+            -22.824965,
+            -47.066138
+          ]
+        },
+        {
+          "id": "6",
+          "title": "Banco Santander - Agência Área Hospitalar",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/banco-santander-hc-2.jpg",
+          "pos": [
+            -22.826906,
+            -47.066151
+          ]
+        },
+        {
+          "id": "7",
+          "title": "Banco Santander - Select",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/santander-select.jpg",
+          "pos": [
+            -22.824288,
+            -47.064681
+          ]
+        },
+        {
+          "id": "32",
+          "title": "Casa lotérica",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/loterica.jpg",
+          "pos": [
+            -22.825311,
+            -47.067000
+          ]
+        },
+        {
+          "id": "35",
+          "title": "Posto de gasolina",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/posto-gasolina.jpg",
+          "pos": [
+            -22.822886,
+            -47.070581
+          ]
+        }
+      ]
+    },
+    {
+      "label": "ADMINISTRAÇÃO ",
+      "color": "828282",
+      "icon": "administracao.png",
+      "markers": [
+        {
+          "id": "33",
+          "title": "RTV UNICAMP - Rádio e TV da UNICAMP",
+          "phone": "",
+          "email": "",
+          "address": "Av. Albert Einsten, 901",
+          "photo": "img/rtv.jpg",
+          "pos": [
+            -22.815671,
+            -47.064121
+          ]
+        },
+        {
+          "id": "3",
+          "title": "Vigilância do Campus",
+          "phone": "tel. (019) 3521 6000",
+          "email": "",
+          "address": "",
+          "photo": "img/VIGILANCIA.jpg",
+          "pos": [
+            -22.817391,
+            -47.064214
+          ]
+        },
+        {
+          "id": "19",
+          "title": "Prefeitura da Cidade Universitária",
+          "phone": "tel: +55 19 3521 4608",
+          "email": "",
+          "address": "Av. Roxo Moreira, 1831",
+          "photo": "img/prefeitura-ouvidoria.jpg",
+          "pos": [
+            -22.824888,
+            -47.067078
+          ]
+        },
+        {
+          "id": "17",
+          "title": "Ouvidoria ",
+          "phone": "tel: +55 19 3521 4608",
+          "email": "",
+          "address": "Av. Roxo Moreira, 1831",
+          "photo": "img/prefeitura-ouvidoria.jpg",
+          "pos": [
+            -22.825043,
+            -47.066727
+          ]
+        },
+        {
+          "id": "25",
+          "title": "SG - Secretaria Geral",
+          "phone": "",
+          "email": "",
+          "address": "Rua da Reitoria, 81",
+          "photo": "img/secretaria-procuradoria-geral.jpg",
+          "pos": [
+            -22.824721,
+            -47.066909
+          ]
+        },
+        {
+          "id": "27",
+          "title": "DGRH - Diretoria Geral de Recursos Humanos",
+          "phone": "Recepção Central: (19) 3521-5183",
+          "email": "dgrhdap@unicamp.br",
+          "address": "Rua da Reitoria nº 165/191",
+          "photo": "img/dgrh-reitoria-iv.jpg",
+          "pos": [
+            -22.823622,
+            -47.067543
+          ]
+        },
+        {
+          "id": "13",
+          "title": "DGA - Diretoria Geral de Administração",
+          "phone": "tel: +55 19 3521 4487",
+          "email": "",
+          "address": "Praça das Bandeiras, 45 (Qd 2)",
+          "photo": "img/dga-vrea.jpg",
+          "pos": [
+            -22.823913,
+            -47.066414
+          ]
+        },
+        {
+          "id": "14",
+          "title": "GR - Gabinete do Reitor",
+          "phone": "",
+          "email": "GR, CGU, PRP, PRDU, PRPG, PREAC, PRG",
+          "address": "Rua da Reitoria, 121",
+          "photo": "img/REITORIA.jpg",
+          "pos": [
+            -22.824221,
+            -47.066938
+          ]
+        },
+        {
+          "id": "26",
+          "title": "VREA - Diretoria Executiva de Administração",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/dga-vrea.jpg",
+          "pos": [
+            -22.824158,
+            -47.066253
+          ]
+        },
+        {
+          "id": "18",
+          "title": "PG - Procuradoria Geral",
+          "phone": "",
+          "email": "",
+          "address": "Rua da Reitoria, 81",
+          "photo": "img/secretaria-procuradoria-geral.jpg",
+          "pos": [
+            -22.824721,
+            -47.066909
+          ]
+        },
+        {
+          "id": "23",
+          "title": "Reitoria",
+          "phone": "tel: +55 19 3521 4720",
+          "email": "",
+          "address": "R. da Reitoria s/n",
+          "photo": "img/REITORIA.jpg",
+          "pos": [
+            -22.824341,
+            -47.067035
+          ]
+        },
+        {
+          "id": "3",
+          "title": "CCUEC - Centro de Computação da Unicamp",
+          "phone": "tel: +55 19 3521 2200",
+          "email": "",
+          "address": "R. Saturnino de Brito, 45",
+          "photo": "img/ccuec.jpg",
+          "pos": [
+            -22.817637,
+            -47.062995
+          ]
+        }
+      ]
+    },
+    {
+      "label": "SAÚDE",
+      "color": "a80b0b",
+      "icon": "saude.png",
+      "markers": [
+        {
+          "id": "1",
+          "title": "CEB - Centro de Engenharia Biomédica",
+          "phone": "tel: +55 19 3521 9247",
+          "email": "",
+          "address": "R. Sir Alexander Fleming, 181",
+          "photo": "img/ceb-deb-fcm.jpg",
+          "pos": [
+            -22.826586,
+            -47.064954
+          ]
+        },
+        {
+          "id": "2",
+          "title": "UER/HC - Unidade de Emergência",
+          "phone": "tel. (019) 3521 8770",
+          "email": "",
+          "address": "",
+          "photo": "img/unidade-emergencia.jpg",
+          "pos": [
+            -22.826370,
+            -47.063533
+          ]
+        },
+        {
+          "id": "4",
+          "title": "CAISM - Centro de Ass. Integral à Saúde da Mulher",
+          "phone": "tel: +55 19 3521 9333",
+          "email": "",
+          "address": "R. Sir Alexander Fleming, 101",
+          "photo": "img/CAISM.jpg",
+          "pos": [
+            -22.828150,
+            -47.066086
+          ]
+        },
+        {
+          "id": "9",
+          "title": "CECOM - Centro de Saúde da Comunidade",
+          "phone": "tel: +55 19 3521 9001",
+          "email": "",
+          "address": "R. Vital Brasil, 150",
+          "photo": "img/CECOM.jpg",
+          "pos": [
+            -22.829046,
+            -47.063969
+          ]
+        },
+        {
+          "id": "15",
+          "title": "HC - Hospital de Clínicas",
+          "phone": "tel: +55 19 3521 8004",
+          "email": "",
+          "address": "R. Vital Brasil, 251",
+          "photo": "img/HC.jpg",
+          "pos": [
+            -22.825688,
+            -47.065455
+          ]
+        },
+        {
+          "id": "16",
+          "title": "Hospital Dia",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/hospital-dia.jpg",
+          "pos": [
+            -22.825463,
+            -47.063444
+          ]
+        },
+        {
+          "id": "34",
+          "title": "Farmácia",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/farmacia-galeria-2.jpg",
+          "pos": [
+            -22.825113,
+            -47.067161
+          ]
+        },
+        {
+          "id": "2",
+          "title": "CEPRE - Centro de Estudos e Pesquisas em Reabilitação Gabriel Porto",
+          "phone": "",
+          "email": "",
+          "address": "R. Tessália Vieira de Camargo, 126",
+          "photo": "img/cepre.jpg",
+          "pos": [-22.830878, -47.062513]
+        },
+        {
+          "id": "3",
+          "title": "CIPED - Centro de Investigação em Pediatria",
+          "phone": "",
+          "email": "",
+          "address": "Rua Tessália Vieira de Camargo, 126",
+          "photo": "img/ciped.jpg",
+          "pos": [-22.830192, -47.062543]
+        },
+        {
+          "id": "4",
+          "title": "CIPOI - Centro Integrado de Pesquisas Oncoematológicas na Infância",
+          "phone": "",
+          "email": "",
+          "address": "Rua Vital Brasil, 100",
+          "photo": "img/CIPOI.jpg",
+          "pos": [
+            -22.828801,
+            -47.064364
+          ]
+        },
+        {
+          "id": "5",
+          "title": "GASTROCENTRO - Centro de Diagnóstico de Doenças do Aparelho Digestivo",
+          "phone": "tel: +55 19 3521 8540",
+          "email": "",
+          "address": "R. Carlos Chagas, 420",
+          "photo": "img/gastrocentro-3.jpg",
+          "pos": [
+            -22.827984,
+            -47.062780
+          ]
+        },
+        {
+          "id": "6",
+          "title": "HEMOCENTRO - Centro de Hematologia e Hemoterapia",
+          "phone": "tel: +55 19 3521 8711",
+          "email": "",
+          "address": "R. Carlos Chagas, 480",
+          "photo": "img/hemocentro-2.jpg",
+          "pos": [
+            -22.828814,
+            -47.062372
+          ]
+        },
+        {
+          "id": "7",
+          "title": "NEFROCENTRO - Centro Integrado de Nefrologia",
+          "phone": "",
+          "email": "",
+          "address": "R. Vital Brasil 300",
+          "photo": "img/nefralogia.jpg",
+          "pos": [
+            -22.828050,
+            -47.063113
+          ]
+        },
+        {
+          "id": "5",
+          "title": "SOBRAPAR",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/sobrapar.jpg",
+          "pos": [
+            -22.827477,
+            -47.067415
+          ]
+        }
+      ]
+    },
+    {
+      "label": "CENTROS DE PESQUISA ",
+      "color": "1c8e0c",
+      "icon": "centros-pesquisa.png",
+      "markers": [
+        {
+          "id": "24",
+          "title": "LABORARTE - Laboratório de Estudos sobre Ensino de Arte",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/FE.jpg",
+          "pos": [
+            -22.817960,
+            -47.066010
+          ]
+        },
+        {
+          "id": "25",
+          "title": "LAPAC - Lab. de Automação e Prototipagem para Arq. e Construção",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/eng-civil-arq-urbanismo.jpg",
+          "pos": [
+            -22.817005,
+            -47.063041
+          ]
+        },
+        {
+          "id": "1",
+          "title": "CBMEG - Centro de Biologia Molecular e Engenharia Genética",
+          "phone": "tel: +55 19 3521 1130",
+          "email": "",
+          "address": "Av. Marechal Candido Rondon, 400",
+          "photo": "img/cbmeg.jpg",
+          "pos": [
+            -22.819694,
+            -47.059508
+          ]
+        },
+        {
+          "id": "2",
+          "title": "CCS - Centro de Componentes Semicondutores",
+          "phone": "tel: +55 19 3521 7282",
+          "email": "",
+          "address": "R. João Pandiá Calógeras, 90",
+          "photo": "img/ccs.jpg",
+          "pos": [
+            -22.823334,
+            -47.065409
+          ]
+        },
+        {
+          "id": "4",
+          "title": "CECULT - Centro de Pesquisas em História Social da Cultura",
+          "phone": "tel: +55 19 3521 7282",
+          "email": "",
+          "address": "R. João Pandiá Calógeras, 90",
+          "photo": "img/ifch.jpg",
+          "pos": [
+            -22.813093,
+            -47.067549
+          ]
+        },
+        {
+          "id": "6",
+          "title": "CEDE - Centro de Estudos de Desenvolvimento Econômico",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/nepo-nepp-cede-2.jpg",
+          "pos": [
+            -22.814873,
+            -47.065363
+          ]
+        },
+        {
+          "id": "7",
+          "title": "CEMEQ - Centro para Manutenção de Equipamentos",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/cemeq-2.jpg",
+          "pos": [
+            -22.823346,
+            -47.063078
+          ]
+        },
+        {
+          "id": "8",
+          "title": "CEMIB - Centro Multidisc. p/ Invest. Biol. na área da Ciência em Animais de Laboratório",
+          "phone": "tel: +55 19 3521 7625",
+          "email": "",
+          "address": "R. 5 de Junho, 250",
+          "photo": "img/cemib.jpg",
+          "pos": [
+            -22.824708,
+            -47.061023
+          ]
+        },
+        {
+          "id": "9",
+          "title": "CENAPAD - Centro de Nacional de Alto Desempenho em São Paulo",
+          "phone": "",
+          "email": "",
+          "address": "Rua Saturnino de Brito, 45, CEP 13.083-889",
+          "photo": "img/cenapad.jpg",
+          "pos": [
+            -22.817637,
+            -47.062995
+          ]
+        },
+        {
+          "id": "10",
+          "title": "CEPAGRI - Centro de Pesquisas Metereológicas e Climáticas Aplicadas à Agricultura",
+          "phone": "tel: +55 19 3521 2462",
+          "email": "",
+          "address": "Av. Dr. André M. Tosello, 209 (EMBRAPA)",
+          "photo": "img/CEPAGRI.jpg",
+          "pos": [
+            -22.817269,
+            -47.062214
+          ]
+        },
+        {
+          "id": "11",
+          "title": "CEPETRO - Centro de Estudos de Petróleo ",
+          "phone": "tel: +55 19 3521 4664",
+          "email": "",
+          "address": "R. Cora Coralina, 350",
+          "photo": "img/cepetro.jpg",
+          "pos": [
+            -22.813135,
+            -47.067750
+          ]
+        },
+        {
+          "id": "12",
+          "title": "CERES - Centro de Estudos Rurais",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/ifch.jpg",
+          "pos": [
+            -22.815217,
+            -47.068764
+          ]
+        },
+        {
+          "id": "13",
+          "title": "CERI - Centro de Estudos de Relações Econômicas Internacionais",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/instituto-economica.jpg",
+          "pos": [
+            -22.815044,
+            -47.065497
+          ]
+        },
+        {
+          "id": "14",
+          "title": "CHAA - Centro de História da Arte e Arqueologia",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/ifch.jpg",
+          "pos": [
+            -22.815296,
+            -47.068196
+          ]
+        },
+        {
+          "id": "15",
+          "title": "CIDDIC/ CMDC - Centro de Integração, Documentação e Difusão Cultural",
+          "phone": "tel: +55 19 3521 6734",
+          "email": "",
+          "address": "R. Sérgio Buarque de Holanda, 421 (BC)",
+          "photo": "img/cdmc.jpg",
+          "pos": [
+            -22.816217,
+            -47.071197
+          ]
+        },
+        {
+          "id": "16",
+          "title": "CLE - Centro de Lógica, Epistemologia e História da Ciência",
+          "phone": "tel: +55 19 3521 6518",
+          "email": "",
+          "address": "R. Sérgio Buarque de Holanda, 251",
+          "photo": "img/centro-de-logica-epistemologia-historia-ciencia.jpg",
+          "pos": [
+            -22.817828,
+            -47.070765
+          ]
+        },
+        {
+          "id": "18",
+          "title": "NEA - Núcleo de Economia Agrícola",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/instituto-economica.jpg",
+          "pos": [
+            -22.815227,
+            -47.067104
+          ]
+        },
+        {
+          "id": "19",
+          "title": "NEIT - Núcleo de Economia Industrial e da Tecnologia",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/instituto-economica.jpg",
+          "pos": [
+            -22.815385,
+            -47.067115
+          ]
+        },
+        {
+          "id": "20",
+          "title": "NEPA - Núcleo de Estudos e Pesquisas em Alimentação",
+          "phone": "tel: +55 19 3521 4022",
+          "email": "",
+          "address": "Av. Albert Einsten, 291",
+          "photo": "img/nepa.jpg",
+          "pos": [
+            -22.820725,
+            -47.066954
+          ]
+        },
+        {
+          "id": "21",
+          "title": "NEPAM - Núcleo de Estudos e Pesquisas Ambientais",
+          "phone": "tel: +55 19 3521 7690",
+          "email": "",
+          "address": "R. dos Flamboyants, 155",
+          "photo": "img/nepam.jpg",
+          "pos": [
+            -22.823378,
+            -47.064969
+          ]
+        },
+        {
+          "id": "22",
+          "title": "NEPO - Núcleo de Estudos de População Elza Berquó Elza Berquó",
+          "phone": "tel: +55 19 3521 5893",
+          "email": "NEPO, NEPP, CEDE",
+          "address": "Av. Albert Einsten, 1300",
+          "photo": "img/nepo-nepp-cede-2.jpg",
+          "pos": [
+            -22.813059,
+            -47.065312
+          ]
+        },
+        {
+          "id": "23",
+          "title": "NEPP - Núcleo de Estudos de Políticas Públicas",
+          "phone": "tel: +55 19 3521 2495",
+          "email": "",
+          "address": "Av. Albert Einsten, 1300",
+          "photo": "img/nepo-nepp-cede-2.jpg",
+          "pos": [
+            -22.813167,
+            -47.065312
+          ]
+        },
+        {
+          "id": "24",
+          "title": "NICS - Núcleo Interdisciplinar de Comunicação Sonora",
+          "phone": "tel: +55 19 3521 7770",
+          "email": "DGRH, DAB, DPD, NICS, SST",
+          "address": "R. da Reitoria, 165 (Reitoria III)",
+          "photo": "img/dgrh-nics-com-social-ggbs.jpg",
+          "pos": [
+            -22.823912,
+            -47.067576
+          ]
+        },
+        {
+          "id": "25",
+          "title": "NIED - Núcleo de Informática Aplicada à Educação",
+          "phone": "tel: +55 19 3521 4353",
+          "email": "",
+          "address": "R. 6 de Agosto, 50 (Reitoria V)",
+          "photo": "img/nied.jpg",
+          "pos": [
+            -22.822958,
+            -47.065715
+          ]
+        },
+        {
+          "id": "26",
+          "title": "NIPE - Núcleo Interdisciplinar de Planejamento Energético",
+          "phone": "tel: +55 19 3521 1244",
+          "email": "",
+          "address": "R. Cora Coralina, 330",
+          "photo": "img/nipe-2.jpg",
+          "pos": [
+            -22.815590,
+            -47.068300
+          ]
+        },
+        {
+          "id": "27",
+          "title": "NMCE - Núcleo de Medicina e Cirurgia Experimental",
+          "phone": "",
+          "email": "",
+          "address": "Rua 5 de Junho, 350",
+          "photo": "img/NMCE-Med-Exp.jpg",
+          "pos": [
+            -22.824598,
+            -47.059907
+          ]
+        },
+        {
+          "id": "28",
+          "title": "NUDECRI - Núcleo de Desenvolvimento de Criatividade",
+          "phone": "tel: +55 19 3521 2584",
+          "email": "NUDECRI, DSSO, CEPETRO,PRPG, LABJOR, NIED",
+          "address": "R. seis de Agosto, 50, prédio da Reitoria V",
+          "photo": "img/prpg-dgrh-nied-cepetro-labjor-nudecri-reitoria-v.jpg",
+          "pos": [
+            -22.824050,
+            -47.067430
+          ]
+        },
+        {
+          "id": "29",
+          "title": "PAGU - Núcleo de Estudos de Gênero",
+          "phone": "tel: +55 19 3521 1704",
+          "email": "",
+          "address": "R. Cora Coralina, 100 (IFCH)",
+          "photo": "img/ifch-3.jpg",
+          "pos": [
+            -22.814937,
+            -47.068535
+          ]
+        }
+      ]
+    },
+    {
+      "label": "ENTIDADES E ASSOCIAÇÕES ",
+      "color": "d65d0b",
+      "icon": "entidades-associacoes.png",
+      "markers": [
+        {
+          "id": "1",
+          "title": "ADUNICAMP - Associação dos Docentes da Unicamp",
+          "phone": "tel: +55 19 3521 2470",
+          "email": "",
+          "address": "Av. Érico Veríssimo, s/n",
+          "photo": "img/adunicamp-2.jpg",
+          "pos": [
+            -22.813145,
+            -47.065020
+          ]
+        },
+        {
+          "id": "2",
+          "title": "DCE - Diretório Central dos Estudantes",
+          "phone": "tel: +55 19 3521 7910",
+          "email": "",
+          "address": "R. Euclides da Cunha, 71",
+          "photo": "img/papelaria-DCE.jpg",
+          "pos": [
+            -22.817937,
+            -47.071575
+          ]
+        },
+        {
+          "id": "3",
+          "title": "STU - Sindicato dos Trabalhadores da Unicamp",
+          "phone": "tel: +55 19 3521 7412",
+          "email": "",
+          "address": "R. Sérgio Buarque de Holanda, 800",
+          "photo": "img/stu-2.jpg",
+          "pos": [
+            -22.817859,
+            -47.068564
+          ]
+        },
+        {
+          "id": "4",
+          "title": "COOPERUNICAMP - Cooperativa de Crédito dos Servidores",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/cooperunicamp.jpg",
+          "pos": [
+            -22.825257,
+            -47.066680
+          ]
+        }
+      ]
+    },
+    {
+      "label": "CONEXÕES EXTERNAS",
+      "color": "885600",
+      "icon": "conexoes-externas.png",
+      "markers": [
+        {
+          "id": "1",
+          "title": "FACAMP",
+          "phone": "",
+          "email": "",
+          "address": "Estrada Municipal da Unicamp - Telebrás km 1 s/n",
+          "photo": "img/facamp-2.jpg",
+          "pos": [
+            -22.814145,
+            -47.058965
+          ]
+        },
+        {
+          "id": "2",
+          "title": "PST - Positron",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/pst.jpg",
+          "pos": [
+            -22.813476,
+            -47.059738
+          ]
+        },
+        {
+          "id": "3",
+          "title": "Inovasoft",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/prefeitura-ouvidoria.jpg",
+          "pos": [
+            -22.813408,
+            -47.060633
+          ]
+        },
+        {
+          "id": "4",
+          "title": "Instituto Eldorado",
+          "phone": "",
+          "email": "",
+          "address": "Estrada Municipal da Unicamp - Telebrás km 1 s/n",
+          "photo": "img/eldorado.jpg",
+          "pos": [
+            -22.812873,
+            -47.061290
+          ]
+        }
+      ]
+    },
+    {
+      "label": "ALIMENTAÇÃO ",
+      "color": "ff002b",
+      "icon": "alimentacao.png",
+      "markers": [
+        {
+          "id": "20",
+          "title": "RA - Refeitório da Administração",
+          "phone": "tel: +55 19 3521 7756",
+          "email": "",
+          "address": "R. Bernardo Sayão, 198",
+          "photo": "img/RA.jpg",
+          "pos": [
+            -22.822476,
+            -47.065023
+          ]
+        },
+        {
+          "id": "21",
+          "title": "RU - Restaurante Universitário",
+          "phone": "tel: +55 19 3521 6428",
+          "email": "",
+          "address": "Av. Érico Veríssimo, 50",
+          "photo": "img/ru.jpg",
+          "pos": [
+            -22.817551,
+            -47.072163
+          ]
+        },
+        {
+          "id": "22",
+          "title": "RS - Restaurante Saturnino",
+          "phone": "tel: +55 19 3521 49148",
+          "email": "",
+          "address": "R. Saturnino de Brito, 314",
+          "photo": "img/restaurante-saturnino.jpg",
+          "pos": [
+            -22.815273,
+            -47.062368
+          ]
+        },
+        {
+          "id": "20",
+          "title": "Restaurante - Aulus Video Bar",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/aulus-bar.jpg",
+          "pos": [
+            -22.818596,
+            -47.073434
+          ]
+        },
+        {
+          "id": "21",
+          "title": "Restaurante - Campus Grill",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/campus-grill.jpg",
+          "pos": [
+            -22.825439,
+            -47.067120
+          ]
+        },
+        {
+          "id": "30",
+          "title": "Restaurante Moriá",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/restaurante-moria.jpg",
+          "pos": [
+            -22.825148,
+            -47.067371
+          ]
+        },
+        {
+          "id": "31",
+          "title": "Restaurante Terraço",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/restaurante-terraco.jpg",
+          "pos": [
+            -22.822013,
+            -47.070321
+          ]
+        }
+      ]
+    },
+	{
+      "label": "CULTURA E LAZER",
+      "color": "700e7a",
+      "icon": "cultura-lazer.png",
+      "markers": [
+        {
+          "id": "26",
+          "title": "Museu Exploratório de Ciências",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/MUSEU-CIENCIAS.jpg",
+          "pos": [
+            -22.814867,
+            -47.057655
+          ]
+        },
+        {
+          "id": "36",
+          "title": "Espaço Cultural Casa do Lago",
+          "phone": "tel: +55 19 3521 7701",
+          "email": "",
+          "address": "Av. Érico Veríssimo s/n",
+          "photo": "img/CASA-DO-LAGO.jpg",
+          "pos": [
+            -22.812397,
+            -47.068847
+          ]
+        },
+        {
+          "id": "11",
+          "title": "CDC - Coord. de Desenv. Cultural | Centro de Convenções",
+          "phone": "tel: +55 19 3521 1733",
+          "email": "",
+          "address": "Av. Elis Regina, 131 (Ginásio)",
+          "photo": "img/cdc-2.jpg",
+          "pos": [
+            -22.814764,
+            -47.071503
+          ]
+        },
+        {
+          "id": "39",
+          "title": "Teatro de Arena",
+          "phone": "",
+          "email": "",
+          "address": "",
+          "photo": "img/teatro-arena.jpg",
+          "pos": [
+            -22.822914,
+            -47.067470
+          ]
+        }
+      ]
+    },
+	{
+		"label": "ARQUIVOS E CENTROS DE DOCUMENTAÇÃO",
+		"color": "419134",
+		"icon": "entidades-associacoes.png",
+		"markers": [
+			{
+				"id"	: "170",
+				"title"	: "SIARQ - Sistema de Arquivos da UNICAMP",
+				"phone"	: "tel: +55 19 3521 6440",
+				"email"	: "",
+				"address"	: "Praça Henfil, 50 - Cidade Universitária, Campinas - SP, 13083-895",
+				"photo"	: "img/siarq.jpg",
+				"pos"	: [
+					-22.818035,
+					-47.071981
+				]
+			},
+			{
+				"id"	: "17",
+				"title"	: "CMU - Centro de Memória da Unicamp",
+				"phone"	: "tel: +55 19 3521 5251",
+				"email"	: "",
+				"address"	: "Sala CB51, R. Sérgio Buarque de Holanda, 800 - Cidade Universitária, Campinas - SP, 13083-859",
+				"photo"	: "img/ciclo-basico.jpg",
+				"pos"	: [
+					-22.817315,
+					-47.068477
+				]
+			},
+			{
+				"id"	: "5",
+				"title"	: "CEDAE - Centro de Documentação Cultural Alexandre Eulálio",
+				"phone"	: "tel: +55 19 3521 1505",
+				"email"	: "",
+				"address"	: "Rua Sérgio Buarque de Holanda, 571 - Cidade Universitária",
+				"photo"	: "img/iel.jpg",
+				"pos"	: [
+					-22.815452,
+					-47.069107
+				]
+			},
+			{
+				"id"	: "85",
+				"title"	: "Arquivo Edgard Leuenroth – AEL",
+				"phone"	: "tel: +55 19 3521 1622",
+				"email"	: "",
+				"address"	: "Rua Claudio Abramo, 377 – Cidade Universitaria",
+				"photo"	: "img/edgar.jpg",
+				"pos"	: [
+					-22.813192,
+					-47.066118
+				]
+			},
+			{
+				"id"	: "850",
+				"title"	: "Centro de Memória e Arquivo (CMA)",
+				"phone"	: "tel: +55 19 3521 9541",
+				"email"	: "",
+				"address"	: "R. Albert Sabin, s/ nº. Cidade Universitária Zeferino Vaz CEP: 13083-894. Campinas, SP, Brasil.",
+				"photo"	: "img/centro-memoria-fcm.jpg",
+				"pos"	: [
+					-22.829596,
+					-47.062986
+				]
+			}
+		]
+	}
+  ]
+}

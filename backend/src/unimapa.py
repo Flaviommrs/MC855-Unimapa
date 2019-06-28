@@ -64,10 +64,17 @@ def create_app(test_config=None):
         database.mock_database_posts(session, 20)
         
         print("Database mocked")
+        
+    @app.cli.command()
+    def populate_database():
+        database.create_database(db)
+        database.populate_real_maps(db)
+        print("Database populated")
 
     # Commands
     app.cli.add_command(mock_database)
     app.cli.add_command(create_database)
+    app.cli.add_command(populate_database)
 
     return app
 
