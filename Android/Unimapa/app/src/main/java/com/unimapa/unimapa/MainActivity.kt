@@ -258,14 +258,19 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
     }
 
     private fun addMarker(mapboxMap: MapboxMap) {
-        var posts = ServerConnection(this).getPosts("/maps/" + mapas.get(selectedMap).getId() + "/posts")
+        var posts =  java.util.ArrayList<Post>()
+        try {
+            posts = ServerConnection(this).getPosts("/maps/" + mapas.get(selectedMap).getId() + "/posts")
+        }catch (e:Exception){e.printStackTrace()}
         mapboxMap.clear()
         for(post: Post in posts) {
             println(post)
-            var titulo = post.getTitle();
+            var titulo = post.getTitle()
+            var desc = post.getTitle()
             println(titulo)
             try {
                 titulo = titulo!!.substring(titulo.indexOf("<strong>") + 8, titulo.indexOf("</strong>"))
+                desc = desc!!.substring(desc.indexOf("<p>") + 3, desc.indexOf("</p>"))
             }catch (e:Exception){
                 e.printStackTrace()
             }
@@ -273,12 +278,13 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
             mapboxMap.addMarker(MarkerOptions()
                     .position(LatLng(post.getlat()!!.toDouble(), post.getLon()!!.toDouble()))
                     .title(titulo)
+                    .snippet(desc)
                 )
         }
         mapboxMap.setOnMarkerClickListener { marker ->//TODO
             // Show a toast with the title of the selected marker
             marker.setTitle(marker.getTitle())
-            marker.setSnippet(marker.title)
+            marker.setSnippet(marker.snippet)
             this.mapView?.let {
                 marker.showInfoWindow(mapboxMap, it)
             }
