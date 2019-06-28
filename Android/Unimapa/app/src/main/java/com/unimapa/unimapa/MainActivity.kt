@@ -272,11 +272,17 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
 
             mapboxMap.addMarker(MarkerOptions()
                     .position(LatLng(post.getlat()!!.toDouble(), post.getLon()!!.toDouble()))
-                    .title(titulo))
+                    .title(titulo)
+                )
         }
         mapboxMap.setOnMarkerClickListener { marker ->//TODO
             // Show a toast with the title of the selected marker
             Toast.makeText(this, marker.getTitle(), Toast.LENGTH_LONG).show()
+            marker.setTitle(marker.getTitle())
+            marker.setSnippet(marker.title)
+            this.mapView?.let {
+                marker.showInfoWindow(mapboxMap, it)
+            }
             println("CCCCCCCCCCCLLLIIIIIIIIIIIIICCCCCCCCOOOOOOOUUUUUUUU")
             true
         }
@@ -353,14 +359,16 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
             if(it.isSuccessful){
                 val token : String = it.result!!.token!!
 
-                ServerConnection(this).sendJson("/maps/" + id.toString() + "/posts", "{\n" +//
-                        "\"title\" : \"$title\", \n" +
-                        "\"message\" : \"$description\",\n" +
-                        "\"lat\" : $postLat,\n" +
-                        "\"lon\" : $postLong\n" +
-                        "}", "POST")
+                ServerConnection(this).sendJson("/maps/" + id.toString() + "/posts",
+                                    "{\n" +//
+                                        "\"title\" : \"$title\", \n" +
+                                        "\"message\" : \"$description\",\n" +
+                                        "\"lat\" : $postLat,\n" +
+                                        "\"lon\" : $postLong\n" +
+                                        "}", "POST"
+                                )
 
-                println("long $postLong, lat $postLat, map $selectedMap")
+                println("POSTTTTTTTT:  long $postLong, lat $postLat, map $selectedMap")
                 //TODO:mapSetupFlow(savedInstanceState_global)
                 addNewPoints()
                 dialog.dismiss()

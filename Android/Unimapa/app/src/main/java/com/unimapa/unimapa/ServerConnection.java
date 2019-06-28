@@ -34,10 +34,38 @@ public class ServerConnection {
 //    public static final String BASE_URL = "http://0346a33c.ngrok.io";
     public static final String BASE_URL = "https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev";
 
+    public ArrayList<Post> getMyPosts(String uri){
+        ArrayList<Post> posts = new ArrayList<Post>();
+        JSONArray postsJson;
+        try {
+            System.out.println(sendJson(uri, "", "GET"));
+            postsJson = sendJson(uri, "", "GET").getJSONArray("features");
+            System.out.println(postsJson);
+
+            for(int i = 0; i < postsJson.length(); i++) {
+                Post post = new Post(
+                                    postsJson.getJSONObject(i).getString("title"),
+                                    postsJson.getJSONObject(i).getString("message"),
+                                    Float.valueOf(postsJson.getJSONObject(i).get("lat").toString()),
+                                    Float.valueOf(postsJson.getJSONObject(i).get("lon").toString())
+                                );
+
+                System.out.println(post);
+                posts.add(post);
+            }
+
+        } catch (JSONException ex) {
+            ex.printStackTrace();
+        }
+
+        return posts;
+    }
+
     public ArrayList<Post> getPosts(String uri){
         ArrayList<Post> posts = new ArrayList<Post>();
         JSONArray postsJson;
         try {
+            System.out.println(sendJson(uri, "", "GET"));
             postsJson = sendJson(uri, "", "GET").getJSONArray("features");
             System.out.println(postsJson);
 
@@ -46,11 +74,6 @@ public class ServerConnection {
                         "mesage",
                         Float.valueOf(postsJson.getJSONObject(i).getJSONObject("geometry").getJSONArray("coordinates").getString(1)),
                         Float.valueOf(postsJson.getJSONObject(i).getJSONObject("geometry").getJSONArray("coordinates").getString(0)));
-
-                //post.setTitle(postsJson.getJSONObject(i).getJSONObject("properties").getString("description"));
-                //post.setMessage("message");
-                //post.setLon(Float.valueOf(postsJson.getJSONObject(i).getJSONObject("geometry").getJSONArray("coordinates").getString(0)));
-                //post.setLat(Float.valueOf(postsJson.getJSONObject(i).getJSONObject("geometry").getJSONArray("coordinates").getString(1)));
 
                 System.out.println(post);
                 posts.add(post);
@@ -241,6 +264,11 @@ public class ServerConnection {
                     buffer.append(line + "\n");
                 }
 
+                System.out.println(jsonText);
+
+                if(params.contains("my_posts")){
+                    return new JSONObject(" { \"features\" : " +jsonText + " }");
+                }
                 return new JSONObject(jsonText);
 
             }else {
