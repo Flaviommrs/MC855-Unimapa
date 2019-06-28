@@ -22,8 +22,7 @@ class PostListActivity: AppCompatActivity(){
 
         var posts = ArrayList<Post>()
 
-        posts.add(Post("Bandeco", "explodiu", 10f, 10f))
-        posts.add(Post("cachorro", "perdido", 15f, 15f))
+        posts = getPosts()
 
         this.lv = findViewById(R.id.list_view)
         this.customAdapter = PostAdapter(this, posts)
@@ -32,6 +31,17 @@ class PostListActivity: AppCompatActivity(){
 
         toolbar = findViewById(R.id.toolbar)
         toolbar!!.setTitle("Suas Publicações")
+    }
+
+    private fun getPosts(): ArrayList<Post> {
+        var posts = ArrayList<Post>()
+
+        posts.add(Post("", "", 10f, 10f))
+
+        posts.add(Post("Bandeco", "explodiu", 10f, 10f))
+        posts.add(Post("cachorro", "perdido", 15f, 15f))
+
+        return posts
     }
 
 

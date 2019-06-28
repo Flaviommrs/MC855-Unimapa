@@ -36,6 +36,8 @@ import com.mapbox.android.core.permissions.PermissionsManager
 
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.annotations.Marker
+import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapView;
@@ -57,8 +59,10 @@ import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.unimapa.unimapa.dataBase.MapaDataBase
 import com.unimapa.unimapa.dataBase.UserDataBase
 import com.unimapa.unimapa.domain.Mapa
+import com.unimapa.unimapa.domain.Post
 import com.unimapa.unimapa.domain.User
 import java.io.IOException
+import java.lang.Exception
 import java.net.URL
 
 
@@ -147,7 +151,7 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
         mapView!!.getMapAsync(OnMapReadyCallback { mapboxMap ->
 
             map = mapboxMap
-
+            //mapboxMap.setOnMarkerClickListener(baseContext)
             val position = CameraPosition.Builder()
             position.target(LatLng(-22.8184,-47.0647))
             position.zoom(14.toDouble())
@@ -156,6 +160,8 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
 
             mapboxMap.setMinZoomPreference(4.toDouble())
             mapboxMap.setMaxZoomPreference(20.toDouble())
+
+            addMarker(mapboxMap)//TODO
 
             mapboxMap.addOnMapLongClickListener{ point ->
                 showPublicationDialog()
@@ -167,30 +173,33 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
             val UDB = UserDataBase(this)
             val token = UDB.getToken()
 
+
             mapboxMap.setStyle(Style.OUTDOORS) { style ->
 
                 runOnUiThread {
-                    val url = URL(ServerConnection.BASE_URL + "/maps/" + mapas.get(selectedMap).getId() + "/posts")
+                    try {
+                        val url = URL(ServerConnection.BASE_URL + "/maps/" + mapas.get(selectedMap).getId() + "/posts")
 
-                    //System.out.println(ServerConnection(this).sendJson("/maps/1/posts","","GET"))
+                        //System.out.println(ServerConnection(this).sendJson("/maps/1/posts","","GET"))
 
-                    System.out.println("pegando pontos com geojson")
-                    val geojsonUrl = url
-                    //geojsonUrl.openConnection().setRequestProperty("Authorization", "Bearer $token")
-                    val source = GeoJsonSource(SOURCE_ID, geojsonUrl)
-                    System.out.println("pegou pintous")
+                        System.out.println("pegando pontos com geojson")
+                        val geojsonUrl = url
+                        //geojsonUrl.openConnection().setRequestProperty("Authorization", "Bearer $token")
+                        val source = GeoJsonSource(SOURCE_ID, geojsonUrl)
+                        System.out.println("pegou pintous")
 
-                    style.addSource(source)
+                        style.addSource(source)
 
-                    if(selectedMap % 2 == 0) {//TODO: mudar aq para o tipo do mapa
-                        addHeatMapLayer(style)
-                    }else {
-                        addMarkerLayer(style)
-                    }
+                        //if (selectedMap % 2 == 0) {//TODO: mudar aq para o tipo do mapa
+                        //    addHeatMapLayer(style)
+                        //} else {
+                            //addMarkerLayer(style)
+                        //}
 
-                    setupLocation(style)
+                        setupLocation(style)
 
-                    style.addLayer(CircleLayer("urban-areas-fill", SOURCE_ID))
+                        style.addLayer(CircleLayer("urban-areas-fill", SOURCE_ID))
+                    }catch (e: Exception){e.printStackTrace()}
                 }
 
             }
@@ -211,6 +220,8 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
             mapboxMap.setMinZoomPreference(4.toDouble())
             mapboxMap.setMaxZoomPreference(20.toDouble())
 
+            addMarker(mapboxMap)//TODO
+
             mapboxMap.addOnMapLongClickListener{ point ->
                 showPublicationDialog()
                 postLat = point.latitude
@@ -225,28 +236,51 @@ class MainActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelecte
 
                 runOnUiThread {
                     val url = URL(ServerConnection.BASE_URL + "/maps/" + mapas.get(selectedMap).getId() + "/posts")
-                    
+
                     val geojsonUrl = url
                     geojsonUrl.openConnection().setRequestProperty("Authorization", "Bearer $token")
                     val source = GeoJsonSource(SOURCE_ID, geojsonUrl)
 
                     style.addSource(source)
 
-                    if(selectedMap % 2 == 0) {//TODO: mudar aq para o tipo do mapa
-                        addHeatMapLayer(style)
-                    }else {
-                        addMarkerLayer(style)
-                    }
+                    ///if (selectedMap % 2 == 0) {//TODO: mudar aq para o tipo do mapa
+                    //    addHeatMapLayer(style)
+                    //} else {
+                        //addMarkerLayer(style)
+                    //}
 
                     setupLocation(style)
 
                     style.addLayer(CircleLayer("urban-areas-fill", SOURCE_ID))
                 }
-
             }
         })
     }
 
+    private fun addMarker(mapboxMap: MapboxMap) {
+        var posts = ServerConnection(this).getPosts("/maps/" + mapas.get(selectedMap).getId() + "/posts")
+        mapboxMap.clear()
+        for(post: Post in posts) {
+            println(post)
+            var titulo = post.getTitle();
+            println(titulo)
+            try {
+                titulo = titulo!!.substring(titulo.indexOf("<strong>") + 8, titulo.indexOf("</strong>"))
+            }catch (e:Exception){
+                e.printStackTrace()
+            }
+
+            mapboxMap.addMarker(MarkerOptions()
+                    .position(LatLng(post.getlat()!!.toDouble(), post.getLon()!!.toDouble()))
+                    .title(titulo))
+        }
+        mapboxMap.setOnMarkerClickListener { marker ->//TODO
+            // Show a toast with the title of the selected marker
+            Toast.makeText(this, marker.getTitle(), Toast.LENGTH_LONG).show()
+            println("CCCCCCCCCCCLLLIIIIIIIIIIIIICCCCCCCCOOOOOOOUUUUUUUU")
+            true
+        }
+    }
 
 
     private fun addMarkerLayer(style: Style){
