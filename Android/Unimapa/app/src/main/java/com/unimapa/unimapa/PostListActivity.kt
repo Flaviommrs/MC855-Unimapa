@@ -35,11 +35,13 @@ class PostListActivity: AppCompatActivity(){
 
     private fun getPosts(): ArrayList<Post> {
         var posts = ArrayList<Post>()
+        var postsFromServer = ServerConnection(this).getMyPosts("/my_posts")
 
         posts.add(Post("", "", 10f, 10f))
 
-        posts.add(Post("Bandeco", "explodiu", 10f, 10f))
-        posts.add(Post("cachorro", "perdido", 15f, 15f))
+        for(post: Post in postsFromServer) {
+            posts.add(post)
+        }
 
         return posts
     }
