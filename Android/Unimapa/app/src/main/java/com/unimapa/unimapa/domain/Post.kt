@@ -1,9 +1,6 @@
 package com.unimapa.unimapa.domain
 
-class Post(title: String?,
-           message: String?,
-           lat:Float?,
-           lon:Float?) {
+class Post {
 
     private var title:String? = ""
 
@@ -12,6 +9,14 @@ class Post(title: String?,
     private var lat:Float? = 0f
 
     private var lon:Float? = 0f
+
+    constructor(title: String?, message: String?, lat: Float?, lon: Float?) {
+        this.title = title
+        this.message = message
+        this.lat = lat
+        this.lon = lon
+    }
+
 
     fun getTitle(): String?{
         return title
@@ -45,4 +50,10 @@ class Post(title: String?,
     fun getlat() : Float?{
         return this.lat
     }
+
+    override fun toString(): String {
+        return "Post(title=$title, message=$message, lat=$lat, lon=$lon)"
+    }
+
+
 }

@@ -6,6 +6,7 @@ import android.os.StrictMode;
 import com.google.gson.Gson;
 import com.unimapa.unimapa.dataBase.UserDataBase;
 import com.unimapa.unimapa.domain.Mapa;
+import com.unimapa.unimapa.domain.Post;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -33,6 +34,35 @@ public class ServerConnection {
 //    public static final String BASE_URL = "http://0346a33c.ngrok.io";
     public static final String BASE_URL = "https://ac820fm2ig.execute-api.us-east-1.amazonaws.com/dev";
 
+    public ArrayList<Post> getPosts(String uri){
+        ArrayList<Post> posts = new ArrayList<Post>();
+        JSONArray postsJson;
+        try {
+            postsJson = sendJson(uri, "", "GET").getJSONArray("features");
+            System.out.println(postsJson);
+
+            for(int i = 0; i < postsJson.length(); i++) {
+                Post post = new Post(postsJson.getJSONObject(i).getJSONObject("properties").getString("description"),
+                        "mesage",
+                        Float.valueOf(postsJson.getJSONObject(i).getJSONObject("geometry").getJSONArray("coordinates").getString(1)),
+                        Float.valueOf(postsJson.getJSONObject(i).getJSONObject("geometry").getJSONArray("coordinates").getString(0)));
+
+                //post.setTitle(postsJson.getJSONObject(i).getJSONObject("properties").getString("description"));
+                //post.setMessage("message");
+                //post.setLon(Float.valueOf(postsJson.getJSONObject(i).getJSONObject("geometry").getJSONArray("coordinates").getString(0)));
+                //post.setLat(Float.valueOf(postsJson.getJSONObject(i).getJSONObject("geometry").getJSONArray("coordinates").getString(1)));
+
+                System.out.println(post);
+                posts.add(post);
+            }
+
+        } catch (JSONException ex) {
+            ex.printStackTrace();
+        }
+
+        return posts;
+    }
+
     public ArrayList<Mapa> getMapas(){
         ArrayList<Mapa> mapas = new ArrayList<Mapa>();
         try {
@@ -41,7 +71,7 @@ public class ServerConnection {
 
             for(int i = 0; i < mapasJson.length(); i++) {
                 Gson gson = new Gson(); // Or use new GsonBuilder().create();
-
+                System.out.println(mapasJson.getJSONObject(i));
                 Mapa mapa = gson.fromJson(String.valueOf(mapasJson.getJSONObject(i)), Mapa.class); // deserializes json into target2
                 mapa.setSelected(false);
                 mapas.add(mapa);
