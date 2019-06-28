@@ -45,7 +45,7 @@ public class ServerConnection {
             for(int i = 0; i < postsJson.length(); i++) {
                 Post post = new Post(
                                     postsJson.getJSONObject(i).getString("title"),
-                                    postsJson.getJSONObject(i).getString("description"),
+                                    postsJson.getJSONObject(i).getString("message"),
                                     Float.valueOf(postsJson.getJSONObject(i).get("lat").toString()),
                                     Float.valueOf(postsJson.getJSONObject(i).get("lon").toString())
                                 );
