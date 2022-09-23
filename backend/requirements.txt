@@ -42,7 +42,7 @@ pip-autoremove==0.9.1
 pkg-resources==0.0.0
 placebo==0.9.0
 pluggy==0.9.0
-protobuf==3.7.1
+protobuf==3.18.3
 psycopg2-binary==2.8.2
 py==1.8.0
 pyasn1==0.4.5
